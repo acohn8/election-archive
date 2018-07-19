@@ -1,9 +1,18 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import { Button } from 'semantic-ui-react';
+import React from 'react';
+import { Grid, Container, Header } from 'semantic-ui-react';
+
+import Nav from './components/nav';
+import StateContainer from './components/stateContainer'
 
 import './App.css';
 
-const App = () => <Button>Hi!</Button>;
+const App = () => (
+  <div>
+    <Nav />
+    <Container>
+      <StateContainer />
+    </Container>
+  </div>
+);
 
 export default App;
