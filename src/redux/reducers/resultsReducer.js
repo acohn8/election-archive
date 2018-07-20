@@ -14,7 +14,6 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         ...previousState,
         loading: false,
         stateName: action.stateName,
-        stateFips: action.stateFips,
         electionResults: action.electionResults,
       };
     default:

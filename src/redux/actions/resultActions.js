@@ -6,9 +6,8 @@ const fetchResults = () => (dispatch) => {
 };
 const countyResults = response => ({
   type: 'COUNTY_RESULTS',
-  stateName: response.name,
-  stateFips: response.fips,
-  electionResults: response.counties,
+  stateName: response.state,
+  electionResults: response,
 });
 
 export { fetchResults };
