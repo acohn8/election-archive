@@ -16,18 +16,12 @@ class ResultsTable extends Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.props.results.counties !== undefined && this.props.results.counties.length > 0) {
-      this.formatData();
-    }
-  }
-
   formatData = () => {
-    console.log(this.props.results.counties);
-    const data = this.props.results.counties.forEach(county =>
-      county.results.map(results => ({ ...results, name: county.name })),
+    const electionData = [];
+    this.props.results.counties.forEach(county =>
+      county.results.forEach(results => electionData.push({ ...results, name: county.name })),
     );
-    console.log(data);
+    this.setState({ data: electionData });
   };
 
   handleSort = clickedColumn => () => {
@@ -51,27 +45,45 @@ class ResultsTable extends Component {
   render() {
     const { column, data, direction } = this.state;
     return (
-      <Table sortable celled fixed>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell
-              sorted={column === 'name' ? direction : null}
-              onClick={this.handleSort('name')}
-            >
-              Name
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {_.map(data, ({ age, gender, name }) => (
-            <Table.Row key={name}>
-              <Table.Cell>{name}</Table.Cell>
-              <Table.Cell>{age}</Table.Cell>
-              <Table.Cell>{gender}</Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table>
+      <div>
+        {this.state.data.length > 0 && (
+          <Table sortable celled fixed>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell
+                  sorted={column === 'name' ? direction : null}
+                  onClick={this.handleSort('name')}
+                >
+                  Name
+                </Table.HeaderCell>
+                {Object.keys(this.state.data[0])
+                  .sort((a, b) => b - a)
+                  .filter(k => k !== 'name')
+                  .map(key => (
+                    <Table.HeaderCell
+                      sorted={column === { key } ? direction : null}
+                      onClick={this.handleSort({ key })}
+                    >
+                      {key}
+                    </Table.HeaderCell>
+                  ))}
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {_.map(data, ({ name, clinton, trump, johnson, stein, other }) => (
+                <Table.Row key={name}>
+                  <Table.Cell>{name}</Table.Cell>
+                  <Table.Cell>{clinton}</Table.Cell>
+                  <Table.Cell>{trump}</Table.Cell>
+                  <Table.Cell>{johnson}</Table.Cell>
+                  <Table.Cell>{stein}</Table.Cell>
+                  <Table.Cell>{other}</Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        )}
+      </div>
     );
   }
 }
