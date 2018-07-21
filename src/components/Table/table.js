@@ -51,7 +51,7 @@ class ResultsTable extends Component {
     return (
       <div>
         {this.state.data.length > 0 && (
-          <Table sortable celled fixed>
+          <Table sortable celled fixed selectable>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell
@@ -64,6 +64,7 @@ class ResultsTable extends Component {
                   <Table.HeaderCell
                     sorted={column === key ? direction : null}
                     onClick={this.handleSort(key)}
+                    key={key}
                   >
                     {key}
                   </Table.HeaderCell>
@@ -74,7 +75,9 @@ class ResultsTable extends Component {
               {data.map(county => (
                 <Table.Row key={county.name}>
                   <Table.Cell>{county.name}</Table.Cell>
-                  {this.candidates().map(candidate => <Table.Cell>{county[candidate]}</Table.Cell>)}
+                  {this.candidates().map(candidate => (
+                    <Table.Cell key={candidate}>{county[candidate].toLocaleString()}</Table.Cell>
+                  ))}
                 </Table.Row>
               ))}
             </Table.Body>

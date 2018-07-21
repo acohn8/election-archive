@@ -20,7 +20,7 @@ class StateContainer extends React.Component {
         ) : (
           <div>
             <Header as="h1">Pennsylvania</Header>
-            <Grid centered columns={2}>
+            <Grid columns={2}>
               <Grid.Row>
                 <Grid.Column>
                   <ToplinesContainer />
@@ -29,7 +29,7 @@ class StateContainer extends React.Component {
                   <MapContainer />
                 </Grid.Column>
               </Grid.Row>
-              <Grid.Row centered colums={1}>
+              <Grid.Row colums={1}>
                 <TableContainer />
               </Grid.Row>
             </Grid>
