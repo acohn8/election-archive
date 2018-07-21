@@ -3,6 +3,14 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
+const colors = {
+  clinton: 'blue',
+  trump: 'red',
+  johnson: 'yellow',
+  stein: 'green',
+  other: 'purple',
+};
+
 class ResultsTable extends Component {
   state = {
     column: null,
@@ -19,9 +27,13 @@ class ResultsTable extends Component {
   formatData = () => {
     const electionData = [];
     this.props.results.counties.forEach(county =>
-      county.results.forEach(results => electionData.push({ ...results, name: county.name })),
+      county.results.forEach(results => electionData.push({ name: county.name, ...results })),
     );
     this.setState({ data: electionData });
+  };
+
+  candidates = () => {
+    return Object.keys(this.state.data[0]).filter(k => k !== 'name');
   };
 
   handleSort = clickedColumn => () => {
@@ -56,28 +68,21 @@ class ResultsTable extends Component {
                 >
                   Name
                 </Table.HeaderCell>
-                {Object.keys(this.state.data[0])
-                  .sort((a, b) => b - a)
-                  .filter(k => k !== 'name')
-                  .map(key => (
-                    <Table.HeaderCell
-                      sorted={column === { key } ? direction : null}
-                      onClick={this.handleSort({ key })}
-                    >
-                      {key}
-                    </Table.HeaderCell>
-                  ))}
+                {this.candidates().map(key => (
+                  <Table.HeaderCell
+                    sorted={column === { key } ? direction : null}
+                    onClick={this.handleSort({ key })}
+                  >
+                    {key}
+                  </Table.HeaderCell>
+                ))}
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {_.map(data, ({ name, clinton, trump, johnson, stein, other }) => (
-                <Table.Row key={name}>
-                  <Table.Cell>{name}</Table.Cell>
-                  <Table.Cell>{clinton}</Table.Cell>
-                  <Table.Cell>{trump}</Table.Cell>
-                  <Table.Cell>{johnson}</Table.Cell>
-                  <Table.Cell>{stein}</Table.Cell>
-                  <Table.Cell>{other}</Table.Cell>
+              {data.map(county => (
+                <Table.Row key={county.name}>
+                  <Table.Cell>{county.name}</Table.Cell>
+                  {this.candidates().map(candidate => <Table.Cell>{county[candidate]}</Table.Cell>)}
                 </Table.Row>
               ))}
             </Table.Body>
