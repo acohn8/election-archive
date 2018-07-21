@@ -3,14 +3,6 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-const colors = {
-  clinton: 'blue',
-  trump: 'red',
-  johnson: 'yellow',
-  stein: 'green',
-  other: 'purple',
-};
-
 class ResultsTable extends Component {
   state = {
     column: null,
@@ -70,8 +62,8 @@ class ResultsTable extends Component {
                 </Table.HeaderCell>
                 {this.candidates().map(key => (
                   <Table.HeaderCell
-                    sorted={column === { key } ? direction : null}
-                    onClick={this.handleSort({ key })}
+                    sorted={column === key ? direction : null}
+                    onClick={this.handleSort(key)}
                   >
                     {key}
                   </Table.HeaderCell>
