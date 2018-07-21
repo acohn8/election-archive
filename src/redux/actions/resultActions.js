@@ -1,32 +1,22 @@
-const fetchResults = () => (dispatch) => {
+import axios from 'axios';
+
+const fetchStateData = () => async (dispatch) => {
   dispatch({ type: 'LOADING' });
-  return fetch('http://localhost:3000/api/v1/states/3/counties')
-    .then(res => res.json())
-    .then((countyData) => {
-      // fetchCandidateDetails(countyData.counties[0].results[0]);
-      dispatch(countyResults(countyData));
-    });
+  const url = 'http://localhost:3000/api/v1';
+  const response = await Promise.all([
+    axios.get(`${url}/states/3/counties`),
+    axios.get(`${url}/states/3/candidates`),
+    axios.get(`${url}/states/3/results`),
+  ]);
+  const geography = response[0].data;
+  const candidates = response[1].data.data;
+  const countyResults = response[2].data;
+  dispatch({
+    type: 'SET_STATE_DATA',
+    geography,
+    candidates,
+    countyResults,
+  });
 };
 
-// const fetchCandidateDetails = (resultsList) => {
-//   fetch('http://localhost:3000/api/v1/candidates')
-//     .then(res => res.json())
-//     .then((candidateInfo) => {
-//       const candidates = Object.keys(resultsList);
-//       const found = candidateInfo.data.filter(fetchedCandidates =>
-//         candidateInfo.includes(fetchedCandidates.id))
-//       console.log(found);
-//     });
-// };
-
-const candidateInfo = (candidates) => {
-  console.log(candidates);
-};
-
-const countyResults = response => ({
-  type: 'COUNTY_RESULTS',
-  stateName: response.state,
-  electionResults: response,
-});
-
-export { fetchResults };
+export { fetchStateData };
