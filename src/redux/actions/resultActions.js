@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { normalize } from 'normalizr';
+
+import { stateCounties, candidateListSchema } from './schema';
 
 const fetchStateData = () => async (dispatch) => {
   dispatch({ type: 'LOADING' });
@@ -8,9 +11,10 @@ const fetchStateData = () => async (dispatch) => {
     axios.get(`${url}/states/3/candidates`),
     axios.get(`${url}/states/3/results`),
   ]);
-  const geography = response[0].data;
-  const candidates = response[1].data.data;
+  const geography = normalize(response[0].data, stateCounties);
+  const candidates = normalize(response[1].data.data, candidateListSchema);
   const countyResults = response[2].data;
+
   dispatch({
     type: 'SET_STATE_DATA',
     geography,
