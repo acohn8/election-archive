@@ -2,6 +2,7 @@ const initialResultsState = {
   loading: false,
   geography: {},
   candidates: [],
+  electionResults: [],
 };
 
 const resultsReducer = (previousState = initialResultsState, action) => {
@@ -14,6 +15,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         loading: false,
         geography: action.geography,
         candidates: action.candidates,
+        electionResults: action.electionResults,
       };
     default:
       return previousState;

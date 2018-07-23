@@ -7,7 +7,7 @@ const ResultsTable = props => (
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell>Name</Table.HeaderCell>
-        {Object.keys(props.geography.entities.counties[props.geography.result.counties[0]].results).map(candidateId => (
+        {Object.keys(props.electionResults.entities.results[props.electionResults.result[0]].results).map(candidateId => (
           <Table.HeaderCell key={candidateId}>
             {candidateId === 'other'
               ? 'Other'
@@ -17,10 +17,10 @@ const ResultsTable = props => (
       </Table.Row>
     </Table.Header>
     <Table.Body>
-      {props.geography.result.counties.map(countyId => (
+      {props.electionResults.result.map(countyId => (
         <Table.Row key={countyId}>
           <Table.Cell>{props.geography.entities.counties[countyId].name}</Table.Cell>
-          {Object.values(props.geography.entities.counties[countyId].results).map(result => (
+          {Object.values(props.electionResults.entities.results[countyId].results).map(result => (
             <Table.Cell key={result}>{result.toLocaleString()}</Table.Cell>
           ))}
         </Table.Row>
@@ -32,6 +32,7 @@ const ResultsTable = props => (
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
+  electionResults: state.results.electionResults,
 });
 
 export default connect(mapStateToProps)(ResultsTable);

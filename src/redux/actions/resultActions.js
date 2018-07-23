@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { normalize } from 'normalizr';
 
-import { stateCounties, candidateListSchema } from './schema';
+import { stateCounties, candidateListSchema, resultListSchema } from './schema';
 
 const fetchStateData = () => async (dispatch) => {
   dispatch({ type: 'LOADING' });
@@ -12,17 +12,15 @@ const fetchStateData = () => async (dispatch) => {
     axios.get(`${url}/states/3/results`),
   ]);
 
-  const geoResponse = response[0].data;
-  const resToMerge = response[2].data.results;
-  resToMerge.forEach(res =>
-    (geoResponse.counties.find(county => county.id === res.county_id).results = res.results[0]));
-  const geography = normalize(geoResponse, stateCounties);
+  const geography = normalize(response[0].data, stateCounties);
+  const electionResults = normalize(response[2].data.results, resultListSchema);
   const candidates = normalize(response[1].data.data, candidateListSchema);
 
   dispatch({
     type: 'SET_STATE_DATA',
     geography,
     candidates,
+    electionResults,
   });
 };
 
