@@ -15,7 +15,7 @@ class Map extends React.Component {
     });
 
     this.map.on('load', () => {
-      this.makeDataLayer();
+      this.addResultsLayer();
     });
   }
 
@@ -33,14 +33,45 @@ class Map extends React.Component {
       const result = countyResults.find(
         countyResult => countyResult.fips === parseInt(county.properties.GEOID),
       );
-      console.log(result);
       const clintonMargin = parseFloat(
         (result.results[16] - result.results[10]) / (result.results[16] + result.results[10]),
       );
+      const clintonVotes = result.results[16];
+      const trumpVotes = result.results[10];
       stateCounties[stateCounties.indexOf(county)].properties.clintonMargin = clintonMargin;
+      stateCounties[stateCounties.indexOf(county)].properties.clintonVotes = clintonVotes;
+      stateCounties[stateCounties.indexOf(county)].properties.trumpVotes = trumpVotes;
     });
     console.log(stateCounties);
     return stateCounties;
+  };
+
+  addResultsLayer = () => {
+    this.map.addLayer({
+      id: 'results',
+      type: 'fill',
+      source: {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: this.makeDataLayer(),
+        },
+      },
+      paint: {
+        'fill-color': [
+          'interpolate',
+          ['linear'],
+          ['get', 'clintonMargin'],
+          -1,
+          'red',
+          0,
+          'white',
+          1,
+          'blue',
+        ],
+        'fill-opacity': 0.8,
+      },
+    });
   };
 
   render() {
