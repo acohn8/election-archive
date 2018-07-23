@@ -7,7 +7,7 @@ const ResultsTable = props => (
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell>Name</Table.HeaderCell>
-        {Object.keys(props.results[0].results[0]).map(candidateId => (
+        {Object.keys(props.geography.entities.counties[props.geography.result.counties[0]].results).map(candidateId => (
           <Table.HeaderCell key={candidateId}>
             {candidateId === 'other'
               ? 'Other'
@@ -20,10 +20,9 @@ const ResultsTable = props => (
       {props.geography.result.counties.map(countyId => (
         <Table.Row key={countyId}>
           <Table.Cell>{props.geography.entities.counties[countyId].name}</Table.Cell>
-          {props.results
-            .find(countyResult => countyResult.county_id === countyId)
-            .results.map(result =>
-              Object.values(result).map(num => <Table.Cell key={num}>{num}</Table.Cell>))}
+          {Object.values(props.geography.entities.counties[countyId].results).map(result => (
+            <Table.Cell key={result}>{result}</Table.Cell>
+          ))}
         </Table.Row>
       ))}
     </Table.Body>
@@ -31,7 +30,6 @@ const ResultsTable = props => (
 );
 
 const mapStateToProps = state => ({
-  results: state.results.countyResults.results,
   candidates: state.results.candidates,
   geography: state.results.geography,
 });

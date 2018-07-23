@@ -15,9 +15,8 @@ class StateContainer extends React.Component {
   render() {
     return (
       <div>
-        {this.props.loading === true ? (
-          <ContentLoader />
-        ) : (
+        {this.props.loading === true && <ContentLoader />}
+        {this.props.candidates.result !== undefined && (
           <div>
             <Header as="h1">Pennsylvania</Header>
             <Grid columns={2}>
@@ -42,6 +41,7 @@ class StateContainer extends React.Component {
 
 const mapStateToProps = state => ({
   loading: state.results.loading,
+  candidates: state.results.candidates,
 });
 
 const mapDispatchToProps = dispatch => ({

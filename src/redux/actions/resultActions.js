@@ -12,22 +12,17 @@ const fetchStateData = () => async (dispatch) => {
     axios.get(`${url}/states/3/results`),
   ]);
 
-  // merge counties with results?
-  const geoToMerge = response[0].data;
+  const geoResponse = response[0].data;
   const resToMerge = response[2].data.results;
   resToMerge.forEach(res =>
-    (geoToMerge.counties.find(county => county.id === res.county_id).results = res.results[0]));
-  console.log(normalize(geoToMerge, stateCounties));
-
-  const geography = normalize(response[0].data, stateCounties);
+    (geoResponse.counties.find(county => county.id === res.county_id).results = res.results[0]));
+  const geography = normalize(geoResponse, stateCounties);
   const candidates = normalize(response[1].data.data, candidateListSchema);
-  const countyResults = response[2].data;
 
   dispatch({
     type: 'SET_STATE_DATA',
     geography,
     candidates,
-    countyResults,
   });
 };
 
