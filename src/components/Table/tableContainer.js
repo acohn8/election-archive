@@ -1,9 +1,8 @@
 import React from 'react';
 import { Button, Divider, Header } from 'semantic-ui-react';
-import { connect } from 'react-redux';
 import ResultsTable from './table';
 
-const tableContainer = props => (
+const TableContainer = () => (
   <div>
     <Divider />
     <Header as="h2">County Results</Header>
@@ -13,8 +12,4 @@ const tableContainer = props => (
   </div>
 );
 
-const mapStateToProps = state => ({
-  candidates: state.results.candidates,
-});
-
-export default connect(mapStateToProps)(tableContainer);
+export default TableContainer;
