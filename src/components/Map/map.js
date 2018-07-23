@@ -62,16 +62,17 @@ class Map extends React.Component {
           'interpolate',
           ['linear'],
           ['get', 'clintonMargin'],
-          -1,
+          -0.7,
           'red',
           0,
           'white',
-          1,
+          0.7,
           'blue',
         ],
-        'fill-opacity': 0.8,
+        'fill-opacity': 1,
       },
     });
+    this.map.moveLayer('results', 'poi-parks-scalerank1');
   };
 
   render() {
