@@ -14,7 +14,6 @@ class Nav extends Component {
       <Menu size="huge">
         <Menu.Item name="home" active={activeItem === 'home'} onClick={this.handleItemClick} />
         <Menu.Item name="about" active={activeItem === 'about'} onClick={this.handleItemClick} />
-
         <Menu.Menu position="right">
           <Dropdown item text="States">
             <Dropdown.Menu>
