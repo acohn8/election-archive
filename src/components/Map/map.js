@@ -47,32 +47,34 @@ class Map extends React.Component {
   };
 
   addResultsLayer = () => {
-    this.map.addLayer({
-      id: 'results',
-      type: 'fill',
-      source: {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: this.makeDataLayer(),
+    this.map.addSource('results', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: this.makeDataLayer(),
+      },
+    }),
+      this.map.addLayer({
+        id: 'clinton-margin',
+        type: 'fill',
+        source: 'results',
+        paint: {
+          'fill-color': [
+            'interpolate',
+            ['linear'],
+            ['get', 'clintonMargin'],
+            -0.7,
+            'red',
+            0,
+            'white',
+            0.7,
+            'blue',
+          ],
+          'fill-opacity': 0.7,
+          'fill-outline-color': 'rgba(200, 100, 240, 1)',
         },
-      },
-      paint: {
-        'fill-color': [
-          'interpolate',
-          ['linear'],
-          ['get', 'clintonMargin'],
-          -0.7,
-          'red',
-          0,
-          'white',
-          0.7,
-          'blue',
-        ],
-        'fill-opacity': 1,
-      },
-    });
-    this.map.moveLayer('results', 'poi-parks-scalerank1');
+      });
+    this.map.moveLayer('clinton-margin', 'poi-parks-scalerank1');
   };
 
   render() {
