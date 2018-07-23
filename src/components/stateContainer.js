@@ -3,6 +3,7 @@ import { Grid, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import { fetchStateData } from '../redux/actions/resultActions';
+import { fetchStatesList } from '../redux/actions/stateActions';
 import TableContainer from './Table/tableContainer';
 import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
@@ -11,6 +12,7 @@ import ContentLoader from './Loader';
 class StateContainer extends React.Component {
   componentDidMount() {
     this.props.fetchStateData();
+    this.props.fetchStatesList();
   }
   render() {
     return (
@@ -46,6 +48,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchStateData: () => dispatch(fetchStateData()),
+  fetchStatesList: () => dispatch(fetchStatesList()),
 });
 
 export default connect(

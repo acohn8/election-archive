@@ -21,7 +21,7 @@ const ResultsTable = props => (
         <Table.Row key={countyId}>
           <Table.Cell>{props.geography.entities.counties[countyId].name}</Table.Cell>
           {Object.values(props.geography.entities.counties[countyId].results).map(result => (
-            <Table.Cell key={result}>{result}</Table.Cell>
+            <Table.Cell key={result}>{result.toLocaleString()}</Table.Cell>
           ))}
         </Table.Row>
       ))}

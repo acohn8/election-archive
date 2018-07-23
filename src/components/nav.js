@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Dropdown, Menu } from 'semantic-ui-react';
 
-export default class Nav extends Component {
+class Nav extends Component {
   state = { activeItem: 'home' };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
@@ -17,9 +18,10 @@ export default class Nav extends Component {
         <Menu.Menu position="right">
           <Dropdown item text="States">
             <Dropdown.Menu>
-              <Dropdown.Item>English</Dropdown.Item>
-              <Dropdown.Item>Russian</Dropdown.Item>
-              <Dropdown.Item>Spanish</Dropdown.Item>
+              {this.props.states.length > 0 &&
+                this.props.states.map(state => (
+                  <Dropdown.Item key={state.id}> {state.attributes.name}</Dropdown.Item>
+                ))}
             </Dropdown.Menu>
           </Dropdown>
         </Menu.Menu>
@@ -27,3 +29,9 @@ export default class Nav extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  states: state.states.states,
+});
+
+export default connect(mapStateToProps)(Nav);

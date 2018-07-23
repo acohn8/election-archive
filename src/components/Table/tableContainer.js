@@ -9,7 +9,7 @@ const tableContainer = props => (
     <Header as="h2">County Results</Header>
     <Button primary>Export to CSV</Button>
     <Divider hidden />
-    {props.candidates.result !== undefined && <ResultsTable />}
+    <ResultsTable />
   </div>
 );
 
