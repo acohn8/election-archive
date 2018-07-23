@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, Menu } from 'semantic-ui-react';
+import { setActiveState, fetchStatesList } from '../redux/actions/stateActions';
 
 class Nav extends Component {
   state = { activeItem: 'home' };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+
+  componentDidMount() {
+    this.props.fetchStatesList();
+  }
 
   render() {
     const { activeItem } = this.state;
@@ -19,7 +24,9 @@ class Nav extends Component {
             <Dropdown.Menu>
               {this.props.states.length > 0 &&
                 this.props.states.map(state => (
-                  <Dropdown.Item key={state.id}> {state.attributes.name}</Dropdown.Item>
+                  <Dropdown.Item key={state.id} onClick={() => this.props.setActiveState(state.id)}>
+                    {state.attributes.name}
+                  </Dropdown.Item>
                 ))}
             </Dropdown.Menu>
           </Dropdown>
@@ -33,4 +40,12 @@ const mapStateToProps = state => ({
   states: state.states.states,
 });
 
-export default connect(mapStateToProps)(Nav);
+const mapDispatchToProps = dispatch => ({
+  setActiveState: e => dispatch(setActiveState(e)),
+  fetchStatesList: () => dispatch(fetchStatesList()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Nav);

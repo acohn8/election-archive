@@ -10,10 +10,6 @@ import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
 
 class StateContainer extends React.Component {
-  componentDidMount() {
-    this.props.fetchStateData();
-    this.props.fetchStatesList();
-  }
   render() {
     return (
       <div>

@@ -70,8 +70,7 @@ class Map extends React.Component {
             0.7,
             'blue',
           ],
-          'fill-opacity': 0.7,
-          'fill-outline-color': 'rgba(200, 100, 240, 1)',
+          'fill-opacity': 1,
         },
       });
     this.map.moveLayer('clinton-margin', 'poi-parks-scalerank1');

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "connected-react-router": "^4.3.0",
     "mapbox-gl": "^0.47.0",
     "normalizr": "^3.2.4",
     "react": "^16.4.1",

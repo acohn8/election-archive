@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container } from 'semantic-ui-react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import Nav from './components/nav';
 import StateContainer from './components/stateContainer';
@@ -13,10 +13,11 @@ const App = () => (
     <Nav />
     <Container>
       <Switch>
-        <StateContainer />
+        <Route exact path="/" component={HomeContainer} />
+        <Route path="states/:state" component={StateContainer} />
       </Switch>
     </Container>
   </div>
 );
 
-export default withRouter(App);
+export default App;

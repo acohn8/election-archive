@@ -1,15 +1,16 @@
 import axios from 'axios';
 import { normalize } from 'normalizr';
+import { push } from 'connected-react-router';
 
 import { stateCounties, candidateListSchema, resultListSchema } from './schema';
 
-const fetchStateData = () => async (dispatch) => {
+const fetchStateData = stateId => async (dispatch) => {
   dispatch({ type: 'LOADING' });
   const url = 'http://localhost:3000/api/v1';
   const response = await Promise.all([
-    axios.get(`${url}/states/3/counties`),
-    axios.get(`${url}/states/3/candidates`),
-    axios.get(`${url}/states/3/results`),
+    axios.get(`${url}/states/${stateId}/counties`),
+    axios.get(`${url}/states/${stateId}/candidates`),
+    axios.get(`${url}/states/${stateId}/results`),
   ]);
 
   const geography = normalize(response[0].data, stateCounties);
@@ -22,6 +23,8 @@ const fetchStateData = () => async (dispatch) => {
     candidates,
     electionResults,
   });
+
+  dispatch(push(`/states/${stateId}`));
 };
 
 export { fetchStateData };
