@@ -6,35 +6,43 @@ import TableContainer from './Table/tableContainer';
 import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
+import { fetchStateData } from '../redux/actions/resultActions';
 
-const StateContainer = props => (
-  <div>
-    {props.loading === true && <ContentLoader />}
-    {props.candidates.result !== undefined && (
+class StateContainer extends React.Component {
+  componentDidMount() {
+    this.props.fetchStateData(this.props.states.activeStateId);
+  }
+  render() {
+    return (
       <div>
-        <Header as="h1">
-          {
-            props.states.states.find(state => state.id === props.states.activeStateId).attributes
-              .name
-          }
-        </Header>
-        <Grid columns={2}>
-          <Grid.Row>
-            <Grid.Column>
-              <ToplinesContainer />
-            </Grid.Column>
-            <Grid.Column>
-              <MapContainer />
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row colums={1}>
-            <TableContainer />
-          </Grid.Row>
-        </Grid>
+        {this.props.loading === true && <ContentLoader />}
+        {this.props.candidates.result !== undefined && (
+          <div>
+            <Header as="h1">
+              {
+                this.props.states.states.find(state => state.id === this.props.states.activeStateId)
+                  .attributes.name
+              }
+            </Header>
+            <Grid columns={2}>
+              <Grid.Row>
+                <Grid.Column>
+                  <ToplinesContainer />
+                </Grid.Column>
+                <Grid.Column>
+                  <MapContainer />
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row colums={1}>
+                <TableContainer />
+              </Grid.Row>
+            </Grid>
+          </div>
+        )}
       </div>
-    )}
-  </div>
-);
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   loading: state.results.loading,
@@ -43,4 +51,11 @@ const mapStateToProps = state => ({
   states: state.states,
 });
 
-export default connect(mapStateToProps)(StateContainer);
+const mapDispatchToProps = dispatch => ({
+  fetchStateData: id => dispatch(fetchStateData(id)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(StateContainer);
