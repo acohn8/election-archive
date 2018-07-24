@@ -1,6 +1,7 @@
 import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import { connect } from 'react-redux';
+import bbox from '@turf/bbox';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -8,9 +9,11 @@ mapboxgl.accessToken =
 class Map extends React.Component {
   componentDidMount() {
     this.map = new mapboxgl.Map({
+      animate: false,
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
       zoom: 5,
+      //grabs the lat long from the first county in the state to ensure the counties layer is loading the right geos
       center: [
         this.props.geography.entities.counties[this.props.geography.result.counties[0]].longitude,
         this.props.geography.entities.counties[this.props.geography.result.counties[0]].latitude,
@@ -27,6 +30,7 @@ class Map extends React.Component {
       .querySourceFeatures('composite', {
         sourceLayer: 'us_counties-16cere',
       })
+      .slice()
       .filter(
         feature =>
           parseInt(feature.properties.STATEFP) ===
@@ -59,26 +63,28 @@ class Map extends React.Component {
         type: 'FeatureCollection',
         features: this.makeDataLayer(),
       },
-    }),
-      this.map.addLayer({
-        id: 'clinton-margin',
-        type: 'fill',
-        source: 'results',
-        paint: {
-          'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['get', 'clintonMargin'],
-            -0.7,
-            'red',
-            0,
-            'white',
-            0.7,
-            'blue',
-          ],
-          'fill-opacity': 1,
-        },
-      });
+    });
+    this.map.addLayer({
+      id: 'clinton-margin',
+      type: 'fill',
+      source: 'results',
+      paint: {
+        'fill-color': [
+          'interpolate',
+          ['linear'],
+          ['get', 'clintonMargin'],
+          -0.7,
+          'red',
+          0,
+          'white',
+          0.7,
+          'blue',
+        ],
+        'fill-opacity': 1,
+      },
+    });
+    const boundingBox = bbox(this.map.getSource('results')._data);
+    this.map.fitBounds(boundingBox, { padding: 10 });
     this.map.moveLayer('clinton-margin', 'poi-parks-scalerank1');
   };
 

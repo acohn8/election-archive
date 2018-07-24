@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Image } from 'semantic-ui-react';
 
-const colors = { democrat: 'blue', republican: 'red' };
+const colors = { democratic: 'blue', republican: 'red' };
 
 const ToplinesCard = ({
   candidate, votes, total, winner,

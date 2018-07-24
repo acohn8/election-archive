@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@turf/bbox": "^6.0.1",
     "axios": "^0.18.0",
     "connected-react-router": "^4.3.0",
     "mapbox-gl": "^0.47.0",
