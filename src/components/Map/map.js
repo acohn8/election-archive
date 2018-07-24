@@ -10,8 +10,11 @@ class Map extends React.Component {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
-      zoom: 5.7,
-      center: [-77.48, 41.082],
+      zoom: 5,
+      center: [
+        this.props.geography.entities.counties[this.props.geography.result.counties[0]].longitude,
+        this.props.geography.entities.counties[this.props.geography.result.counties[0]].latitude,
+      ],
     });
 
     this.map.on('load', () => {
@@ -24,14 +27,18 @@ class Map extends React.Component {
       .querySourceFeatures('composite', {
         sourceLayer: 'us_counties-16cere',
       })
-      .filter(feature => feature.properties.STATEFP === '42');
+      .filter(
+        feature =>
+          parseInt(feature.properties.STATEFP) ===
+          this.props.geography.entities.state[this.props.states.activeStateId].fips,
+      );
     const countyResults = this.props.electionResults.result.map(countyId => ({
-      fips: this.props.geography.entities.counties[countyId].fips,
+      fips: this.props.geography.entities.counties[countyId].fips.toString().padStart(5, '0'),
       results: this.props.electionResults.entities.results[countyId].results,
     }));
     stateCounties.map(county => {
       const result = countyResults.find(
-        countyResult => countyResult.fips === parseInt(county.properties.GEOID),
+        countyResult => countyResult.fips === county.properties.GEOID,
       );
       const clintonMargin = parseFloat(
         (result.results[16] - result.results[10]) / (result.results[16] + result.results[10]),
@@ -42,7 +49,6 @@ class Map extends React.Component {
       stateCounties[stateCounties.indexOf(county)].properties.clintonVotes = clintonVotes;
       stateCounties[stateCounties.indexOf(county)].properties.trumpVotes = trumpVotes;
     });
-    console.log(stateCounties);
     return stateCounties;
   };
 
@@ -89,8 +95,8 @@ class Map extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  states: state.states,
   geography: state.results.geography,
-  electionResults: state.results.electionResults,
   electionResults: state.results.electionResults,
 });
 
