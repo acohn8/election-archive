@@ -37,6 +37,14 @@ class Map extends React.Component {
   };
 
   makeDataLayer = () => {
+    const demCandidate = this.props.candidates.result.find(
+      candidateId =>
+        this.props.candidates.entities.candidates[candidateId].attributes.party === 'democratic',
+    );
+    const gopCandidate = this.props.candidates.result.find(
+      candidateId =>
+        this.props.candidates.entities.candidates[candidateId].attributes.party === 'republican',
+    );
     //finds the county layer, filters counties with matching fips, matches results from state
     const stateCounties = this.map
       .querySourceFeatures('composite', {
@@ -56,14 +64,15 @@ class Map extends React.Component {
       const result = countyResults.find(
         countyResult => countyResult.fips === county.properties.GEOID,
       );
-      const clintonMargin = parseFloat(
-        (result.results[16] - result.results[10]) / (result.results[16] + result.results[10]),
+      const demMargin = parseFloat(
+        (result.results[demCandidate] - result.results[gopCandidate]) /
+          (result.results[demCandidate] + result.results[gopCandidate]),
       );
-      const clintonVotes = result.results[16];
-      const trumpVotes = result.results[10];
-      stateCounties[stateCounties.indexOf(county)].properties.clintonMargin = clintonMargin;
-      stateCounties[stateCounties.indexOf(county)].properties.clintonVotes = clintonVotes;
-      stateCounties[stateCounties.indexOf(county)].properties.trumpVotes = trumpVotes;
+      const demVotes = result.results[demCandidate];
+      const gopVotes = result.results[gopCandidate];
+      stateCounties[stateCounties.indexOf(county)].properties.demMargin = demMargin;
+      stateCounties[stateCounties.indexOf(county)].properties.demVotes = demVotes;
+      stateCounties[stateCounties.indexOf(county)].properties.gopVotes = gopVotes;
     });
     return stateCounties;
   };
@@ -77,14 +86,14 @@ class Map extends React.Component {
       },
     });
     this.map.addLayer({
-      id: 'clinton-margin',
+      id: 'dem-margin',
       type: 'fill',
       source: 'results',
       paint: {
         'fill-color': [
           'interpolate',
           ['linear'],
-          ['get', 'clintonMargin'],
+          ['get', 'demMargin'],
           -0.7,
           'red',
           0,
@@ -97,7 +106,7 @@ class Map extends React.Component {
     });
     const boundingBox = bbox(this.map.getSource('results')._data);
     this.map.fitBounds(boundingBox, { padding: 10, animate: false });
-    this.map.moveLayer('clinton-margin', 'poi-parks-scalerank1');
+    this.map.moveLayer('dem-margin', 'poi-parks-scalerank1');
   };
 
   render() {
@@ -116,6 +125,7 @@ const mapStateToProps = state => ({
   states: state.states,
   geography: state.results.geography,
   electionResults: state.results.electionResults,
+  candidates: state.results.candidates,
 });
 
 export default connect(mapStateToProps)(Map);
