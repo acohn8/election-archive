@@ -3,6 +3,7 @@ import { Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import ToplinesCard from './toplinesCard';
+import findTopCandidates from '../functions/findTopCandidates';
 
 const ToplinesContainer = (props) => {
   const statewideCandidateResults = () => {

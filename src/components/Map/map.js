@@ -4,6 +4,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
+import findTopCandidates from '../functions/findTopCandidates';
+
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
 
@@ -37,14 +39,19 @@ class Map extends React.Component {
   };
 
   makeDataLayer = () => {
-    const demCandidate = this.props.candidates.result.find(
-      candidateId =>
-        this.props.candidates.entities.candidates[candidateId].attributes.party === 'democratic',
-    );
-    const gopCandidate = this.props.candidates.result.find(
-      candidateId =>
-        this.props.candidates.entities.candidates[candidateId].attributes.party === 'republican',
-    );
+    let demCandidate;
+    let gopCandidate;
+    findTopCandidates(this.props.candidates, this.props.electionResults).forEach(candidateId => {
+      if (
+        this.props.candidates.entities.candidates[candidateId].attributes.party === 'democratic'
+      ) {
+        demCandidate = candidateId;
+      } else if (
+        this.props.candidates.entities.candidates[candidateId].attributes.party === 'republican'
+      ) {
+        gopCandidate = candidateId;
+      }
+    });
     //finds the county layer, filters counties with matching fips, matches results from state
     const stateCounties = this.map
       .querySourceFeatures('composite', {
