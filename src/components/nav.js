@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dropdown, Menu } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+
 import { setActiveState, fetchStatesList } from '../redux/actions/stateActions';
 
 class Nav extends Component {
@@ -24,7 +26,12 @@ class Nav extends Component {
             <Dropdown.Menu>
               {this.props.states.length > 0 &&
                 this.props.states.map(state => (
-                  <Dropdown.Item key={state.id} onClick={() => this.props.setActiveState(state.id)}>
+                  <Dropdown.Item
+                    as={Link}
+                    to={`/states/${state.id}`}
+                    key={state.id}
+                    onClick={() => this.props.setActiveState(state.id)}
+                  >
                     {state.attributes.name}
                   </Dropdown.Item>
                 ))}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from 'semantic-ui-react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Nav from './components/nav';
 import StateContainer from './components/stateContainer';
@@ -14,10 +15,14 @@ const App = () => (
     <Container>
       <Switch>
         <Route exact path="/" component={HomeContainer} />
-        <Route path="states/:state" component={StateContainer} />
+        <Route path="/states/:activeStateId" component={StateContainer} />
       </Switch>
     </Container>
   </div>
 );
 
-export default App;
+const mapStateToProps = state => ({
+  states: state.results.states,
+});
+
+export default withRouter(connect(mapStateToProps)(App));
