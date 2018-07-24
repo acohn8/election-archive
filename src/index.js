@@ -5,7 +5,6 @@ import 'semantic-ui-css/semantic.min.css';
 import { ConnectedRouter } from 'connected-react-router';
 
 import './index.css';
-// import store from './redux/store';
 import { history, store } from './redux/store';
 
 import App from './App';
