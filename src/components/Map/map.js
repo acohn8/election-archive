@@ -9,7 +9,6 @@ mapboxgl.accessToken =
 class Map extends React.Component {
   componentDidMount() {
     this.map = new mapboxgl.Map({
-      animate: false,
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
       zoom: 5,
@@ -84,7 +83,7 @@ class Map extends React.Component {
       },
     });
     const boundingBox = bbox(this.map.getSource('results')._data);
-    this.map.fitBounds(boundingBox, { padding: 10 });
+    this.map.fitBounds(boundingBox, { padding: 10, animate: false });
     this.map.moveLayer('clinton-margin', 'poi-parks-scalerank1');
   };
 
