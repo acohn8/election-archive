@@ -6,21 +6,15 @@ import { Link } from 'react-router-dom';
 import { setActiveState, fetchStatesList } from '../redux/actions/stateActions';
 
 class Nav extends Component {
-  state = { activeItem: 'home' };
-
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
-
   componentDidMount() {
     this.props.fetchStatesList();
   }
 
   render() {
-    const { activeItem } = this.state;
-
     return (
       <Menu size="huge">
-        <Menu.Item name="home" active={activeItem === 'home'} onClick={this.handleItemClick} />
-        <Menu.Item name="about" active={activeItem === 'about'} onClick={this.handleItemClick} />
+        <Menu.Item name="home" as={Link} to="/" />
+        <Menu.Item name="about" />
         <Menu.Menu position="right">
           <Dropdown item text="States">
             <Dropdown.Menu>

@@ -8,7 +8,9 @@ const ToplinesContainer = (props) => {
   const statewideCandidateResults = () => {
     const statewideResults = {};
     const stateCandidates = props.candidates.result;
-    stateCandidates.forEach(candidateId => (statewideResults[candidateId] = 0));
+    stateCandidates.forEach((candidateId) => {
+      statewideResults[candidateId] = 0;
+    });
     props.electionResults.result.forEach((countyId) => {
       stateCandidates.forEach((candidateId) => {
         statewideResults[candidateId] +=
@@ -27,7 +29,9 @@ const ToplinesContainer = (props) => {
 
   const getStatewideTotal = () => {
     let statewideTotal = 0;
-    filterAndSortCandidatesWithResults().forEach(candidateId => (statewideTotal += statewideCandidateResults()[candidateId]));
+    filterAndSortCandidatesWithResults().forEach((candidateId) => {
+      statewideTotal += statewideCandidateResults()[candidateId];
+    });
     return statewideTotal;
   };
 
