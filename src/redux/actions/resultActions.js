@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { normalize } from 'normalizr';
-import { push } from 'connected-react-router';
 
 import { stateCounties, candidateListSchema, resultListSchema } from './schema';
 
@@ -23,8 +22,6 @@ const fetchStateData = stateId => async (dispatch) => {
     candidates,
     electionResults,
   });
-
-  dispatch(push(`/states/${stateId}`));
 };
 
 export { fetchStateData };

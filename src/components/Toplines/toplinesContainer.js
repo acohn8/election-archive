@@ -38,6 +38,7 @@ const ToplinesContainer = (props) => {
         .map(candidateId => (
           <ToplinesCard
             candidate={props.candidates.entities.candidates[candidateId]}
+            key={candidateId}
             votes={statewideCandidateResults()[candidateId]}
             winner={filterAndSortCandidatesWithResults()[0]}
             total={getStatewideTotal()}

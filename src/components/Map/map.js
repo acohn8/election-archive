@@ -8,6 +8,17 @@ mapboxgl.accessToken =
 
 class Map extends React.Component {
   componentDidMount() {
+    this.createMap();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      this.map.remove();
+      this.createMap();
+    }
+  }
+
+  createMap = () => {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
@@ -22,9 +33,10 @@ class Map extends React.Component {
     this.map.on('load', () => {
       this.addResultsLayer();
     });
-  }
+  };
 
   makeDataLayer = () => {
+    //finds the county layer, filters counties with matching fips, matches results from state
     const stateCounties = this.map
       .querySourceFeatures('composite', {
         sourceLayer: 'us_counties-16cere',
@@ -32,14 +44,14 @@ class Map extends React.Component {
       .slice()
       .filter(
         feature =>
-          parseInt(feature.properties.STATEFP) ===
+          parseInt(feature.properties.STATEFP, 0) ===
           this.props.geography.entities.state[this.props.states.activeStateId].fips,
       );
     const countyResults = this.props.electionResults.result.map(countyId => ({
       fips: this.props.geography.entities.counties[countyId].fips.toString().padStart(5, '0'),
       results: this.props.electionResults.entities.results[countyId].results,
     }));
-    stateCounties.map(county => {
+    stateCounties.forEach(county => {
       const result = countyResults.find(
         countyResult => countyResult.fips === county.properties.GEOID,
       );
