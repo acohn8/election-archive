@@ -1,16 +1,19 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
 import findTopCandidates from '../functions/findTopCandidates';
+import CountyPopup from './countyPopup';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
 
 class Map extends React.Component {
   componentDidMount() {
+    this.tooltipContainer = document.createElement('div');
     this.createMap();
   }
 
@@ -35,6 +38,35 @@ class Map extends React.Component {
 
     this.map.on('load', () => {
       this.addResultsLayer();
+      this.enableHover();
+    });
+  };
+
+  setTooltip(features) {
+    if (features.length) {
+      ReactDOM.render(
+        React.createElement(CountyPopup, {
+          features,
+        }),
+        this.tooltipContainer,
+      );
+    } else {
+      this.tooltipContainer.innerHTML = '';
+    }
+  }
+
+  enableHover = () => {
+    const tooltip = new mapboxgl.Marker(this.tooltipContainer, {
+      offset: [0, 60],
+    })
+      .setLngLat([0, 0])
+      .addTo(this.map);
+
+    this.map.on('mousemove', 'dem-margin', e => {
+      const features = this.map.queryRenderedFeatures(e.point);
+      tooltip.setLngLat(e.lngLat);
+      this.map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+      this.setTooltip(features);
     });
   };
 
