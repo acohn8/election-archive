@@ -5,7 +5,7 @@ import { stateCounties, candidateListSchema, resultListSchema } from './schema';
 
 const fetchStateData = stateId => async (dispatch) => {
   dispatch({ type: 'LOADING' });
-  const url = 'https://election-data-2016.herokuapp.com';
+  const url = 'https://election-data-2016.herokuapp.com/api/v1';
   const response = await Promise.all([
     axios.get(`${url}/states/${stateId}/counties`),
     axios.get(`${url}/states/${stateId}/candidates`),
