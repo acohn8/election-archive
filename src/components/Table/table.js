@@ -1,56 +1,106 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import { Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { div } from 'gl-matrix/src/gl-matrix/vec4';
 
-const ResultsTable = (props) => {
-  const majorCandidates = Object.keys(props.electionResults.entities.results[props.electionResults.result[0]].results);
+import { fetchPrecinctData } from '../../redux/actions/precinctActions';
+import PrecinctTable from './precinctTable';
 
-  const data = props.electionResults.result.map(countyId => ({
-    countyId,
-    county: props.geography.entities.counties[countyId].name,
-  }));
+class ResultsTable extends React.Component {
+  state = { filtered: [] };
 
-  data.forEach((county) => {
-    county.candidates = {};
-    majorCandidates.forEach((candidateId) => {
-      county.candidates[candidateId] = {
-        votes: props.electionResults.entities.results[county.countyId].results[candidateId],
-      };
+  makeData = () => {
+    const majorCandidates = Object.keys(
+      this.props.electionResults.entities.results[this.props.electionResults.result[0]].results,
+    );
+
+    const data = this.props.electionResults.result.map(countyId => ({
+      countyId,
+      county: this.props.geography.entities.counties[countyId].name,
+    }));
+
+    data.forEach(county => {
+      county.candidates = {};
+      majorCandidates.forEach(candidateId => {
+        county.candidates[candidateId] = {
+          votes: this.props.electionResults.entities.results[county.countyId].results[candidateId],
+        };
+      });
     });
-  });
+    console.log(data);
+    return data;
+  };
 
-  const columns = [
-    {
-      Header: 'County',
-      id: 'county',
-      accessor: d => d.county,
-    },
-  ];
+  makeColumns = () => {
+    const majorCandidates = Object.keys(
+      this.props.electionResults.entities.results[this.props.electionResults.result[0]].results,
+    );
 
-  majorCandidates.map((candidateId) => {
-    columns.push({
-      id: candidateId,
-      Header: `${
-        candidateId === 'other'
-          ? 'Other'
-          : props.candidates.entities.candidates[candidateId].attributes.name
-      }`,
-      accessor: d => d.candidates[candidateId].votes,
+    const columns = [
+      {
+        Header: 'County',
+        id: 'county',
+        width: 300,
+        accessor: d => d.county,
+        filterMethod: (filter, row) =>
+          this.state.filtered.length > 0 &&
+          row.county.toLowerCase().includes(this.state.filtered[0].value.toLowerCase()),
+      },
+    ];
+
+    majorCandidates.map(candidateId => {
+      columns.push({
+        id: candidateId,
+        Header: `${
+          candidateId === 'other'
+            ? 'Other'
+            : this.props.candidates.entities.candidates[candidateId].attributes.name
+        }`,
+        accessor: d => d.candidates[candidateId].votes,
+        filterable: false,
+        minWidth: 100,
+      });
     });
-  });
+    return columns;
+  };
 
-  return (
-    <ReactTable
-      data={data}
-      columns={columns}
-      defaultPageSize={10}
-      className="-striped -highlight"
-    />
-  );
-};
+  render() {
+    return (
+      <ReactTable
+        data={this.makeData()}
+        columns={this.makeColumns()}
+        defaultPageSize={20}
+        filterable
+        filtered={this.state.filtered}
+        onFilteredChange={filtered => this.setState({ filtered })}
+        className="-striped -highlight"
+        style={{
+          height: '800px',
+        }}
+        SubComponent={row => {
+          {
+            this.props.fetchPrecinctData(row.original.countyId);
+          }
+          return (
+            <div style={{ padding: '20px', backgroundColor: '#F9FAFB' }}>
+              <Header as="h4">Precinct Results</Header>
+              <br />
+              <br />
+              <div>
+                <PrecinctTable />
+              </div>
+            </div>
+          );
+        }}
+      />
+    );
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  fetchPrecinctData: id => dispatch(fetchPrecinctData(id)),
+});
 
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
@@ -58,4 +108,7 @@ const mapStateToProps = state => ({
   electionResults: state.results.electionResults,
 });
 
-export default connect(mapStateToProps)(ResultsTable);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ResultsTable);

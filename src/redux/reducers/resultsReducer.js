@@ -3,6 +3,7 @@ const initialResultsState = {
   geography: {},
   candidates: [],
   electionResults: [],
+  precinctResults: {},
 };
 
 const resultsReducer = (previousState = initialResultsState, action) => {
@@ -16,6 +17,11 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         geography: action.geography,
         candidates: action.candidates,
         electionResults: action.electionResults,
+      };
+    case 'SET_PRECINCTS':
+      return {
+        ...previousState,
+        precinctResults: { county_id: action.county, precincts: action.precincts },
       };
     default:
       return previousState;
