@@ -79,7 +79,7 @@ class ResultsTable extends React.Component {
       <ReactTable
         data={this.makeData()}
         columns={this.makeColumns()}
-        defaultPageSize={20}
+        defaultPageSize={50}
         filterable
         filtered={this.state.filtered}
         freezeWhenExpanded={true}
