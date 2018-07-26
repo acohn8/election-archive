@@ -8,7 +8,16 @@ import { fetchPrecinctData } from '../../redux/actions/precinctActions';
 import PrecinctTable from './precinctTable';
 
 class ResultsTable extends React.Component {
-  state = { filtered: [] };
+  state = { filtered: [], expanded: {} };
+
+  handleRowExpanded(newExpanded, index, event) {
+    this.setState({
+      expanded: { [index]: true },
+    });
+    this.props.fetchPrecinctData(
+      this.props.geography.entities.counties[this.props.geography.result.counties[index[0]]].id,
+    );
+  }
 
   makeData = () => {
     const majorCandidates = Object.keys(
@@ -28,21 +37,20 @@ class ResultsTable extends React.Component {
         };
       });
     });
-    console.log(data);
     return data;
   };
 
-  makeColumns = () => {
+  makeColumns = (precinct = false) => {
     const majorCandidates = Object.keys(
       this.props.electionResults.entities.results[this.props.electionResults.result[0]].results,
     );
 
     const columns = [
       {
-        Header: 'County',
-        id: 'county',
+        Header: precinct === false ? 'County' : 'Precinct',
+        id: precinct === false ? 'county' : 'precinct',
         width: 300,
-        accessor: d => d.county,
+        accessor: precinct === false ? d => d.county : d => d.name,
         filterMethod: (filter, row) =>
           this.state.filtered.length > 0 &&
           row.county.toLowerCase().includes(this.state.filtered[0].value.toLowerCase()),
@@ -57,9 +65,10 @@ class ResultsTable extends React.Component {
             ? 'Other'
             : this.props.candidates.entities.candidates[candidateId].attributes.name
         }`,
-        accessor: d => d.candidates[candidateId].votes,
+        accessor:
+          precinct === false ? d => d.candidates[candidateId].votes : d => d.results[candidateId],
         filterable: false,
-        minWidth: 100,
+        minWidth: 200,
       });
     });
     return columns;
@@ -73,25 +82,34 @@ class ResultsTable extends React.Component {
         defaultPageSize={20}
         filterable
         filtered={this.state.filtered}
-        // expanded={this.state.expanded}
-        // onExpandedChange={expanded => this.setState({ expanded: expanded })}
+        freezeWhenExpanded={true}
+        expanded={this.state.expanded}
+        onExpandedChange={(newExpanded, index, event) =>
+          this.handleRowExpanded(newExpanded, index, event)
+        }
         onFilteredChange={filtered => this.setState({ filtered })}
         className="-striped -highlight"
         style={{
           height: '800px',
         }}
         SubComponent={row => {
-          {
-            this.props.fetchPrecinctData(row.original.countyId);
-          }
+          // {
+          //   this.props.fetchPrecinctData(row.original.countyId);
+          // }
           return (
-            <div style={{ padding: '20px', backgroundColor: '#F9FAFB' }}>
-              <Header as="h4">Precinct Results</Header>
+            <div style={{ padding: '20px' }}>
               <br />
               <br />
-              <div>
-                <PrecinctTable />
-              </div>
+              {this.props.precinctResults.precincts !== undefined ? (
+                <ReactTable
+                  data={this.props.precinctResults.precincts}
+                  columns={this.makeColumns(true)}
+                  defaultPageSize={this.makeColumns(true).length}
+                  showPagination={false}
+                />
+              ) : (
+                ''
+              )}
             </div>
           );
         }}

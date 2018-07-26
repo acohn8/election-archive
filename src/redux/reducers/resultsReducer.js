@@ -10,6 +10,11 @@ const resultsReducer = (previousState = initialResultsState, action) => {
   switch (action.type) {
     case 'LOADING':
       return { ...previousState, loading: true };
+    case 'RESET_PRECINCTS':
+      return {
+        ...previousState,
+        precinctResults: {},
+      };
     case 'SET_STATE_DATA':
       return {
         ...previousState,
