@@ -92,9 +92,6 @@ class ResultsTable extends React.Component {
           height: '800px',
         }}
         SubComponent={row => {
-          // {
-          //   this.props.fetchPrecinctData(row.original.countyId);
-          // }
           return (
             <div style={{ padding: '20px' }}>
               <br />
