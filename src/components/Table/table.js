@@ -2,19 +2,27 @@ import React from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { connect } from 'react-redux';
+import { Grid } from 'semantic-ui-react';
 
 import { fetchPrecinctData } from '../../redux/actions/precinctActions';
+import CountyContainer from '../CountyDetail/CountyContainer';
+import CountyMap from '../Map/countyMap';
 
 class ResultsTable extends React.Component {
-  state = { filtered: [], expanded: {} };
+  state = { filtered: [], expanded: {}, prevIndex: '' };
 
   handleRowExpanded(newExpanded, index, event) {
-    this.setState({
-      expanded: { [index]: true },
-    });
-    this.props.fetchPrecinctData(
-      this.props.geography.entities.counties[this.props.geography.result.counties[index[0]]].id,
-    );
+    if (this.state.prevIndex !== '' && index - this.state.prevIndex === 0) {
+      this.setState({ expanded: {}, prevIndex: '' });
+    } else {
+      this.setState({
+        expanded: { [index]: true },
+        prevIndex: index,
+      });
+      this.props.fetchPrecinctData(
+        this.props.geography.entities.counties[this.props.geography.result.counties[index[0]]].id,
+      );
+    }
   }
 
   makeData = () => {
@@ -47,7 +55,7 @@ class ResultsTable extends React.Component {
       {
         Header: precinct === false ? 'County' : 'Precinct',
         id: precinct === false ? 'county' : 'precinct',
-        width: 300,
+        width: precinct === false ? 300 : 150,
         accessor: precinct === false ? d => d.county : d => d.name,
         filterMethod: (filter, row) =>
           this.state.filtered.length > 0 &&
@@ -66,7 +74,7 @@ class ResultsTable extends React.Component {
         accessor:
           precinct === false ? d => d.candidates[candidateId].votes : d => d.results[candidateId],
         filterable: false,
-        minWidth: 200,
+        minWidth: precinct === false ? 200 : 100,
       });
     });
     return columns;
@@ -92,18 +100,28 @@ class ResultsTable extends React.Component {
         SubComponent={row => {
           return (
             <div style={{ padding: '20px' }}>
-              <br />
-              <br />
-              {this.props.precinctResults.precincts !== undefined ? (
-                <ReactTable
-                  data={this.props.precinctResults.precincts}
-                  columns={this.makeColumns(true)}
-                  defaultPageSize={this.props.precinctResults.precincts.length}
-                  showPagination={false}
-                />
-              ) : (
-                ''
-              )}
+              <Grid centered columns={2}>
+                <Grid.Column>
+                  {this.props.precinctResults.precincts !== undefined ? (
+                    <ReactTable
+                      data={this.props.precinctResults.precincts}
+                      defaultPageSize={
+                        this.props.precinctResults.precincts.length > 20
+                          ? 20
+                          : this.props.precinctResults.precincts.length
+                      }
+                      columns={this.makeColumns(true)}
+                      defaultPageSize={this.props.precinctResults.precincts.length}
+                      showPagination={true}
+                    />
+                  ) : (
+                    ''
+                  )}
+                </Grid.Column>
+                <Grid.Column>
+                  {this.props.precinctResults.county_id !== undefined && <CountyMap />}
+                </Grid.Column>
+              </Grid>
             </div>
           );
         }}

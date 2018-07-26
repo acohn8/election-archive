@@ -11,7 +11,7 @@ import CountyPopup from './countyPopup';
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
 
-class Map extends React.Component {
+class CountyMap extends React.Component {
   componentDidMount() {
     this.tooltipContainer = document.createElement('div');
     this.createMap();
@@ -28,11 +28,11 @@ class Map extends React.Component {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
-      zoom: 5,
+      zoom: 8,
       //grabs the lat long from the first county in the state to ensure the counties layer is loading the right geos
       center: [
-        this.props.geography.entities.counties[this.props.geography.result.counties[0]].longitude,
-        this.props.geography.entities.counties[this.props.geography.result.counties[0]].latitude,
+        this.props.geography.entities.counties[this.props.precinctResults.county_id].longitude,
+        this.props.geography.entities.counties[this.props.precinctResults.county_id].latitude,
       ],
     });
 
@@ -85,20 +85,22 @@ class Map extends React.Component {
       }
     });
     //finds the county layer, filters counties with matching fips, matches results from state
+    const fips = this.props.geography.entities.counties[this.props.precinctResults.county_id].fips;
     const stateCounties = this.map
       .querySourceFeatures('composite', {
         sourceLayer: 'us_counties-16cere',
       })
       .slice()
-      .filter(
-        feature =>
-          parseInt(feature.properties.STATEFP, 0) ===
-          this.props.geography.entities.state[this.props.states.activeStateId].fips,
-      );
+      .filter(county => fips === parseInt(county.properties.GEOID, 0));
+
     const countyResults = this.props.electionResults.result.map(countyId => ({
-      fips: this.props.geography.entities.counties[countyId].fips.toString().padStart(5, '0'),
-      results: this.props.electionResults.entities.results[countyId].results,
+      fips: this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
+        .toString()
+        .padStart(5, '0'),
+      results: this.props.electionResults.entities.results[this.props.precinctResults.county_id]
+        .results,
     }));
+
     stateCounties.forEach(county => {
       const result = countyResults.find(
         countyResult => countyResult.fips === county.properties.GEOID,
@@ -144,7 +146,7 @@ class Map extends React.Component {
       },
     });
     const boundingBox = bbox(this.map.getSource('results')._data);
-    this.map.fitBounds(boundingBox, { padding: 10, animate: false });
+    this.map.fitBounds(boundingBox, { padding: 40, animate: false });
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank1');
   };
 
@@ -165,6 +167,7 @@ const mapStateToProps = state => ({
   geography: state.results.geography,
   electionResults: state.results.electionResults,
   candidates: state.results.candidates,
+  precinctResults: state.results.precinctResults,
 });
 
-export default connect(mapStateToProps)(Map);
+export default connect(mapStateToProps)(CountyMap);
