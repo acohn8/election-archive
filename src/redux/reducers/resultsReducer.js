@@ -22,6 +22,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         boundingBox: [],
       };
     case 'SET_PRECINCTS':
+      console.log(action.county, action.precincts);
       return {
         ...previousState,
         precinctResults: { county_id: action.county, precincts: action.precincts },
