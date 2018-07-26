@@ -2,7 +2,7 @@ import React from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { connect } from 'react-redux';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Header, Divider } from 'semantic-ui-react';
 
 import { fetchPrecinctData } from '../../redux/actions/precinctActions';
 import CountyContainer from '../CountyDetail/CountyContainer';
@@ -55,7 +55,7 @@ class ResultsTable extends React.Component {
       {
         Header: precinct === false ? 'County' : 'Precinct',
         id: precinct === false ? 'county' : 'precinct',
-        width: precinct === false ? 300 : 150,
+        width: precinct === false ? 300 : 170,
         accessor: precinct === false ? d => d.county : d => d.name,
         filterMethod: (filter, row) =>
           this.state.filtered.length > 0 &&
@@ -74,7 +74,7 @@ class ResultsTable extends React.Component {
         accessor:
           precinct === false ? d => d.candidates[candidateId].votes : d => d.results[candidateId],
         filterable: false,
-        minWidth: precinct === false ? 200 : 100,
+        minWidth: precinct === false ? 200 : 90,
       });
     });
     return columns;
@@ -93,26 +93,25 @@ class ResultsTable extends React.Component {
           this.handleRowExpanded(newExpanded, index, event)
         }
         onFilteredChange={filtered => this.setState({ filtered })}
-        className="-striped -highlight"
-        style={{
-          height: '800px',
-        }}
+        className="-highlight"
         SubComponent={row => {
           return (
             <div style={{ padding: '20px' }}>
               <Grid centered columns={2}>
+                <Grid.Row>
+                  <Divider />
+                  <Header as="h2">{row.row.county}</Header>
+                </Grid.Row>
                 <Grid.Column>
                   {this.props.precinctResults.precincts !== undefined ? (
                     <ReactTable
                       data={this.props.precinctResults.precincts}
-                      defaultPageSize={
-                        this.props.precinctResults.precincts.length > 20
-                          ? 20
-                          : this.props.precinctResults.precincts.length
-                      }
-                      columns={this.makeColumns(true)}
                       defaultPageSize={this.props.precinctResults.precincts.length}
-                      showPagination={true}
+                      showPagination={false}
+                      columns={this.makeColumns(true)}
+                      style={{
+                        maxHeight: '400px',
+                      }}
                     />
                   ) : (
                     ''
@@ -121,6 +120,7 @@ class ResultsTable extends React.Component {
                 <Grid.Column>
                   {this.props.precinctResults.county_id !== undefined && <CountyMap />}
                 </Grid.Column>
+                <Divider />
               </Grid>
             </div>
           );

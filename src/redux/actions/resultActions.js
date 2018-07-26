@@ -23,5 +23,9 @@ const fetchStateData = stateId => async (dispatch) => {
     electionResults,
   });
 };
+const setBoundingBox = bbox => (dispatch) => {
+  console.log(bbox);
+  dispatch({ type: 'SET_STATE_BOUNDS', bounds: bbox });
+};
 
-export { fetchStateData };
+export { fetchStateData, setBoundingBox };

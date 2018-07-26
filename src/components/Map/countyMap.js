@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
@@ -38,35 +37,6 @@ class CountyMap extends React.Component {
 
     this.map.on('load', () => {
       this.addResultsLayer();
-      this.enableHover();
-    });
-  };
-
-  setTooltip(features) {
-    if (features.length) {
-      ReactDOM.render(
-        React.createElement(CountyPopup, {
-          features,
-        }),
-        this.tooltipContainer,
-      );
-    } else {
-      this.tooltipContainer.innerHTML = '';
-    }
-  }
-
-  enableHover = () => {
-    const tooltip = new mapboxgl.Marker(this.tooltipContainer, {
-      offset: [0, 60],
-    })
-      .setLngLat([0, 0])
-      .addTo(this.map);
-
-    this.map.on('mousemove', 'dem-margin', e => {
-      const features = this.map.queryRenderedFeatures(e.point);
-      tooltip.setLngLat(e.lngLat);
-      this.map.getCanvas().style.cursor = features.length ? 'pointer' : '';
-      this.setTooltip(features);
     });
   };
 
@@ -88,7 +58,7 @@ class CountyMap extends React.Component {
     const fips = this.props.geography.entities.counties[this.props.precinctResults.county_id].fips;
     const stateCounties = this.map
       .querySourceFeatures('composite', {
-        sourceLayer: 'us_counties-16cere',
+        sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
       })
       .slice()
       .filter(county => fips === parseInt(county.properties.GEOID, 0));
@@ -135,18 +105,17 @@ class CountyMap extends React.Component {
           'interpolate',
           ['linear'],
           ['get', 'demMargin'],
-          -0.7,
+          -0.3,
           '#ef8a62',
           0,
           '#f7f7f7',
-          0.7,
+          0.3,
           '#67a9cf',
         ],
         'fill-opacity': 1,
       },
     });
-    const boundingBox = bbox(this.map.getSource('results')._data);
-    this.map.fitBounds(boundingBox, { padding: 40, animate: false });
+    this.map.fitBounds(this.props.boundingBox, { padding: 40, animate: false });
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank1');
   };
 
@@ -168,6 +137,7 @@ const mapStateToProps = state => ({
   electionResults: state.results.electionResults,
   candidates: state.results.candidates,
   precinctResults: state.results.precinctResults,
+  boundingBox: state.results.boundingBox,
 });
 
 export default connect(mapStateToProps)(CountyMap);

@@ -7,6 +7,7 @@ import bbox from '@turf/bbox';
 
 import findTopCandidates from '../functions/findTopCandidates';
 import CountyPopup from './countyPopup';
+import { setBoundingBox } from '../../redux/actions/resultActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -87,7 +88,7 @@ class Map extends React.Component {
     //finds the county layer, filters counties with matching fips, matches results from state
     const stateCounties = this.map
       .querySourceFeatures('composite', {
-        sourceLayer: 'us_counties-16cere',
+        sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
       })
       .slice()
       .filter(
@@ -133,11 +134,11 @@ class Map extends React.Component {
           'interpolate',
           ['linear'],
           ['get', 'demMargin'],
-          -0.7,
+          -0.3,
           '#ef8a62',
           0,
           '#f7f7f7',
-          0.7,
+          0.3,
           '#67a9cf',
         ],
         'fill-opacity': 1,
@@ -146,6 +147,7 @@ class Map extends React.Component {
     const boundingBox = bbox(this.map.getSource('results')._data);
     this.map.fitBounds(boundingBox, { padding: 10, animate: false });
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank1');
+    this.props.setBoundingBox(boundingBox);
   };
 
   render() {
@@ -160,6 +162,10 @@ class Map extends React.Component {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  setBoundingBox: bounds => dispatch(setBoundingBox(bounds)),
+});
+
 const mapStateToProps = state => ({
   states: state.states,
   geography: state.results.geography,
@@ -167,4 +173,7 @@ const mapStateToProps = state => ({
   candidates: state.results.candidates,
 });
 
-export default connect(mapStateToProps)(Map);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Map);
