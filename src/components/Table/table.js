@@ -73,6 +73,8 @@ class ResultsTable extends React.Component {
         defaultPageSize={20}
         filterable
         filtered={this.state.filtered}
+        // expanded={this.state.expanded}
+        // onExpandedChange={expanded => this.setState({ expanded: expanded })}
         onFilteredChange={filtered => this.setState({ filtered })}
         className="-striped -highlight"
         style={{
@@ -106,6 +108,7 @@ const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
   electionResults: state.results.electionResults,
+  precinctResults: state.results.precinctResults,
 });
 
 export default connect(
