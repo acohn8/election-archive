@@ -9,8 +9,16 @@ const initialResultsState = {
 
 const resultsReducer = (previousState = initialResultsState, action) => {
   switch (action.type) {
-    case 'LOADING':
-      return { ...previousState, loading: true };
+    case 'START_FETCH':
+      return {
+        ...previousState,
+        loading: true,
+        geography: {},
+        candidates: [],
+        electionResults: [],
+        precinctResults: {},
+        boundingBox: [],
+      };
     case 'SET_STATE_DATA':
       return {
         ...previousState,
@@ -18,11 +26,8 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         geography: action.geography,
         candidates: action.candidates,
         electionResults: action.electionResults,
-        precinctResults: {},
-        boundingBox: [],
       };
     case 'SET_PRECINCTS':
-      console.log(action.county, action.precincts);
       return {
         ...previousState,
         precinctResults: { county_id: action.county, precincts: action.precincts },

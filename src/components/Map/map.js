@@ -146,7 +146,8 @@ class Map extends React.Component {
     });
     const boundingBox = bbox(this.map.getSource('results')._data);
     this.map.fitBounds(boundingBox, { padding: 10, animate: false });
-    this.map.moveLayer('dem-margin', 'poi-parks-scalerank1');
+    this.map.moveLayer('dem-margin', 'waterway-river-canal');
+
     this.props.setBoundingBox(boundingBox);
   };
 
