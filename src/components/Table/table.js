@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import { fetchPrecinctData } from '../../redux/actions/precinctActions';
-import PrecinctTable from './precinctTable';
 
 class ResultsTable extends React.Component {
   state = { filtered: [], expanded: {} };
