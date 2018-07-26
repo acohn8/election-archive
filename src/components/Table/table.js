@@ -79,10 +79,9 @@ class ResultsTable extends React.Component {
       <ReactTable
         data={this.makeData()}
         columns={this.makeColumns()}
-        defaultPageSize={50}
+        defaultPageSize={this.makeData().length > 50 ? 50 : this.makeData().length}
         filterable
         filtered={this.state.filtered}
-        freezeWhenExpanded={true}
         expanded={this.state.expanded}
         onExpandedChange={(newExpanded, index, event) =>
           this.handleRowExpanded(newExpanded, index, event)
@@ -104,7 +103,7 @@ class ResultsTable extends React.Component {
                 <ReactTable
                   data={this.props.precinctResults.precincts}
                   columns={this.makeColumns(true)}
-                  defaultPageSize={this.makeColumns(true).length}
+                  defaultPageSize={this.props.precinctResults.precincts.length}
                   showPagination={false}
                 />
               ) : (
