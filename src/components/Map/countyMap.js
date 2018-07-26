@@ -2,41 +2,33 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
-import bbox from '@turf/bbox';
 
 import findTopCandidates from '../functions/findTopCandidates';
-import CountyPopup from './countyPopup';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
 
 class CountyMap extends React.Component {
   componentDidMount() {
-    this.tooltipContainer = document.createElement('div');
     this.createMap();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      this.map.remove();
-      this.createMap();
-    }
+  componentWillUnmount() {
+    this.map.remove();
   }
 
   createMap = () => {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
-      zoom: 8,
+      zoom: this.props.mapDetails.zoom,
       //grabs the lat long from the first county in the state to ensure the counties layer is loading the right geos
-      center: [
-        this.props.geography.entities.counties[this.props.precinctResults.county_id].longitude,
-        this.props.geography.entities.counties[this.props.precinctResults.county_id].latitude,
-      ],
+      center: this.props.mapDetails.center,
     });
 
     this.map.on('load', () => {
       this.addResultsLayer();
+      this.map.fitBounds(this.props.mapDetails.bbox, { padding: 40, animate: false });
     });
   };
 
@@ -115,8 +107,7 @@ class CountyMap extends React.Component {
         'fill-opacity': 1,
       },
     });
-    this.map.fitBounds(this.props.boundingBox, { padding: 40, animate: false });
-    this.map.moveLayer('dem-margin', 'waterway-river-canal');
+    this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
   };
 
   render() {
@@ -137,7 +128,7 @@ const mapStateToProps = state => ({
   electionResults: state.results.electionResults,
   candidates: state.results.candidates,
   precinctResults: state.results.precinctResults,
-  boundingBox: state.results.boundingBox,
+  mapDetails: state.results.mapDetails,
 });
 
 export default connect(mapStateToProps)(CountyMap);

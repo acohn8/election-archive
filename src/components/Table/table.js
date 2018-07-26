@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { Grid, Header, Divider } from 'semantic-ui-react';
 
 import { fetchPrecinctData } from '../../redux/actions/precinctActions';
-import CountyContainer from '../CountyDetail/CountyContainer';
 import CountyMap from '../Map/countyMap';
+import Loader from '../Loader';
 
 class ResultsTable extends React.Component {
   state = { filtered: [], expanded: {}, prevIndex: '' };
@@ -101,9 +101,10 @@ class ResultsTable extends React.Component {
                 <Grid.Row>
                   <Divider />
                   <Header as="h2">{row.row.county}</Header>
+                  {this.props.precinctResults.precincts === undefined && <Loader />}
                 </Grid.Row>
                 <Grid.Column>
-                  {this.props.precinctResults.precincts !== undefined ? (
+                  {this.props.precinctResults.precincts !== undefined && (
                     <ReactTable
                       data={this.props.precinctResults.precincts}
                       defaultPageSize={this.props.precinctResults.precincts.length}
@@ -113,8 +114,6 @@ class ResultsTable extends React.Component {
                         maxHeight: '400px',
                       }}
                     />
-                  ) : (
-                    ''
                   )}
                 </Grid.Column>
                 <Grid.Column>

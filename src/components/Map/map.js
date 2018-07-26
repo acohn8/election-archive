@@ -7,7 +7,7 @@ import bbox from '@turf/bbox';
 
 import findTopCandidates from '../functions/findTopCandidates';
 import CountyPopup from './countyPopup';
-import { setBoundingBox } from '../../redux/actions/resultActions';
+import { setMapDetails } from '../../redux/actions/resultActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -100,6 +100,7 @@ class Map extends React.Component {
       fips: this.props.geography.entities.counties[countyId].fips.toString().padStart(5, '0'),
       results: this.props.electionResults.entities.results[countyId].results,
     }));
+    console.log(countyResults);
     stateCounties.forEach(county => {
       const result = countyResults.find(
         countyResult => countyResult.fips === county.properties.GEOID,
@@ -146,9 +147,14 @@ class Map extends React.Component {
     });
     const boundingBox = bbox(this.map.getSource('results')._data);
     this.map.fitBounds(boundingBox, { padding: 10, animate: false });
-    this.map.moveLayer('dem-margin', 'waterway-river-canal');
-
-    this.props.setBoundingBox(boundingBox);
+    this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
+    const mapDetails = {
+      center: this.map.getCenter(),
+      zoom: this.map.getZoom(),
+      bbox: boundingBox,
+    };
+    this.props.setMapDetails(mapDetails);
+    console.log(mapDetails);
   };
 
   render() {
@@ -164,7 +170,7 @@ class Map extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setBoundingBox: bounds => dispatch(setBoundingBox(bounds)),
+  setMapDetails: details => dispatch(setMapDetails(details)),
 });
 
 const mapStateToProps = state => ({
