@@ -2,11 +2,9 @@ import React from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { connect } from 'react-redux';
-import { Grid, Header, Divider } from 'semantic-ui-react';
 
 import { fetchPrecinctData } from '../../redux/actions/precinctActions';
-import CountyMap from '../Map/countyMap';
-import Loader from '../Loader';
+import CountyContainer from '../CountyDetail/CountyContainer';
 
 class ResultsTable extends React.Component {
   state = { filtered: [], expanded: {}, prevIndex: '' };
@@ -118,30 +116,7 @@ class ResultsTable extends React.Component {
         SubComponent={row => {
           return (
             <div style={{ padding: '20px' }}>
-              <Grid centered columns={2}>
-                <Grid.Row>
-                  <Divider />
-                  <Header as="h2">{row.row.county}</Header>
-                  {this.props.precinctResults.precincts === undefined && <Loader />}
-                </Grid.Row>
-                <Grid.Column>
-                  {this.props.precinctResults.precincts !== undefined && (
-                    <ReactTable
-                      data={this.props.precinctResults.precincts}
-                      defaultPageSize={this.props.precinctResults.precincts.length}
-                      showPagination={false}
-                      columns={this.makeColumns(true)}
-                      style={{
-                        maxHeight: '400px',
-                      }}
-                    />
-                  )}
-                </Grid.Column>
-                <Grid.Column>
-                  {this.props.precinctResults.county_id !== undefined && <CountyMap />}
-                </Grid.Column>
-                <Divider />
-              </Grid>
+              <CountyContainer />
             </div>
           );
         }}

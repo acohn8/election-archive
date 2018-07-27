@@ -1,14 +1,19 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
-import Map from '../Map/map';
+import CountyMap from '../Map/countyMap';
 
-const CountyContainer = () => (
+const CountyContainer = props => (
   <Grid centered columns={2}>
-    <Grid.Column>
-      <Map />
-    </Grid.Column>
+    <Grid.Column>{props.precinctResults.precincts !== undefined && <CountyMap />}</Grid.Column>
   </Grid>
 );
 
-export default CountyContainer;
+const mapStateToProps = state => ({
+  candidates: state.results.candidates,
+  geography: state.results.geography,
+  precinctResults: state.results.precinctResults,
+});
+
+export default connect(mapStateToProps)(CountyContainer);
