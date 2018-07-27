@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Header } from 'semantic-ui-react';
+import { Grid, Header, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import TableContainer from './Table/tableContainer';
@@ -27,7 +27,7 @@ class StateContainer extends React.Component {
                   this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
                 }
               </Header>
-              <Grid columns={2}>
+              <Grid columns={2} verticalAlign="middle">
                 <Grid.Row>
                   <Grid.Column>
                     <ToplinesContainer />

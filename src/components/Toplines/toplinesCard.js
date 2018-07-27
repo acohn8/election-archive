@@ -1,12 +1,17 @@
 import React from 'react';
 import { Card, Image } from 'semantic-ui-react';
 
-const colors = { democratic: 'blue', republican: 'red' };
+const colors = {
+  democratic: 'blue',
+  republican: 'red',
+  libertarian: 'yellow',
+  green: 'green',
+};
 
 const ToplinesCard = ({
   candidate, votes, total, winner,
 }) => (
-  <Card>
+  <Card color={colors[candidate.attributes.party]}>
     {candidate.id === winner ? (
       <Image
         fluid
@@ -18,7 +23,7 @@ const ToplinesCard = ({
         src={candidate.attributes.image}
       />
     ) : (
-      <Image src={candidate.attributes.image} />
+      <Image src={candidate.attributes.image} disabled />
     )}
     <Card.Content>
       <Card.Header>{candidate.attributes.name}</Card.Header>
