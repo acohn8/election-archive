@@ -71,7 +71,7 @@ class Map extends React.Component {
     });
   };
 
-  formatData = () => {
+  makeDataLayer = () => {
     let demCandidate;
     let gopCandidate;
     findTopCandidates(this.props.candidates, this.props.electionResults).forEach(candidateId => {
@@ -85,28 +85,51 @@ class Map extends React.Component {
         gopCandidate = candidateId;
       }
     });
-    const countyResults = this.props.electionResults.result.map(result => ({
-      fips: this.props.geography.entities.counties[result].fips,
-      demMargin:
-        (this.props.electionResults.entities.results[result].results[demCandidate] /
-          (this.props.electionResults.entities.results[result].results[demCandidate] +
-            this.props.electionResults.entities.results[result].results[gopCandidate])) *
-        100,
+    //finds the county layer, filters counties with matching fips, matches results from state
+    const stateCounties = this.map
+      .querySourceFeatures('composite', {
+        sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
+      })
+      .slice()
+      .filter(
+        feature =>
+          parseInt(feature.properties.STATEFP, 0) ===
+          this.props.geography.entities.state[this.props.states.activeStateId].fips,
+      );
+    const countyResults = this.props.electionResults.result.map(countyId => ({
+      fips: this.props.geography.entities.counties[countyId].fips.toString().padStart(5, '0'),
+      results: this.props.electionResults.entities.results[countyId].results,
     }));
-    return countyResults;
+    console.log(countyResults);
+    stateCounties.forEach(county => {
+      const result = countyResults.find(
+        countyResult => countyResult.fips === county.properties.GEOID,
+      );
+      const demMargin = parseFloat(
+        (result.results[demCandidate] - result.results[gopCandidate]) /
+          (result.results[demCandidate] + result.results[gopCandidate]),
+      );
+      const demVotes = result.results[demCandidate];
+      const gopVotes = result.results[gopCandidate];
+      stateCounties[stateCounties.indexOf(county)].properties.demMargin = demMargin;
+      stateCounties[stateCounties.indexOf(county)].properties.demVotes = demVotes;
+      stateCounties[stateCounties.indexOf(county)].properties.gopVotes = gopVotes;
+    });
+    return stateCounties;
   };
 
   addResultsLayer = () => {
-    this.map.addSource('counties', {
-      type: 'vector',
-      source: 'mapbox://adamcohn.4rxuwfht',
+    this.map.addSource('results', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: this.makeDataLayer(),
+      },
     });
-
     this.map.addLayer({
-      id: 'results',
+      id: 'dem-margin',
       type: 'fill',
-      source: 'counties',
-      sourceLayer: 'demMargin',
+      source: 'results',
       paint: {
         'fill-color': [
           'interpolate',
@@ -122,65 +145,17 @@ class Map extends React.Component {
         'fill-opacity': 1,
       },
     });
-
-    console.log(
-      this.map.querySourceFeatures('counties', {
-        sourceLayer: 'counties',
-      }),
-    );
+    const boundingBox = bbox(this.map.getSource('results')._data);
+    this.map.fitBounds(boundingBox, { padding: 10, animate: false });
+    this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
+    const mapDetails = {
+      center: this.map.getCenter(),
+      zoom: this.map.getZoom(),
+      bbox: boundingBox,
+    };
+    this.props.setMapDetails(mapDetails);
+    console.log(mapDetails);
   };
-
-  //   this.formatData().forEach(row => {
-  //     console.log(row);
-  //     this.map.addLayer(
-  //       {
-  //         source: 'us-counties',
-  //         sourceLayer: 'cb_2017_us_county_5m-2n1v3o',
-  //         GEOID: row.fips.toString(),
-  //       },
-  //       row,
-  //     );
-  //   });
-  //   console.log(this.map.getStyle().layers.GEOID);
-  // };
-
-  //   this.map.addSource('results', {
-  //     type: 'geojson',
-  //     data: {
-  //       type: 'FeatureCollection',
-  //       features: this.makeDataLayer(),
-  //     },
-  //   });
-  //   this.map.addLayer({
-  //     id: 'dem-margin',
-  //     type: 'fill',
-  //     source: 'results',
-  //     paint: {
-  //       'fill-color': [
-  //         'interpolate',
-  //         ['linear'],
-  //         ['get', 'demMargin'],
-  //         -0.3,
-  //         '#ef8a62',
-  //         0,
-  //         '#f7f7f7',
-  //         0.3,
-  //         '#67a9cf',
-  //       ],
-  //       'fill-opacity': 1,
-  //     },
-  //   });
-  //   const boundingBox = bbox(this.map.getSource('results')._data);
-  //   this.map.fitBounds(boundingBox, { padding: 10, animate: false });
-  //   this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
-  //   const mapDetails = {
-  //     center: this.map.getCenter(),
-  //     zoom: this.map.getZoom(),
-  //     bbox: boundingBox,
-  //   };
-  //   this.props.setMapDetails(mapDetails);
-  //   console.log(mapDetails);
-  // };
 
   render() {
     const style = {
@@ -209,31 +184,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Map);
-
-//  addResultsLayer = () => {
-//   this.map.addSource('mn-votes', {
-//     type: 'vector',
-//     url: 'mapbox://adamcohn.5lxa6wia',
-//   });
-
-//   this.map.addLayer({
-//     id: 'clinton-votes',
-//     source: 'mn-votes',
-//     'source-layer': 'MN-2016-a7m9cx',
-//     type: 'fill',
-//     paint: {
-//       'fill-color': [
-//         'interpolate',
-//         ['linear'],
-//         ['/', ['get', 'USPRSDFL'], ['get', 'USPRSTOTAL']],
-//         0,
-//         'red',
-//         0.5,
-//         'white',
-//         1,
-//         'blue',
-//       ],
-//       'fill-opacity': 0.75,
-//     },
-//   });
-// };
