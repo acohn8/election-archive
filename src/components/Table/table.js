@@ -53,10 +53,10 @@ class ResultsTable extends React.Component {
 
     const columns = [
       {
-        Header: precinct === false ? 'County' : 'Precinct',
-        id: precinct === false ? 'county' : 'precinct',
-        width: precinct === false ? 300 : 170,
-        accessor: precinct === false ? d => d.county : d => d.name,
+        Header: 'County',
+        id: 'county',
+        width: 300,
+        accessor: d => d.county,
         filterMethod: (filter, row) =>
           this.state.filtered.length > 0 &&
           row.county.toLowerCase().includes(this.state.filtered[0].value.toLowerCase()),
@@ -71,10 +71,31 @@ class ResultsTable extends React.Component {
             ? 'Other'
             : this.props.candidates.entities.candidates[candidateId].attributes.name
         }`,
-        accessor:
-          precinct === false ? d => d.candidates[candidateId].votes : d => d.results[candidateId],
-        filterable: false,
-        minWidth: precinct === false ? 200 : 90,
+        columns: [
+          {
+            Header: 'Votes',
+            id: `candidate-votes-${candidateId}`,
+            accessor:
+              precinct === false
+                ? d => d.candidates[candidateId].votes
+                : d => d.results[candidateId],
+            filterable: false,
+            minWidth: 100,
+            Cell: row => row.value.toLocaleString(),
+          },
+          {
+            Header: 'Percent',
+            id: `candidate-percent-${candidateId}`,
+            accessor: d =>
+              d.candidates[candidateId].votes /
+              majorCandidates
+                .map(candidate => d.candidates[candidate].votes)
+                .reduce((total, num) => total + num),
+            filterable: false,
+            minWidth: 100,
+            Cell: row => `${Math.max(Math.round(row.value * 100 * 10) / 10)} %`,
+          },
+        ],
       });
     });
     return columns;
