@@ -72,7 +72,7 @@ class ResultsTable extends React.Component {
         columns: [
           {
             Header: 'Votes',
-            id: `candidate-votes-${candidateId}`,
+            id: `candidate-votes${candidateId}`,
             accessor:
               precinct === false
                 ? d => d.candidates[candidateId].votes
