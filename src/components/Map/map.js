@@ -100,7 +100,6 @@ class Map extends React.Component {
       fips: this.props.geography.entities.counties[countyId].fips.toString().padStart(5, '0'),
       results: this.props.electionResults.entities.results[countyId].results,
     }));
-    console.log(countyResults);
     stateCounties.forEach(county => {
       const result = countyResults.find(
         countyResult => countyResult.fips === county.properties.GEOID,
@@ -119,6 +118,30 @@ class Map extends React.Component {
   };
 
   addResultsLayer = () => {
+    this.map.addSource('countyLines', {
+      url: 'mapbox://adamcohn.4rxuwfht',
+      type: 'vector',
+    });
+
+    this.map.addLayer(
+      {
+        id: 'states-join',
+        type: 'line',
+        source: 'countyLines',
+        'source-layer': 'cb_2017_us_county_5m-2n1v3o',
+        filter: [
+          '==',
+          'STATEFP',
+          this.props.geography.entities.state[this.props.geography.result.state].fips,
+        ],
+        paint: {
+          'line-color': '#ff69b4',
+          'line-width': 1,
+        },
+      },
+      'waterway-label',
+    );
+
     this.map.addSource('results', {
       type: 'geojson',
       data: {
@@ -154,7 +177,6 @@ class Map extends React.Component {
       bbox: boundingBox,
     };
     this.props.setMapDetails(mapDetails);
-    console.log(mapDetails);
   };
 
   render() {

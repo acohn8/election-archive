@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 const PrecinctResultsTable = (props) => {
   const majorCandidates = Object.keys(props.electionResults.entities.results[props.electionResults.result[0]].results);
-  console.log(majorCandidates);
   return (
     <ReactTable
       data={props.precinctResults.precincts}

@@ -109,7 +109,7 @@ class CountyMap extends React.Component {
     });
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
     const boundingBox = bbox(this.map.getSource('results')._data);
-    this.map.fitBounds(boundingBox, { padding: 50, animation: { duration: 200 } });
+    this.map.fitBounds(boundingBox, { padding: 70, animation: { duration: 200 } });
   };
 
   render() {

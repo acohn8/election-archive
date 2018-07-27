@@ -6,50 +6,59 @@ import Loader from '../Loader';
 import CountyMap from '../Map/countyMap';
 import ResultsList from './ResultsList';
 import PrecinctResultsTable from './PrecinctResultsTable';
+import { fetchPrecinctData } from '../../redux/actions/precinctActions';
 
-const CountyContainer = (props) => {
-  const formatCountyToplines = () => {
-    const countyResults =
-      props.electionResults.entities.results[props.precinctResults.county_id].results;
+class CountyContainer extends React.Component {
+  componentDidMount() {
+    this.props.fetchPrecinctData(this.props.row.original.countyId);
+  }
+
+  formatCountyToplines = () => {
+    const countyResults = this.props.electionResults.entities.results[
+      this.props.precinctResults.county_id
+    ].results;
     const countyCandidates = Object.keys(countyResults);
     const formattedData = countyCandidates
       .map(candidate => ({
-        candidate: props.candidates.entities.candidates[candidate],
+        candidate: this.props.candidates.entities.candidates[candidate],
         votes: countyResults[candidate],
       }))
       .filter(candidate => candidate.candidate !== undefined)
       .sort((a, b) => b.votes - a.votes);
     return formattedData;
   };
-  return (
-    <Segment raised padded>
-      {props.precinctResults.precincts !== undefined ? (
-        <Grid centered columns={2}>
-          <Grid.Row>
-            <Header as="h2">
-              {props.geography.entities.counties[props.precinctResults.county_id].name}
-            </Header>
-          </Grid.Row>
-          <Grid.Row>
-            <List horizontal size="big">
-              {formatCountyToplines().map(candidate => (
-                <ResultsList key={candidate.id} candidate={candidate} />
-              ))}
-            </List>
-          </Grid.Row>
-          <Grid.Column>
-            <PrecinctResultsTable />
-          </Grid.Column>
-          <Grid.Column>
-            <CountyMap />
-          </Grid.Column>
-        </Grid>
-      ) : (
-        <Loader />
-      )}
-    </Segment>
-  );
-};
+
+  render() {
+    return (
+      <Segment raised padded>
+        {this.props.precinctResults.precincts !== undefined ? (
+          <Grid centered columns={2}>
+            <Grid.Row />
+            <Grid.Row>
+              <List horizontal size="big">
+                {this.formatCountyToplines().map(candidate => (
+                  <ResultsList key={candidate.id} candidate={candidate} />
+                ))}
+              </List>
+            </Grid.Row>
+            <Grid.Column>
+              <Header as="h3">Preicnct Results</Header>
+              <PrecinctResultsTable />
+            </Grid.Column>
+            <Grid.Column>
+              <Header as="h3">
+                {this.props.geography.entities.counties[this.props.precinctResults.county_id].name}
+              </Header>
+              <CountyMap />
+            </Grid.Column>
+          </Grid>
+        ) : (
+          <Loader />
+        )}
+      </Segment>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
@@ -58,4 +67,11 @@ const mapStateToProps = state => ({
   electionResults: state.results.electionResults,
 });
 
-export default connect(mapStateToProps)(CountyContainer);
+const mapDispatchToProps = dispatch => ({
+  fetchPrecinctData: id => dispatch(fetchPrecinctData(id)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CountyContainer);

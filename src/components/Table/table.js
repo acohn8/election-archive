@@ -3,13 +3,12 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { connect } from 'react-redux';
 
-import { fetchPrecinctData } from '../../redux/actions/precinctActions';
 import CountyContainer from '../CountyDetail/CountyContainer';
 
 class ResultsTable extends React.Component {
   state = { filtered: [], expanded: {}, prevIndex: '' };
 
-  handleRowExpanded(newExpanded, index, event) {
+  handleRowExpanded(index) {
     if (this.state.prevIndex !== '' && index - this.state.prevIndex === 0) {
       this.setState({ expanded: {}, prevIndex: '' });
     } else {
@@ -17,9 +16,6 @@ class ResultsTable extends React.Component {
         expanded: { [index]: true },
         prevIndex: index,
       });
-      this.props.fetchPrecinctData(
-        this.props.geography.entities.counties[this.props.geography.result.counties[index[0]]].id,
-      );
     }
   }
 
@@ -108,15 +104,15 @@ class ResultsTable extends React.Component {
         filterable
         filtered={this.state.filtered}
         expanded={this.state.expanded}
-        onExpandedChange={(newExpanded, index, event) =>
-          this.handleRowExpanded(newExpanded, index, event)
-        }
+        onExpandedChange={(newExpanded, index, event) => {
+          this.handleRowExpanded(index);
+        }}
         onFilteredChange={filtered => this.setState({ filtered })}
         className="-highlight"
         SubComponent={row => {
           return (
             <div style={{ padding: '20px' }}>
-              <CountyContainer />
+              <CountyContainer row={row} />
             </div>
           );
         }}
@@ -125,10 +121,6 @@ class ResultsTable extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  fetchPrecinctData: id => dispatch(fetchPrecinctData(id)),
-});
-
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
@@ -136,7 +128,4 @@ const mapStateToProps = state => ({
   precinctResults: state.results.precinctResults,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ResultsTable);
+export default connect(mapStateToProps)(ResultsTable);
