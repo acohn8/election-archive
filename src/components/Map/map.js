@@ -71,76 +71,78 @@ class Map extends React.Component {
     });
   };
 
-  makeDataLayer = () => {
-    console.log(this.props.electionResults, this.props.geography);
+  formatData = () => {
+    let demCandidate;
+    let gopCandidate;
+    findTopCandidates(this.props.candidates, this.props.electionResults).forEach(candidateId => {
+      if (
+        this.props.candidates.entities.candidates[candidateId].attributes.party === 'democratic'
+      ) {
+        demCandidate = candidateId;
+      } else if (
+        this.props.candidates.entities.candidates[candidateId].attributes.party === 'republican'
+      ) {
+        gopCandidate = candidateId;
+      }
+    });
     const countyResults = this.props.electionResults.result.map(result => ({
       fips: this.props.geography.entities.counties[result].fips,
-      results: this.props.electionResults.entities.results[result].results,
+      demMargin:
+        (this.props.electionResults.entities.results[result].results[demCandidate] /
+          (this.props.electionResults.entities.results[result].results[demCandidate] +
+            this.props.electionResults.entities.results[result].results[gopCandidate])) *
+        100,
     }));
-    console.log(countyResults);
-    // let demCandidate;
-    // let gopCandidate;
-    // findTopCandidates(this.props.candidates, this.props.electionResults).forEach(candidateId => {
-    //   if (
-    //     this.props.candidates.entities.candidates[candidateId].attributes.party === 'democratic'
-    //   ) {
-    //     demCandidate = candidateId;
-    //   } else if (
-    //     this.props.candidates.entities.candidates[candidateId].attributes.party === 'republican'
-    //   ) {
-    //     gopCandidate = candidateId;
-    //   }
-    // });
-    //finds the county layer, filters counties with matching fips, matches results from state
-    // const stateCounties = this.map
-    //   .querySourceFeatures('composite', {
-    //     sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
-    //   })
-    //   .slice()
-    //   .filter(
-    //     feature =>
-    //       parseInt(feature.properties.STATEFP, 0) ===
-    //       this.props.geography.entities.state[this.props.states.activeStateId].fips,
-    //   );
-    // const countyResults = this.props.electionResults.result.map(countyId => ({
-    //   fips: this.props.geography.entities.counties[countyId].fips.toString().padStart(5, '0'),
-    //   results: this.props.electionResults.entities.results[countyId].results,
-    // }));
-    // console.log(countyResults);
-    // stateCounties.forEach(county => {
-    //   const result = countyResults.find(
-    //     countyResult => countyResult.fips === county.properties.GEOID,
-    //   );
-    //   const demMargin = parseFloat(
-    //     (result.results[demCandidate] - result.results[gopCandidate]) /
-    //       (result.results[demCandidate] + result.results[gopCandidate]),
-    //   );
-    //   const demVotes = result.results[demCandidate];
-    //   const gopVotes = result.results[gopCandidate];
-    //   stateCounties[stateCounties.indexOf(county)].properties.demMargin = demMargin;
-    //   stateCounties[stateCounties.indexOf(county)].properties.demVotes = demVotes;
-    //   stateCounties[stateCounties.indexOf(county)].properties.gopVotes = gopVotes;
-    // });
-    // return stateCounties;
+    return countyResults;
   };
 
   addResultsLayer = () => {
-    this.makeDataLayer();
-    this.map.addSource('us-counties', {
+    this.map.addSource('counties', {
       type: 'vector',
-      url: 'mapbox://adamcohn.4rxuwfht',
+      source: 'mapbox://adamcohn.4rxuwfht',
     });
+
     this.map.addLayer({
-      id: 'counties',
-      source: 'us-counties',
-      'source-layer': 'cb_2017_us_county_5m-2n1v3o',
+      id: 'results',
       type: 'fill',
+      source: 'counties',
+      sourceLayer: 'demMargin',
       paint: {
-        'fill-color': 'blue',
-        'fill-opacity': 0.75,
+        'fill-color': [
+          'interpolate',
+          ['linear'],
+          ['get', 'demMargin'],
+          -0.3,
+          '#ef8a62',
+          0,
+          '#f7f7f7',
+          0.3,
+          '#67a9cf',
+        ],
+        'fill-opacity': 1,
       },
     });
+
+    console.log(
+      this.map.querySourceFeatures('counties', {
+        sourceLayer: 'counties',
+      }),
+    );
   };
+
+  //   this.formatData().forEach(row => {
+  //     console.log(row);
+  //     this.map.addLayer(
+  //       {
+  //         source: 'us-counties',
+  //         sourceLayer: 'cb_2017_us_county_5m-2n1v3o',
+  //         GEOID: row.fips.toString(),
+  //       },
+  //       row,
+  //     );
+  //   });
+  //   console.log(this.map.getStyle().layers.GEOID);
+  // };
 
   //   this.map.addSource('results', {
   //     type: 'geojson',
