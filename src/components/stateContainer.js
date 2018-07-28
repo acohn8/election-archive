@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Header, Segment } from 'semantic-ui-react';
+import { Grid, Header, Image } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import TableContainer from './Table/tableContainer';
@@ -15,16 +15,32 @@ class StateContainer extends React.Component {
     }
   }
 
+  importAll = r => {
+    return r.keys().map(r);
+  };
+
   render() {
+    const images = this.importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
     return (
       <div>
         {this.props.loading === true && <ContentLoader />}
         {this.props.loading === false &&
           this.props.states.activeStateId !== '' && (
             <div>
-              <Header as="h1">
+              <Header size="huge">
+                <Image
+                  src={images.find(image =>
+                    image.includes(
+                      `/static/media/${this.props.geography.entities.state[
+                        this.props.geography.result.state
+                      ].short_name.toLowerCase()}`,
+                    ),
+                  )}
+                />
                 {
-                  this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
+                  this.props.states.states.find(
+                    state => state.id === this.props.states.activeStateId,
+                  ).attributes.name
                 }
               </Header>
               <Grid columns={2} verticalAlign="middle">
@@ -49,6 +65,7 @@ class StateContainer extends React.Component {
 
 const mapStateToProps = state => ({
   loading: state.results.loading,
+  geography: state.results.geography,
   states: state.states,
 });
 
