@@ -2,9 +2,15 @@ import React from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 
 import CountyContainer from '../CountyDetail/CountyContainer';
+
+const colors = {
+  democratic: '#2085D0',
+  republican: '#DB2828',
+  libertarian: '#FBBD09',
+  other: '#6435C9',
+};
 
 class ResultsTable extends React.Component {
   state = { filtered: [], expanded: {}, prevIndex: '' };
@@ -24,14 +30,25 @@ class ResultsTable extends React.Component {
     const majorCandidates = Object.keys(
       this.props.electionResults.entities.results[this.props.electionResults.result[0]].results,
     );
-
-    const data = this.props.electionResults.result.map(countyId => ({
-      countyId,
-      county: this.props.geography.entities.counties[countyId].name,
-    }));
+    const data = [];
+    this.props.electionResults.result.forEach(countyId => {
+      const countyData = {};
+      const countyTotals = Object.values(
+        this.props.electionResults.entities.results[countyId].results,
+      );
+      const countyCandidates = Object.keys(
+        this.props.electionResults.entities.results[countyId].results,
+      );
+      const winnerIndex = countyTotals.indexOf(countyTotals.reduce((a, b) => Math.max(a, b)));
+      const winner = countyCandidates[winnerIndex];
+      countyData.countyId = countyId;
+      countyData.candidates = majorCandidates;
+      countyData.winner = winner;
+      countyData.county = this.props.geography.entities.counties[countyId].name;
+      data.push(countyData);
+    });
 
     data.forEach(county => {
-      county.candidates = {};
       majorCandidates.forEach(candidateId => {
         county.candidates[candidateId] = {
           votes: this.props.electionResults.entities.results[county.countyId].results[candidateId],
@@ -55,6 +72,22 @@ class ResultsTable extends React.Component {
         filterMethod: (filter, row) =>
           this.state.filtered.length > 0 &&
           row.county.toLowerCase().includes(this.state.filtered[0].value.toLowerCase()),
+        Cell: row => (
+          <span>
+            <span
+              style={{
+                color:
+                  colors[
+                    this.props.candidates.entities.candidates[row.original.winner].attributes.party
+                  ],
+                transition: 'all .3s ease',
+              }}
+            >
+              &#x25cf;
+            </span>
+            {row.value}
+          </span>
+        ),
       },
     ];
 
