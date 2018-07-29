@@ -6,7 +6,7 @@ const TableContainer = () => (
   <div>
     <Divider />
     <Header as="h2">County Results</Header>
-    {/* <Button primary>Export to CSV</Button> */}
+    <Button primary>Export to CSV</Button>
     <Divider hidden />
     <ResultsTable />
   </div>

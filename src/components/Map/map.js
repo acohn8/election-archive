@@ -25,16 +25,25 @@ class Map extends React.Component {
     }
   }
 
+  getCoords = () => {
+    const foundCounty = this.props.geography.result.counties.find(
+      countyId =>
+        this.props.geography.entities.counties[countyId].latitude &&
+        this.props.geography.entities.counties[countyId].longitude !== false,
+    );
+    return [
+      this.props.geography.entities.counties[foundCounty].longitude,
+      this.props.geography.entities.counties[foundCounty].latitude,
+    ];
+  };
+
   createMap = () => {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
       zoom: 5,
       //grabs the lat long from the first county in the state to ensure the counties layer is loading the right geos
-      center: [
-        this.props.geography.entities.counties[this.props.geography.result.counties[0]].longitude,
-        this.props.geography.entities.counties[this.props.geography.result.counties[0]].latitude,
-      ],
+      center: this.getCoords(),
     });
 
     this.map.on('load', () => {
@@ -104,6 +113,7 @@ class Map extends React.Component {
       const result = countyResults.find(
         countyResult => countyResult.fips === county.properties.GEOID,
       );
+      console.log(county, result);
       const demMargin = parseFloat(
         (result.results[demCandidate] - result.results[gopCandidate]) /
           (result.results[demCandidate] + result.results[gopCandidate]),
@@ -177,7 +187,6 @@ class Map extends React.Component {
       bbox: boundingBox,
     };
     this.props.setMapDetails(mapDetails);
-    console.log(this.map.getStyle().layers);
   };
 
   render() {

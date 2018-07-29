@@ -104,13 +104,11 @@ class ResultsTable extends React.Component {
           {
             Header: 'Votes',
             id: `candidate-votes${candidateId}`,
-            accessor:
-              precinct === false
-                ? d => d.candidates[candidateId].votes
-                : d => d.results[candidateId],
+            accessor: d => d.candidates[candidateId].votes,
+
             filterable: false,
             minWidth: 100,
-            Cell: row => row.value.toLocaleString(),
+            Cell: row => (row.value === undefined ? 0 : row.value.toLocaleString()),
           },
           {
             Header: 'Percent',

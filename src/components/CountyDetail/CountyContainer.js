@@ -42,7 +42,7 @@ class CountyContainer extends React.Component {
               </List>
             </Grid.Row>
             <Grid.Column>
-              <Header as="h3">Preicnct Results</Header>
+              <Header as="h3">Precinct Results</Header>
               <PrecinctResultsTable />
             </Grid.Column>
             <Grid.Column>
