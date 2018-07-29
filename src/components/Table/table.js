@@ -81,6 +81,7 @@ class ResultsTable extends React.Component {
                     this.props.candidates.entities.candidates[row.original.winner].attributes.party
                   ],
                 transition: 'all .3s ease',
+                margin: '3px',
               }}
             >
               &#x25cf;
