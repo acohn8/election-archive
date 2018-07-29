@@ -42,13 +42,13 @@ class ResultsTable extends React.Component {
       const winnerIndex = countyTotals.indexOf(countyTotals.reduce((a, b) => Math.max(a, b)));
       const winner = countyCandidates[winnerIndex];
       countyData.countyId = countyId;
-      countyData.candidates = majorCandidates;
       countyData.winner = winner;
       countyData.county = this.props.geography.entities.counties[countyId].name;
       data.push(countyData);
     });
 
     data.forEach(county => {
+      county.candidates = {};
       majorCandidates.forEach(candidateId => {
         county.candidates[candidateId] = {
           votes: this.props.electionResults.entities.results[county.countyId].results[candidateId],
