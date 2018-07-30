@@ -4,6 +4,7 @@ import { Dropdown, Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import { setActiveState, fetchStatesList } from '../redux/actions/stateActions';
+import StateDropdown from './StateDropdown';
 
 class Nav extends Component {
   componentDidMount() {
@@ -15,23 +16,6 @@ class Nav extends Component {
       <Menu size="huge">
         <Menu.Item name="home" as={Link} to="/" />
         <Menu.Item name="about" />
-        <Menu.Menu position="right">
-          <Dropdown item text="States">
-            <Dropdown.Menu>
-              {this.props.states.length > 0 &&
-                this.props.states.map(state => (
-                  <Dropdown.Item
-                    as={Link}
-                    to={`/states/${state.id}`}
-                    key={state.id}
-                    onClick={() => this.props.setActiveState(state.id)}
-                  >
-                    {state.attributes.name}
-                  </Dropdown.Item>
-                ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Menu.Menu>
       </Menu>
     );
   }

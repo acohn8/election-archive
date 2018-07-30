@@ -7,6 +7,7 @@ import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
 import { setActiveState } from '../redux/actions/stateActions';
+import StateDropdown from './StateDropdown';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -26,37 +27,40 @@ class StateContainer extends React.Component {
         {this.props.loading === true && <ContentLoader />}
         {this.props.loading === false &&
           this.props.states.activeStateId !== '' && (
-            <div>
-              <Header size="huge">
-                <Image
-                  src={images.find(image =>
-                    image.includes(
-                      `/static/media/${this.props.geography.entities.state[
-                        this.props.geography.result.state
-                      ].short_name.toLowerCase()}`,
-                    ),
-                  )}
-                />
-                {
-                  this.props.states.states.find(
-                    state => state.id === this.props.states.activeStateId,
-                  ).attributes.name
-                }
-              </Header>
-              <Grid columns={2} verticalAlign="middle">
-                <Grid.Row>
-                  <Grid.Column>
-                    <ToplinesContainer />
-                  </Grid.Column>
-                  <Grid.Column>
-                    <MapContainer />
-                  </Grid.Column>
-                </Grid.Row>
-                <Grid.Row colums={1}>
-                  <TableContainer />
-                </Grid.Row>
-              </Grid>
-            </div>
+            <Grid columns={2} verticalAlign="middle">
+              <Grid.Column>
+                <Header size="huge">
+                  <Image
+                    src={images.find(image =>
+                      image.includes(
+                        `/static/media/${this.props.geography.entities.state[
+                          this.props.geography.result.state
+                        ].short_name.toLowerCase()}`,
+                      ),
+                    )}
+                  />
+                  {
+                    this.props.states.states.find(
+                      state => state.id === this.props.states.activeStateId,
+                    ).attributes.name
+                  }
+                </Header>
+              </Grid.Column>
+              <Grid.Column>
+                <StateDropdown />
+              </Grid.Column>
+              <Grid.Row>
+                <Grid.Column>
+                  <ToplinesContainer />
+                </Grid.Column>
+                <Grid.Column>
+                  <MapContainer />
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row colums={1}>
+                <TableContainer />
+              </Grid.Row>
+            </Grid>
           )}
       </Container>
     );
