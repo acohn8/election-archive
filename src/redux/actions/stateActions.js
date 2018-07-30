@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { push } from 'connected-react-router';
 
 import fetchStateData from './resultActions';
 import { resetHover } from './mapActions';
@@ -12,6 +13,7 @@ const setActiveState = stateId => (dispatch) => {
   dispatch({ type: 'ACTIVE_STATE', stateId });
   dispatch(resetHover());
   dispatch(fetchStateData(stateId));
+  dispatch(push(`/states/${stateId}`));
 };
 
 export { fetchStatesList, setActiveState };

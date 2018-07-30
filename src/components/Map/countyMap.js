@@ -31,7 +31,7 @@ class CountyMap extends React.Component {
 
   addResultsLayer = () => {
     this.map.addSource('presResults', {
-      url: 'mapbox://adamcohn.019zfefq',
+      url: 'mapbox://adamcohn.7bxery92',
       type: 'vector',
     });
 
@@ -40,7 +40,7 @@ class CountyMap extends React.Component {
         id: 'dem-margin',
         type: 'fill',
         source: 'presResults',
-        'source-layer': '2016_pres-asczpp',
+        'source-layer': '2016_county_results-5wvgz3',
         filter: [
           '==',
           ['get', 'GEOID'],

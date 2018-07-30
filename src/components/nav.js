@@ -42,7 +42,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setActiveState: e => dispatch(setActiveState(e)),
+  setActiveState: id => dispatch(setActiveState(id)),
   fetchStatesList: () => dispatch(fetchStatesList()),
 });
 
