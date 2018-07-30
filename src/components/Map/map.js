@@ -4,7 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
-import { getHoverInfo, setMapDetails } from '../../redux/actions/mapActions';
+import { getHoverInfo, setMapDetails, resetHover } from '../../redux/actions/mapActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -49,11 +49,11 @@ class Map extends React.Component {
   };
 
   enableHover = () => {
-    this.map.on('mousemove', 'dem-margin', e => {
+    this.map.on('mousemove', e => {
       const features = this.map.queryRenderedFeatures(e.point, {
         layers: ['dem-margin'],
       });
-      if (features.length) {
+      if (features.length > 0) {
         const feature = features[0];
         this.props.getHoverInfo(
           feature.properties.NAME,
@@ -62,6 +62,8 @@ class Map extends React.Component {
           feature.properties.county_r_4,
           feature.properties.county_r_3,
         );
+      } else if (features.length === 0) {
+        this.props.resetHover();
       }
     });
   };
@@ -159,6 +161,7 @@ const mapDispatchToProps = dispatch => ({
   setMapDetails: details => dispatch(setMapDetails(details)),
   getHoverInfo: (countyName, demMargin, demVotes, gopMargin, gopVotes) =>
     dispatch(getHoverInfo(countyName, demMargin, demVotes, gopMargin, gopVotes)),
+  resetHover: () => dispatch(resetHover()),
 });
 
 const mapStateToProps = state => ({

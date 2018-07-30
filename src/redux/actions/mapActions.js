@@ -8,8 +8,8 @@ const getHoverInfo = (countyName, demMargin, demVotes, gopMargin, gopVotes) => d
     gopVotes,
   });
 
-const setMapDetails = details => (dispatch) => {
-  dispatch({ type: 'SET_MAP_DETAILS', details });
-};
+const resetHover = () => dispatch => dispatch({ type: 'RESET_HOVER' });
 
-export { getHoverInfo, setMapDetails };
+const setMapDetails = details => dispatch => dispatch({ type: 'SET_MAP_DETAILS', details });
+
+export { getHoverInfo, setMapDetails, resetHover };

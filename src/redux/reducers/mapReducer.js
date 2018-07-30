@@ -23,6 +23,15 @@ const resultsReducer = (previousState = initialMapState, action) => {
         ...previousState,
         mapDetails: action.details,
       };
+    case 'RESET_HOVER':
+      return {
+        ...previousState,
+        overlay: {
+          hoveredCounty: '',
+          hoveredDem: { votes: '', percent: '' },
+          hoveredRep: { votes: '', percent: '' },
+        },
+      };
     default:
       return previousState;
   }
