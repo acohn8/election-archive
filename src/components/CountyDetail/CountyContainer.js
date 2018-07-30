@@ -37,7 +37,7 @@ class CountyContainer extends React.Component {
             <Grid.Row>
               <List horizontal size="big">
                 {this.formatCountyToplines().map(candidate => (
-                  <ResultsList key={candidate.id} candidate={candidate} />
+                  <ResultsList key={candidate.candidate.id} candidate={candidate} />
                 ))}
               </List>
             </Grid.Row>

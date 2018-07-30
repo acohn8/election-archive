@@ -92,7 +92,7 @@ class ResultsTable extends React.Component {
       },
     ];
 
-    majorCandidates.map(candidateId => {
+    majorCandidates.map(candidateId =>
       columns.push({
         id: candidateId,
         Header: `${
@@ -123,8 +123,8 @@ class ResultsTable extends React.Component {
             Cell: row => `${Math.max(Math.round(row.value * 100 * 10) / 10)} %`,
           },
         ],
-      });
-    });
+      }),
+    );
     return columns;
   };
 

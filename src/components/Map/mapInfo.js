@@ -2,13 +2,6 @@ import React from 'react';
 import { List, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-const colors = {
-  democratic: '#2085D0',
-  republican: '#DB2828',
-  libertarian: '#FBBD09',
-  other: '#6435C9',
-};
-
 const MapInfo = props => (
   <div>
     {props.overlay.hoveredDem.votes !== '' && (
