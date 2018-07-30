@@ -46,7 +46,7 @@ class CountyMap extends React.Component {
           ['get', 'GEOID'],
           this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
             .toString()
-            .padStart(2, '0'),
+            .padStart(5, '0'),
         ],
 
         paint: {
