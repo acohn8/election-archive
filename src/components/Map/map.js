@@ -146,7 +146,7 @@ class Map extends React.Component {
     });
 
     const boundingBox = bbox(this.map.getSource('counties')._data);
-    this.map.fitBounds(boundingBox, { padding: 10, animate: false });
+    this.map.fitBounds(boundingBox, { padding: 20, animate: false });
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
     console.log(boundingBox);
     const mapDetails = {
