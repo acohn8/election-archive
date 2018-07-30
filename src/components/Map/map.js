@@ -1,19 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
-import CountyPopup from './countyPopup';
 import { setMapDetails } from '../../redux/actions/resultActions';
+import getHoverInfo from '../../redux/actions/mapActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
 
 class Map extends React.Component {
   componentDidMount() {
-    this.tooltipContainer = document.createElement('div');
     this.createMap();
   }
 
@@ -47,35 +45,25 @@ class Map extends React.Component {
 
     this.map.on('load', () => {
       this.addResultsLayer();
-      // this.enableHover();
+      this.enableHover();
     });
   };
 
-  setTooltip(features) {
-    if (features.length) {
-      ReactDOM.render(
-        React.createElement(CountyPopup, {
-          features,
-        }),
-        this.tooltipContainer,
-      );
-    } else {
-      this.tooltipContainer.innerHTML = '';
-    }
-  }
-
   enableHover = () => {
-    const tooltip = new mapboxgl.Marker(this.tooltipContainer, {
-      offset: [0, 60],
-    })
-      .setLngLat([0, 0])
-      .addTo(this.map);
-
     this.map.on('mousemove', 'dem-margin', e => {
-      const features = this.map.queryRenderedFeatures(e.point);
-      tooltip.setLngLat(e.lngLat);
-      this.map.getCanvas().style.cursor = features.length ? 'pointer' : '';
-      this.setTooltip(features);
+      const features = this.map.queryRenderedFeatures(e.point, {
+        layers: ['dem-margin'],
+      });
+      if (features.length) {
+        const feature = features[0];
+        this.props.getHoverInfo(
+          feature.properties.NAME,
+          feature.properties.county_r_1,
+          feature.properties.county_res,
+          feature.properties.county_r_4,
+          feature.properties.county_r_3,
+        );
+      }
     });
   };
 
@@ -171,6 +159,8 @@ class Map extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   setMapDetails: details => dispatch(setMapDetails(details)),
+  getHoverInfo: (countyName, demMargin, demVotes, gopMargin, gopVotes) =>
+    dispatch(getHoverInfo(countyName, demMargin, demVotes, gopMargin, gopVotes)),
 });
 
 const mapStateToProps = state => ({
