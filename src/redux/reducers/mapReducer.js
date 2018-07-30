@@ -4,6 +4,7 @@ const initialMapState = {
     hoveredDem: { votes: '', percent: '' },
     hoveredRep: { votes: '', percent: '' },
   },
+  mapDetails: {},
 };
 
 const resultsReducer = (previousState = initialMapState, action) => {
@@ -16,6 +17,11 @@ const resultsReducer = (previousState = initialMapState, action) => {
           hoveredDem: { votes: action.demVotes, percent: action.demMargin },
           hoveredRep: { votes: action.gopVotes, percent: action.gopMargin },
         },
+      };
+    case 'SET_MAP_DETAILS':
+      return {
+        ...previousState,
+        mapDetails: action.details,
       };
     default:
       return previousState;

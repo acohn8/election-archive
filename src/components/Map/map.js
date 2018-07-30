@@ -4,8 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
-import { setMapDetails } from '../../redux/actions/resultActions';
-import getHoverInfo from '../../redux/actions/mapActions';
+import { getHoverInfo, setMapDetails } from '../../redux/actions/mapActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';

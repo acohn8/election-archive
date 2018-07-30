@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { fetchStateData } from './resultActions';
+import fetchStateData from './resultActions';
 
 const fetchStatesList = () => async (dispatch) => {
   const response = await axios.get('http://localhost:3000/api/v1/states');

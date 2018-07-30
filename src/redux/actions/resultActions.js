@@ -23,8 +23,5 @@ const fetchStateData = stateId => async (dispatch) => {
     electionResults,
   });
 };
-const setMapDetails = details => (dispatch) => {
-  dispatch({ type: 'SET_MAP_DETAILS', details });
-};
 
-export { fetchStateData, setMapDetails };
+export default fetchStateData;

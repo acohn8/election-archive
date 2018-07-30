@@ -118,7 +118,7 @@ const mapStateToProps = state => ({
   electionResults: state.results.electionResults,
   candidates: state.results.candidates,
   precinctResults: state.results.precinctResults,
-  mapDetails: state.results.mapDetails,
+  mapDetails: state.maps.mapDetails,
 });
 
 export default connect(mapStateToProps)(CountyMap);
