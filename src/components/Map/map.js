@@ -5,7 +5,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
-import findTopCandidates from '../functions/findTopCandidates';
 import CountyPopup from './countyPopup';
 import { setMapDetails } from '../../redux/actions/resultActions';
 
@@ -111,37 +110,40 @@ class Map extends React.Component {
             0.3,
             '#67a9cf',
           ],
-          'fill-opacity': 0.7,
+          'fill-opacity': 0.8,
         },
       },
       'waterway-label',
     );
 
+    const mapFeatures = this.map
+      .querySourceFeatures('composite', {
+        sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
+      })
+      .filter(
+        county =>
+          county.properties.STATEFP ===
+          this.props.geography.entities.state[this.props.geography.result.state].fips
+            .toString()
+            .padStart(2, '0'),
+      );
+
     this.map.addSource('counties', {
       type: 'geojson',
       data: {
         type: 'FeatureCollection',
-        features: this.map
-          .querySourceFeatures('composite', {
-            sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
-          })
-          .filter(
-            county =>
-              county.properties.STATEFP ===
-              this.props.geography.entities.state[this.props.geography.result.state].fips
-                .toString()
-                .padStart(2, '0'),
-          ),
+        features: mapFeatures,
       },
     });
-    console.log(this.map.getSource('counties'));
-    // const boundingBox = bbox(this.map.getSource('counties')._data);
-    // this.map.fitBounds(this.map.getSource('counties').bounds);
+
+    const boundingBox = bbox(this.map.getSource('counties')._data);
+    this.map.fitBounds(boundingBox, { padding: 10, animate: false });
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
+    console.log(boundingBox);
     const mapDetails = {
       center: this.map.getCenter(),
       zoom: this.map.getZoom(),
-      // bbox: boundingBox,
+      bbox: boundingBox,
     };
     this.props.setMapDetails(mapDetails);
   };
@@ -173,31 +175,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Map);
-
-// addResultsLayer = () => {
-//   this.map.addSource('mn-votes', {
-//     type: 'vector',
-//     url: 'mapbox://adamcohn.5lxa6wia',
-//   });
-
-//   this.map.addLayer({
-//     id: 'clinton-votes',
-//     source: 'mn-votes',
-//     'source-layer': 'MN-2016-a7m9cx',
-//     type: 'fill',
-//     paint: {
-//       'fill-color': [
-//         'interpolate',
-//         ['linear'],
-//         ['/', ['get', 'USPRSDFL'], ['get', 'USPRSTOTAL']],
-//         0,
-//         'red',
-//         0.5,
-//         'white',
-//         1,
-//         'blue',
-//       ],
-//       'fill-opacity': 0.75,
-//     },
-//   });
-// };
