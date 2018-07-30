@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Header, Image } from 'semantic-ui-react';
+import { Grid, Header, Image, Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import TableContainer from './Table/tableContainer';
@@ -22,7 +22,7 @@ class StateContainer extends React.Component {
   render() {
     const images = this.importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
     return (
-      <div>
+      <Container>
         {this.props.loading === true && <ContentLoader />}
         {this.props.loading === false &&
           this.props.states.activeStateId !== '' && (
@@ -58,7 +58,7 @@ class StateContainer extends React.Component {
               </Grid>
             </div>
           )}
-      </div>
+      </Container>
     );
   }
 }

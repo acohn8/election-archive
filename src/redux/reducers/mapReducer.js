@@ -16,6 +16,7 @@ const resultsReducer = (previousState = initialMapState, action) => {
           hoveredCounty: action.countyName,
           hoveredDem: { votes: action.demVotes, percent: action.demMargin },
           hoveredRep: { votes: action.gopVotes, percent: action.gopMargin },
+          isNational: action.isNational,
         },
       };
     case 'SET_MAP_DETAILS':

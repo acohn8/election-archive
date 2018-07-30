@@ -65,7 +65,10 @@ class NationalMap extends React.Component {
             feature.properties.county_res,
             feature.properties.county_r_4,
             feature.properties.county_r_3,
+            true,
           );
+        } else {
+          this.props.resetHover();
         }
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
@@ -164,6 +167,22 @@ class NationalMap extends React.Component {
       'waterway-label',
     );
 
+    this.map.addLayer(
+      {
+        id: 'state-lines',
+        type: 'line',
+        source: 'statewidePresResults',
+        minzoom: zoomThreshold,
+        'source-layer': '2016_statewide_results-bui81z',
+        paint: {
+          'line-width': 0.8,
+          'line-color': '#696969',
+          'line-opacity': 0.8,
+        },
+      },
+      'waterway-label',
+    );
+
     const mapFeatures = this.map
       .querySourceFeatures('composite', {
         sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
@@ -171,7 +190,6 @@ class NationalMap extends React.Component {
       .filter(
         feature => feature.properties.STATEFP !== '15' && feature.properties.STATEFP !== '02',
       );
-    console.log(mapFeatures);
     this.map.addSource('counties', {
       type: 'geojson',
       data: {
@@ -183,6 +201,7 @@ class NationalMap extends React.Component {
     const boundingBox = bbox(this.map.getSource('counties')._data);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
     this.map.moveLayer('dem-county-margin', 'poi-parks-scalerank2');
+    this.map.moveLayer('state-lines', 'poi-parks-scalerank2');
   };
 
   render() {
@@ -191,8 +210,10 @@ class NationalMap extends React.Component {
       top: 0,
       bottom: 0,
       width: '100%',
+      height: '100%',
       minWidth: 100,
-      minHeight: 600,
+      minHeight: '70em',
+      overflowY: false,
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }
@@ -201,8 +222,8 @@ class NationalMap extends React.Component {
 const mapDispatchToProps = dispatch => ({
   setActiveState: id => dispatch(setActiveState(id)),
   setMapDetails: details => dispatch(setMapDetails(details)),
-  getHoverInfo: (countyName, demMargin, demVotes, gopMargin, gopVotes) =>
-    dispatch(getHoverInfo(countyName, demMargin, demVotes, gopMargin, gopVotes)),
+  getHoverInfo: (countyName, demMargin, demVotes, gopMargin, gopVotes, isNational) =>
+    dispatch(getHoverInfo(countyName, demMargin, demVotes, gopMargin, gopVotes, isNational)),
   resetHover: () => dispatch(resetHover()),
 });
 

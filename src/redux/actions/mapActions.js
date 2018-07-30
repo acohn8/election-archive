@@ -1,4 +1,11 @@
-const getHoverInfo = (countyName, demMargin, demVotes, gopMargin, gopVotes) => dispatch =>
+const getHoverInfo = (
+  countyName,
+  demMargin,
+  demVotes,
+  gopMargin,
+  gopVotes,
+  isNational = false,
+) => dispatch =>
   dispatch({
     type: 'SET_HOVER',
     countyName,
@@ -6,6 +13,7 @@ const getHoverInfo = (countyName, demMargin, demVotes, gopMargin, gopVotes) => d
     demVotes,
     gopMargin,
     gopVotes,
+    isNational,
   });
 
 const resetHover = () => dispatch => dispatch({ type: 'RESET_HOVER' });

@@ -11,12 +11,12 @@ import './App.css';
 const App = () => (
   <div>
     <Nav />
-    <Container>
-      <Switch>
-        <Route exact path="/" render={HomeContainer} />
-        <Route path="/states/:activeStateId" component={StateContainer} />
-      </Switch>
-    </Container>
+    {/* <Container> */}
+    <Switch>
+      <Route exact path="/" render={HomeContainer} />
+      <Route path="/states/:activeStateId" component={StateContainer} />
+    </Switch>
+    {/* </Container> */}
   </div>
 );
 
