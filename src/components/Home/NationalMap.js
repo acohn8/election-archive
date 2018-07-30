@@ -92,7 +92,7 @@ class NationalMap extends React.Component {
   };
 
   addResultsLayer = () => {
-    const zoomThreshold = 4;
+    const zoomThreshold = 4.2;
     this.map.addSource('countyPresResults', {
       url: 'mapbox://adamcohn.7bxery92',
       type: 'vector',
@@ -175,7 +175,7 @@ class NationalMap extends React.Component {
         minzoom: zoomThreshold,
         'source-layer': '2016_statewide_results-bui81z',
         paint: {
-          'line-width': 0.8,
+          'line-width': 0.5,
           'line-color': '#696969',
           'line-opacity': 0.8,
         },
@@ -213,7 +213,6 @@ class NationalMap extends React.Component {
       height: '100%',
       minWidth: 100,
       minHeight: '70em',
-      overflowY: false,
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }

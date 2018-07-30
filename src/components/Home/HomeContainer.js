@@ -15,7 +15,7 @@ const HomeContainer = () => (
       <Divider hidden />
     </Container>
     <MapInfo />
-    <Container fluid style={{ height: '100%' }}>
+    <Container fluid style={{ height: '100%', position: 'fixed', overflow: 'hide' }}>
       <NationalMap />
     </Container>
   </div>
