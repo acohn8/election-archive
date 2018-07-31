@@ -24,4 +24,5 @@ const fetchStateData = stateId => async (dispatch) => {
   });
 };
 
-export default fetchStateData;
+const resetResults = () => dispatch => dispatch({ type: 'RESET_RESULTS' });
+export { fetchStateData, resetResults };

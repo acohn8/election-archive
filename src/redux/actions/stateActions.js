@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { push } from 'connected-react-router';
 
-import fetchStateData from './resultActions';
+import { fetchStateData, resetResults } from './resultActions';
 import { resetHover } from './mapActions';
 
 const fetchStatesList = () => async (dispatch) => {
@@ -16,6 +16,9 @@ const setActiveState = stateId => (dispatch) => {
   dispatch(push(`/states/${stateId}`));
 };
 
-const resetActiveState = () => dispatch => dispatch({ type: 'RESET_ACTIVE_STATE' });
+const resetActiveState = () => (dispatch) => {
+  dispatch({ type: 'RESET_ACTIVE_STATE' });
+  dispatch(resetResults());
+};
 
 export { fetchStatesList, setActiveState, resetActiveState };

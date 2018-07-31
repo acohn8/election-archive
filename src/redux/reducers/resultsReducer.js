@@ -35,6 +35,14 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         ...previousState,
         precinctResults: { county_id: action.county, precincts: action.precincts },
       };
+    case 'RESET_RESULTS':
+      return {
+        loading: false,
+        geography: {},
+        candidates: [],
+        electionResults: [],
+        precinctResults: {},
+      };
     default:
       return previousState;
   }
