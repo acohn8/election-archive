@@ -30,6 +30,8 @@ class CountyMap extends React.Component {
   };
 
   addResultsLayer = () => {
+    let zoomThreshold;
+    this.props.geography.result.state === 4 ? (zoomThreshold = 8) : (zoomThreshold = 0);
     this.map.addSource('presResults', {
       url: 'mapbox://adamcohn.7bxery92',
       type: 'vector',
@@ -41,6 +43,7 @@ class CountyMap extends React.Component {
         type: 'fill',
         source: 'presResults',
         'source-layer': '2016_county_results-5wvgz3',
+        maxzoom: zoomThreshold,
         filter: [
           '==',
           ['get', 'GEOID'],
@@ -95,9 +98,60 @@ class CountyMap extends React.Component {
       },
     });
 
+    if (this.props.geography.result.state === 4) {
+      this.map.addSource('wi-precinct', {
+        url: 'mapbox://adamcohn.59aj7ijb',
+        type: 'vector',
+      });
+
+      this.map.addLayer(
+        {
+          id: 'wi-pres-precinct',
+          type: 'fill',
+          minzoom: zoomThreshold,
+          source: 'wi-precinct',
+          'source-layer': 'wi_2016-5i7xwd',
+          filter: [
+            '==',
+            ['get', 'CNTY_FIPS'],
+            this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
+              .toString()
+              .padStart(5, '0'),
+          ],
+          paint: {
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              [
+                '-',
+                ['/', ['get', 'G16PREDCli'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+                ['/', ['get', 'G16PRERTru'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+              ],
+              -0.3,
+              '#d6604d',
+              -0.2,
+              '#f4a582',
+              -0.1,
+              '#fddbc7',
+              0.0,
+              '#f7f7f7',
+              0.1,
+              '#d1e5f0',
+              0.2,
+              '#92c5de',
+              0.3,
+              '#4393c3',
+            ],
+            'fill-opacity': 0.7,
+          },
+        },
+        'waterway-label',
+      );
+    }
+
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
     const boundingBox = bbox(this.map.getSource('counties')._data);
-    this.map.fitBounds(boundingBox, { padding: 70, animation: { duration: 200 } });
+    this.map.fitBounds(boundingBox, { padding: 30, animation: { duration: 200 } });
   };
 
   render() {

@@ -9,7 +9,7 @@ import StateDropdown from '../StateDropdown';
 const HomeContainer = () => (
   <div>
     <Container>
-      <Grid columns={2}>
+      <Grid columns={2} verticalAlign="middle">
         <Grid.Column>
           <Header as="h1">
             Select a State For Results
