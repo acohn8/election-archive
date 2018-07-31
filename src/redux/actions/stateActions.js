@@ -5,7 +5,7 @@ import fetchStateData from './resultActions';
 import { resetHover } from './mapActions';
 
 const fetchStatesList = () => async (dispatch) => {
-  const response = await axios.get('http://localhost:3000/api/v1/states');
+  const response = await axios.get('https://election-data-2016.herokuapp.com/api/v1/states');
   dispatch({ type: 'SET_STATES', states: response.data.data });
 };
 
