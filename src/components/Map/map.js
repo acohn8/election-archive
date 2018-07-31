@@ -37,14 +37,15 @@ class Map extends React.Component {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
-      zoom: 5,
+      zoom: 3,
       //grabs the lat long from the first county in the state to ensure the counties layer is loading the right geos
-      center: this.getCoords(),
+      //if it's Alaska, it just jumps to the middle of the state
+      center: this.props.geography.result.state !== 17 ? this.getCoords() : [-149.4937, 64.2008],
     });
 
     this.map.on('load', () => {
       this.addResultsLayer();
-      this.enableHover();
+      this.props.geography.result.state !== 17 && this.enableHover();
     });
   };
 
@@ -55,6 +56,7 @@ class Map extends React.Component {
       });
       if (features.length > 0) {
         const feature = features[0];
+        console.log(feature);
         this.props.getHoverInfo(
           feature.properties.NAME,
           feature.properties.county_r_1,
@@ -71,53 +73,92 @@ class Map extends React.Component {
   };
 
   addResultsLayer = () => {
+    //adds the precinct zoom threshold for WI
     let zoomThreshold;
     this.props.geography.result.state === 4 ? (zoomThreshold = 8) : (zoomThreshold = 0);
     this.map.addSource('presResults', {
-      url: 'mapbox://adamcohn.7bxery92',
+      //loads the AK state leg map if it's Alaska
+      url:
+        this.props.geography.result.state !== 17
+          ? 'mapbox://adamcohn.7bxery92'
+          : 'mapbox://adamcohn.2hweullr',
       type: 'vector',
     });
-
-    this.map.addLayer(
-      {
-        id: 'dem-margin',
-        type: 'fill',
-        source: 'presResults',
-        maxzoom: zoomThreshold,
-        'source-layer': '2016_county_results-5wvgz3',
-        filter: [
-          '==',
-          ['get', 'STATEFP'],
-          this.props.geography.entities.state[this.props.geography.result.state].fips
-            .toString()
-            .padStart(2, '0'),
-        ],
-
-        paint: {
-          'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['get', 'county_r_2'],
-            -0.3,
-            '#d6604d',
-            -0.2,
-            '#f4a582',
-            -0.1,
-            '#fddbc7',
-            0.0,
-            '#f7f7f7',
-            0.1,
-            '#d1e5f0',
-            0.2,
-            '#92c5de',
-            0.3,
-            '#4393c3',
+    if (this.props.geography.result.state !== 17) {
+      this.map.addLayer(
+        {
+          id: 'dem-margin',
+          type: 'fill',
+          source: 'presResults',
+          maxzoom: zoomThreshold,
+          'source-layer': '2016_county_results-5wvgz3',
+          filter: [
+            '==',
+            ['get', 'STATEFP'],
+            this.props.geography.entities.state[this.props.geography.result.state].fips
+              .toString()
+              .padStart(2, '0'),
           ],
-          'fill-opacity': 0.7,
+
+          paint: {
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'county_r_2'],
+              -0.3,
+              '#d6604d',
+              -0.2,
+              '#f4a582',
+              -0.1,
+              '#fddbc7',
+              0.0,
+              '#f7f7f7',
+              0.1,
+              '#d1e5f0',
+              0.2,
+              '#92c5de',
+              0.3,
+              '#4393c3',
+            ],
+            'fill-opacity': 0.7,
+          },
         },
-      },
-      'waterway-label',
-    );
+        'waterway-label',
+      );
+    } else if (this.props.geography.result.state === 17) {
+      this.map.addLayer(
+        {
+          id: 'dem-margin',
+          type: 'fill',
+          source: 'presResults',
+          maxzoom: zoomThreshold,
+          'source-layer': '2016_ak_results-d7n96u',
+          paint: {
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'ak_resul_2'],
+              -0.3,
+              '#d6604d',
+              -0.2,
+              '#f4a582',
+              -0.1,
+              '#fddbc7',
+              0.0,
+              '#f7f7f7',
+              0.1,
+              '#d1e5f0',
+              0.2,
+              '#92c5de',
+              0.3,
+              '#4393c3',
+            ],
+            'fill-opacity': 0.7,
+          },
+        },
+        'waterway-label',
+      );
+    }
 
     const mapFeatures = this.map
       .querySourceFeatures('composite', {
@@ -182,6 +223,7 @@ class Map extends React.Component {
         'waterway-label',
       );
     }
+    console.log(this.map.getSource('counties')._data);
 
     const boundingBox = bbox(this.map.getSource('counties')._data);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });

@@ -49,7 +49,8 @@ class CountyContainer extends React.Component {
               <Header as="h3">
                 {this.props.geography.entities.counties[this.props.precinctResults.county_id].name}
               </Header>
-              <CountyMap />
+              {/* no AK map */}
+              {this.props.geography.result.state !== 17 && <CountyMap />}
             </Grid.Column>
           </Grid>
         ) : (

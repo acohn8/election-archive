@@ -16,4 +16,6 @@ const setActiveState = stateId => (dispatch) => {
   dispatch(push(`/states/${stateId}`));
 };
 
-export { fetchStatesList, setActiveState };
+const resetActiveState = () => dispatch => dispatch({ type: 'RESET_ACTIVE_STATE' });
+
+export { fetchStatesList, setActiveState, resetActiveState };

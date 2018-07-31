@@ -9,21 +9,23 @@ import StateDropdown from '../StateDropdown';
 const HomeContainer = () => (
   <div>
     <Container>
-      <Grid columns={2} verticalAlign="middle">
-        <Grid.Column>
-          <Header as="h1">
-            Select a State For Results
-            <Header.Subheader>Zoom in for county results</Header.Subheader>
-          </Header>
-        </Grid.Column>
-        <Grid.Column>
-          <StateDropdown />
-        </Grid.Column>
+      <Grid columns={2} verticalAlign="middle" stackable>
+        <Grid.Row>
+          <Grid.Column>
+            <Header as="h1">
+              Select a State For Results
+              <Header.Subheader>Zoom in for county results</Header.Subheader>
+            </Header>
+          </Grid.Column>
+          <Grid.Column>
+            <StateDropdown />
+          </Grid.Column>
+        </Grid.Row>
+        <Divider hidden />
       </Grid>
-      <Divider hidden />
     </Container>
     <MapInfo />
-    <Container fluid style={{ height: '100%', position: 'fixed', overflow: 'hide' }}>
+    <Container fluid style={{ height: '83%', position: 'fixed' }}>
       <NationalMap />
     </Container>
   </div>

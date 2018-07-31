@@ -12,6 +12,8 @@ const resultsReducer = (previousState = initialStatesState, action) => {
       };
     case 'ACTIVE_STATE':
       return { ...previousState, activeStateId: action.stateId };
+    case 'RESET_ACTIVE_STATE':
+      return { ...previousState, activeStateId: '' };
     default:
       return previousState;
   }

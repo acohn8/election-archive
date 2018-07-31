@@ -6,7 +6,7 @@ import TableContainer from './Table/tableContainer';
 import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
-import { setActiveState } from '../redux/actions/stateActions';
+import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
 import StateDropdown from './StateDropdown';
 
 class StateContainer extends React.Component {
@@ -14,6 +14,18 @@ class StateContainer extends React.Component {
     if (this.props.states.activeStateId === '') {
       this.props.setActiveState(this.props.match.params.activeStateId);
     }
+  }
+  componentDidUpdate() {
+    if (
+      this.props.states.activeStateId === '' ||
+      this.props.match.params.activeStateId !== this.props.states.activeStateId
+    ) {
+      this.props.setActiveState(this.props.match.params.activeStateId);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.resetActiveState();
   }
 
   importAll = r => {
@@ -75,6 +87,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setActiveState: stateId => dispatch(setActiveState(stateId)),
+  resetActiveState: () => dispatch(resetActiveState()),
 });
 
 export default connect(

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dropdown, Menu } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import { setActiveState, fetchStatesList } from '../redux/actions/stateActions';
-import StateDropdown from './StateDropdown';
 
 class Nav extends Component {
   componentDidMount() {

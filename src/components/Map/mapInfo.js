@@ -13,7 +13,7 @@ const MapInfo = props => (
           opacity: '0.8',
           padding: '10px',
           margin: 'auto',
-          right: 20,
+          right: 30,
           top: props.overlay.isNational ? 170 : 20,
           borderColor: 'gray',
           borderStyle: 'solid',

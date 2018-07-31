@@ -3,7 +3,6 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
-import { push } from 'connected-react-router';
 
 import { setActiveState } from '../../redux/actions/stateActions';
 import { getHoverInfo, setMapDetails, resetHover } from '../../redux/actions/mapActions';
@@ -86,7 +85,7 @@ class NationalMap extends React.Component {
         const state = this.props.states.states.find(
           state => state.attributes.name === features[0].properties.NAME,
         ).id;
-        this.props.setActiveState(state);
+        this.props.setActiveState(state, true);
       }
     });
   };
@@ -211,8 +210,8 @@ class NationalMap extends React.Component {
       bottom: 0,
       width: '100%',
       height: '100%',
-      minWidth: 100,
-      minHeight: '70em',
+      minWidth: 400,
+      minHeight: '60em',
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }

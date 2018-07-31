@@ -58,7 +58,7 @@ class ResultsTable extends React.Component {
     return data;
   };
 
-  makeColumns = (precinct = false) => {
+  makeColumns = () => {
     const majorCandidates = Object.keys(
       this.props.electionResults.entities.results[this.props.electionResults.result[0]].results,
     );
@@ -158,7 +158,6 @@ const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
   electionResults: state.results.electionResults,
-  precinctResults: state.results.precinctResults,
 });
 
 export default connect(mapStateToProps)(ResultsTable);
