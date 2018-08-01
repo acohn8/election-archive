@@ -8,17 +8,17 @@ const ExportDropdown = props => (
       <Dropdown.Header icon="tags" content="Select a geography" />
       <Dropdown.Item
         as="a"
-        href={`https://election-data-2016.herokuapp.com/api/v1/results/export/county/${
+        href={`https://s3.amazonaws.com/stateprecinctresults/countyresults/${props.geography.entities.state[
           props.states.activeStateId
-        }.csv`}
+        ].short_name.toLowerCase()}-county-results.csv`}
       >
         County
       </Dropdown.Item>
       <Dropdown.Item
         as="a"
-        href={`https://election-data-2016.herokuapp.com/api/v1/results/export/precinct/${
+        href={`https://s3.amazonaws.com/stateprecinctresults/precinctresults/${props.geography.entities.state[
           props.states.activeStateId
-        }.csv`}
+        ].short_name.toLowerCase()}-precinct-results.csv`}
       >
         Precinct
       </Dropdown.Item>
@@ -28,6 +28,7 @@ const ExportDropdown = props => (
 
 const mapStateToProps = state => ({
   states: state.states,
+  geography: state.results.geography,
 });
 
 export default connect(mapStateToProps)(ExportDropdown);

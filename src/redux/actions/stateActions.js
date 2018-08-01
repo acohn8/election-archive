@@ -19,6 +19,7 @@ const setActiveState = (stateId, fetch = true) => (dispatch) => {
 const resetActiveState = () => (dispatch) => {
   dispatch({ type: 'RESET_ACTIVE_STATE' });
   dispatch(resetResults());
+  dispatch(resetHover());
 };
 
 export { fetchStatesList, setActiveState, resetActiveState };
