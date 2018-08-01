@@ -68,6 +68,8 @@ class Map extends React.Component {
         this.map.getCanvas().style.cursor = 'pointer';
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
+        this.map.setFilter('state-hover-line', ['==', 'STATEFP', '']);
+        this.map.setFilter('county-hover-line', ['==', 'GEOID', '']);
         this.props.resetHover();
       }
     });
