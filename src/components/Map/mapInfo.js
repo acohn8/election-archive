@@ -11,7 +11,7 @@ const MapInfo = props => (
           zIndex: 1,
           backgroundColor: 'white',
           opacity: '0.8',
-          padding: '10px',
+          padding: props.overlay.isNational === true ? '20px' : '10px',
           margin: 'auto',
           right: 30,
           top: props.overlay.isNational ? 170 : 20,
@@ -20,7 +20,12 @@ const MapInfo = props => (
           borderWidth: '0.5px',
         }}
       >
-        <Header as="h4">{props.overlay.hoveredCounty}</Header>
+        <Header as={props.overlay.isNational === true ? 'h3' : 'h4'}>
+          {props.overlay.hoveredGeography}
+          {props.overlay.isStatewide === true && (
+            <Header.Subheader>Click for details</Header.Subheader>
+          )}
+        </Header>
         <List divided relaxed>
           <List.Item>
             <List.Content>

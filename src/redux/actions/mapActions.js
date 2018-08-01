@@ -1,5 +1,5 @@
 const getHoverInfo = (
-  countyName,
+  geographyName,
   demMargin,
   demVotes,
   gopMargin,
@@ -8,7 +8,7 @@ const getHoverInfo = (
 ) => dispatch =>
   dispatch({
     type: 'SET_HOVER',
-    countyName,
+    geographyName,
     demMargin,
     demVotes,
     gopMargin,

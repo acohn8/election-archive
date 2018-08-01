@@ -1,6 +1,6 @@
 const initialMapState = {
   overlay: {
-    hoveredCounty: '',
+    geographyName: '',
     hoveredDem: { votes: '', percent: '' },
     hoveredRep: { votes: '', percent: '' },
   },
@@ -13,7 +13,7 @@ const resultsReducer = (previousState = initialMapState, action) => {
       return {
         ...previousState,
         overlay: {
-          hoveredCounty: action.countyName,
+          hoveredGeography: action.geographyName,
           hoveredDem: { votes: action.demVotes, percent: action.demMargin },
           hoveredRep: { votes: action.gopVotes, percent: action.gopMargin },
           isNational: action.isNational,
@@ -28,7 +28,7 @@ const resultsReducer = (previousState = initialMapState, action) => {
       return {
         ...previousState,
         overlay: {
-          hoveredCounty: '',
+          hoveredGeography: '',
           hoveredDem: { votes: '', percent: '' },
           hoveredRep: { votes: '', percent: '' },
         },

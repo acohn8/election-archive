@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
 import { setActiveState } from '../../redux/actions/stateActions';
-import { getHoverInfo, setMapDetails, resetHover } from '../../redux/actions/mapActions';
+import { getHoverInfo, resetHover } from '../../redux/actions/mapActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -66,6 +66,7 @@ class NationalMap extends React.Component {
             feature.properties.county_r_4,
             feature.properties.county_r_3,
             true,
+            false,
           );
         } else if (feature.layer.id === 'dem-statewide-margin') {
           this.map.setFilter('state-hover-line', ['==', 'STATEFP', feature.properties.STATEFP]);
@@ -75,6 +76,7 @@ class NationalMap extends React.Component {
             feature.properties.statewide_,
             feature.properties.statewid_4,
             feature.properties.statewid_3,
+            true,
             true,
           );
         } else {
@@ -265,7 +267,6 @@ class NationalMap extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   setActiveState: id => dispatch(setActiveState(id)),
-  setMapDetails: details => dispatch(setMapDetails(details)),
   getHoverInfo: (countyName, demMargin, demVotes, gopMargin, gopVotes, isNational) =>
     dispatch(getHoverInfo(countyName, demMargin, demVotes, gopMargin, gopVotes, isNational)),
   resetHover: () => dispatch(resetHover()),
