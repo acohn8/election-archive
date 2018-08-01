@@ -16,8 +16,8 @@ const getHoverInfo = (
     isNational,
   });
 
-const resetHover = () => dispatch => dispatch({ type: 'RESET_HOVER' });
+const resetHover = () => ({ type: 'RESET_HOVER' });
 
-const setMapDetails = details => dispatch => dispatch({ type: 'SET_MAP_DETAILS', details });
+const setMapDetails = details => ({ type: 'SET_MAP_DETAILS', details });
 
 export { getHoverInfo, setMapDetails, resetHover };

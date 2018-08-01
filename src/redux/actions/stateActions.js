@@ -9,11 +9,11 @@ const fetchStatesList = () => async (dispatch) => {
   dispatch({ type: 'SET_STATES', states: response.data.data });
 };
 
-const setActiveState = stateId => (dispatch) => {
+const setActiveState = (stateId, fetch = true) => (dispatch) => {
   dispatch({ type: 'ACTIVE_STATE', stateId });
   dispatch(resetHover());
-  dispatch(fetchStateData(stateId));
   dispatch(push(`/states/${stateId}`));
+  fetch === true && dispatch(fetchStateData(stateId));
 };
 
 const resetActiveState = () => (dispatch) => {

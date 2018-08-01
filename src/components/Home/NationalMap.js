@@ -6,6 +6,7 @@ import bbox from '@turf/bbox';
 
 import { setActiveState } from '../../redux/actions/stateActions';
 import { getHoverInfo, resetHover } from '../../redux/actions/mapActions';
+import { fetchStateData } from '../../redux/actions/resultActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -13,13 +14,6 @@ mapboxgl.accessToken =
 class NationalMap extends React.Component {
   componentDidMount() {
     this.createMap();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      this.map.remove();
-      this.createMap();
-    }
   }
 
   getCoords = () => {
@@ -95,12 +89,26 @@ class NationalMap extends React.Component {
         layers: ['dem-statewide-margin'],
       });
       if (features.length) {
+        const coords = e.lngLat;
         const state = this.props.states.states.find(
           state => state.attributes.name === features[0].properties.NAME,
         ).id;
-        this.props.setActiveState(state, true);
+        this.map.removeLayer('county-hover-line');
+        this.map.removeLayer('state-hover-line');
+        this.setStateOnClick(state, coords);
       }
     });
+  };
+
+  setStateOnClick = (state, coords) => {
+    this.props.fetchStateData(state);
+    // this.map.moveLayer('state-lines', 'poi-parks-scalerank2');
+    this.map.flyTo({
+      center: coords,
+      zoom: 6,
+      speed: 0.55,
+    });
+    this.map.on('moveend', () => this.props.setActiveState(state, false));
   };
 
   addResultsLayer = () => {
@@ -248,6 +256,7 @@ class NationalMap extends React.Component {
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
     this.map.moveLayer('dem-county-margin', 'poi-parks-scalerank2');
     this.map.moveLayer('county-hover-line', 'poi-parks-scalerank2');
+    this.map.moveLayer('state-hover-line', 'poi-parks-scalerank2');
     this.map.moveLayer('state-lines', 'poi-parks-scalerank2');
   };
 
@@ -266,10 +275,11 @@ class NationalMap extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setActiveState: id => dispatch(setActiveState(id)),
+  setActiveState: (id, fetch) => dispatch(setActiveState(id, fetch)),
   getHoverInfo: (countyName, demMargin, demVotes, gopMargin, gopVotes, isNational) =>
     dispatch(getHoverInfo(countyName, demMargin, demVotes, gopMargin, gopVotes, isNational)),
   resetHover: () => dispatch(resetHover()),
+  fetchStateData: id => dispatch(fetchStateData(id)),
 });
 
 const mapStateToProps = state => ({
