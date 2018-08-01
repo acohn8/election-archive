@@ -57,16 +57,24 @@ class NationalMap extends React.Component {
       if (features.length > 0) {
         const feature = features[0];
         this.map.getCanvas().style.cursor = 'pointer';
-        this.map.getZoom() > 4.2
-          ? this.map.setFilter('county-hover-line', ['==', 'GEOID', feature.properties.GEOID])
-          : this.map.setFilter('state-hover-line', ['==', 'STATEFP', feature.properties.STATEFP]);
-        if (feature.layer.id !== 'dem-statewide-margin') {
+        if (feature.layer.id === 'dem-county-margin') {
+          this.map.setFilter('county-hover-line', ['==', 'GEOID', feature.properties.GEOID]);
           this.props.getHoverInfo(
             feature.properties.NAME,
             feature.properties.county_r_1,
             feature.properties.county_res,
             feature.properties.county_r_4,
             feature.properties.county_r_3,
+            true,
+          );
+        } else if (feature.layer.id === 'dem-statewide-margin') {
+          this.map.setFilter('state-hover-line', ['==', 'STATEFP', feature.properties.STATEFP]);
+          this.props.getHoverInfo(
+            feature.properties.NAME,
+            feature.properties.statewid_1,
+            feature.properties.statewide_,
+            feature.properties.statewid_4,
+            feature.properties.statewid_3,
             true,
           );
         } else {
@@ -204,8 +212,9 @@ class NationalMap extends React.Component {
       {
         id: 'county-hover-line',
         type: 'line',
-        source: 'counties',
+        source: 'countyPresResults',
         minzoom: zoomThreshold,
+        'source-layer': '2016_county_results-5wvgz3',
         filter: ['==', 'GEOID', ''],
         paint: {
           'line-width': 2,
@@ -221,7 +230,7 @@ class NationalMap extends React.Component {
         id: 'state-hover-line',
         type: 'line',
         source: 'statewidePresResults',
-        minzoom: zoomThreshold,
+        maxzoom: zoomThreshold,
         'source-layer': '2016_statewide_results-bui81z',
         filter: ['==', 'STATEFP', ''],
         paint: {

@@ -56,7 +56,6 @@ class Map extends React.Component {
       });
       if (features.length > 0) {
         const feature = features[0];
-        console.log(feature);
         this.props.getHoverInfo(
           feature.properties.NAME,
           feature.properties.county_r_1,
@@ -64,6 +63,7 @@ class Map extends React.Component {
           feature.properties.county_r_4,
           feature.properties.county_r_3,
         );
+        this.map.setFilter('county-hover-line', ['==', 'GEOID', feature.properties.GEOID]);
         this.map.getCanvas().style.cursor = 'pointer';
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
@@ -76,7 +76,7 @@ class Map extends React.Component {
     //adds the precinct zoom threshold for WI
     let zoomThreshold;
     this.props.geography.result.state === 4 ? (zoomThreshold = 8) : (zoomThreshold = 0);
-    this.map.addSource('presResults', {
+    this.map.addSource('countyPresResults', {
       //loads the AK state leg map if it's Alaska
       url:
         this.props.geography.result.state !== 17
@@ -89,7 +89,7 @@ class Map extends React.Component {
         {
           id: 'dem-margin',
           type: 'fill',
-          source: 'presResults',
+          source: 'countyPresResults',
           maxzoom: zoomThreshold,
           'source-layer': '2016_county_results-5wvgz3',
           filter: [
@@ -125,12 +125,29 @@ class Map extends React.Component {
         },
         'waterway-label',
       );
+
+      this.map.addLayer(
+        {
+          id: 'county-hover-line',
+          type: 'line',
+          source: 'countyPresResults',
+          maxzoom: zoomThreshold,
+          'source-layer': '2016_county_results-5wvgz3',
+          filter: ['==', 'GEOID', ''],
+          paint: {
+            'line-width': 2,
+            'line-color': '#696969',
+            'line-opacity': 1,
+          },
+        },
+        'waterway-label',
+      );
     } else if (this.props.geography.result.state === 17) {
       this.map.addLayer(
         {
           id: 'dem-margin',
           type: 'fill',
-          source: 'presResults',
+          source: 'countyPresResults',
           maxzoom: zoomThreshold,
           'source-layer': '2016_ak_results-d7n96u',
           paint: {
@@ -223,11 +240,12 @@ class Map extends React.Component {
         'waterway-label',
       );
     }
-    console.log(this.map.getSource('counties')._data);
 
     const boundingBox = bbox(this.map.getSource('counties')._data);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
+    this.props.geography.result.state !== 17 &&
+      this.map.moveLayer('county-hover-line', 'poi-parks-scalerank2');
     const mapDetails = {
       center: this.map.getCenter(),
       zoom: this.map.getZoom(),
