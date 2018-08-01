@@ -73,11 +73,11 @@ class NationalMap extends React.Component {
             true,
             true,
           );
-        } else {
-          this.props.resetHover();
         }
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
+        this.map.setFilter('state-hover-line', ['==', 'STATEFP', '']);
+        this.map.setFilter('county-hover-line', ['==', 'GEOID', '']);
         this.props.resetHover();
       }
     });
@@ -102,7 +102,6 @@ class NationalMap extends React.Component {
 
   setStateOnClick = (state, coords) => {
     this.props.fetchStateData(state);
-    // this.map.moveLayer('state-lines', 'poi-parks-scalerank2');
     this.map.flyTo({
       center: coords,
       zoom: 6,
