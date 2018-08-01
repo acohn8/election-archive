@@ -14,7 +14,7 @@ const MapInfo = props => (
           padding: props.overlay.isNational === true ? '20px' : '10px',
           margin: 'auto',
           right: 30,
-          top: props.overlay.isNational ? 170 : 20,
+          top: props.overlay.isNational ? 200 : 50,
           borderColor: 'gray',
           borderStyle: 'solid',
           borderWidth: '0.5px',
