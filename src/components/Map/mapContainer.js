@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Map from './map';
+import Map from './StateMap';
 import MapInfo from './mapInfo';
 
 const MapContainer = () => (

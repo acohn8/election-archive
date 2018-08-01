@@ -40,6 +40,7 @@ class NationalMap extends React.Component {
       this.addResultsLayer();
       this.stateSelection();
       this.enableHover();
+      this.map.addControl(new mapboxgl.FullscreenControl());
     });
   };
 
