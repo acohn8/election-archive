@@ -57,6 +57,9 @@ class NationalMap extends React.Component {
       if (features.length > 0) {
         const feature = features[0];
         this.map.getCanvas().style.cursor = 'pointer';
+        this.map.getZoom() > 4.2
+          ? this.map.setFilter('county-hover-line', ['==', 'GEOID', feature.properties.GEOID])
+          : this.map.setFilter('state-hover-line', ['==', 'STATEFP', feature.properties.STATEFP]);
         if (feature.layer.id !== 'dem-statewide-margin') {
           this.props.getHoverInfo(
             feature.properties.NAME,
@@ -197,9 +200,43 @@ class NationalMap extends React.Component {
       },
     });
 
+    this.map.addLayer(
+      {
+        id: 'county-hover-line',
+        type: 'line',
+        source: 'counties',
+        minzoom: zoomThreshold,
+        filter: ['==', 'GEOID', ''],
+        paint: {
+          'line-width': 2,
+          'line-color': '#696969',
+          'line-opacity': 1,
+        },
+      },
+      'waterway-label',
+    );
+
+    this.map.addLayer(
+      {
+        id: 'state-hover-line',
+        type: 'line',
+        source: 'statewidePresResults',
+        minzoom: zoomThreshold,
+        'source-layer': '2016_statewide_results-bui81z',
+        filter: ['==', 'STATEFP', ''],
+        paint: {
+          'line-width': 2,
+          'line-color': '#696969',
+          'line-opacity': 1,
+        },
+      },
+      'waterway-label',
+    );
+
     const boundingBox = bbox(this.map.getSource('counties')._data);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
     this.map.moveLayer('dem-county-margin', 'poi-parks-scalerank2');
+    this.map.moveLayer('county-hover-line', 'poi-parks-scalerank2');
     this.map.moveLayer('state-lines', 'poi-parks-scalerank2');
   };
 
