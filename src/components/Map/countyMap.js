@@ -152,9 +152,12 @@ class CountyMap extends React.Component {
       );
     }
 
-    if (this.props.geography.result.state === 45) {
+    if (this.props.geography.result.state === 45 || this.props.geography.result.state === 11) {
+      const links = { 45: 'adamcohn.9iseezid', 11: 'adamcohn.1g8o5usp' };
+      const layers = { 45: 'tx-2016-final-7ylsll', 11: 'ga-2016-final-9bvbyq' };
+
       this.map.addSource('precinct', {
-        url: 'mapbox://adamcohn.9iseezid',
+        url: `mapbox://${links[this.props.geography.result.state]}`,
         type: 'vector',
       });
 
@@ -164,7 +167,7 @@ class CountyMap extends React.Component {
           type: 'fill',
           minzoom: zoomThreshold,
           source: 'precinct',
-          'source-layer': 'tx-2016-final-7ylsll',
+          'source-layer': layers[this.props.geography.result.state],
           filter: [
             '==',
             ['get', 'GEOID'],
