@@ -18,6 +18,9 @@ const getHoverInfo = (
 
 const resetHover = () => ({ type: 'RESET_HOVER' });
 
+const showHeader = () => ({ type: 'SHOW_HEADER' });
+const hideHeader = () => ({ type: 'HIDE_HEADER' });
+
 const setMapDetails = details => ({ type: 'SET_MAP_DETAILS', details });
 
-export { getHoverInfo, setMapDetails, resetHover };
+export { getHoverInfo, setMapDetails, resetHover, hideHeader, showHeader };

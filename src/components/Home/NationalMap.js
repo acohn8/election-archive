@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
 import { setActiveState } from '../../redux/actions/stateActions';
-import { getHoverInfo, resetHover } from '../../redux/actions/mapActions';
+import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
 
 mapboxgl.accessToken =
@@ -14,6 +14,7 @@ mapboxgl.accessToken =
 class NationalMap extends React.Component {
   componentDidMount() {
     this.createMap();
+    this.props.showHeader();
   }
 
   getCoords = () => {
@@ -41,6 +42,7 @@ class NationalMap extends React.Component {
       this.stateSelection();
       this.enableHover();
       this.map.addControl(new mapboxgl.FullscreenControl());
+      this.map.on('movestart', () => this.props.hideHeader());
     });
   };
 
@@ -268,8 +270,8 @@ class NationalMap extends React.Component {
       bottom: 0,
       width: '100%',
       height: '100%',
-      minWidth: 400,
-      minHeight: '60em',
+      // minWidth: 400,
+      minHeight: '74em',
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }
@@ -281,6 +283,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(getHoverInfo(countyName, demMargin, demVotes, gopMargin, gopVotes, isNational)),
   resetHover: () => dispatch(resetHover()),
   fetchStateData: id => dispatch(fetchStateData(id)),
+  hideHeader: () => dispatch(hideHeader()),
+  showHeader: () => dispatch(showHeader()),
 });
 
 const mapStateToProps = state => ({

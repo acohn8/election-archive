@@ -1,34 +1,49 @@
 import React from 'react';
 import { Header, Container, Grid, Divider } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';
 import StateDropdown from '../StateDropdown';
 
-/* eslint-disable max-len */
-
-const HomeContainer = () => (
+const HomeContainer = props => (
   <div>
-    <Container>
-      <Grid columns={2} verticalAlign="middle" stackable>
-        <Grid.Row>
-          <Grid.Column>
-            <Header as="h1">
-              Select a State For Results
-              <Header.Subheader>Zoom in for county results</Header.Subheader>
-            </Header>
-          </Grid.Column>
-          <Grid.Column>
-            <StateDropdown />
-          </Grid.Column>
-        </Grid.Row>
-        <Divider hidden />
-      </Grid>
-    </Container>
+    {!props.headerHid && (
+      <div
+        style={{
+          position: 'absolute',
+          zIndex: 1,
+          left: 60,
+          top: 72,
+          width: 250,
+          backgroundColor: 'white',
+          padding: '20px',
+          opacity: '0.8',
+        }}
+      >
+        <Header as="h1">
+          Select a state
+          <Header.Subheader>Or zoom in</Header.Subheader>
+        </Header>
+      </div>
+    )}
+    <div
+      style={{
+        position: 'absolute',
+        zIndex: 1,
+        right: 60,
+        top: 72,
+        width: 250,
+      }}
+    >
+      <StateDropdown />
+    </div>
     <MapInfo />
-    <Container fluid style={{ height: '83%', position: 'fixed' }}>
-      <NationalMap />
-    </Container>
+    <NationalMap />
   </div>
 );
 
-export default HomeContainer;
+const mapStateToProps = state => ({
+  headerHid: state.maps.headerHid,
+});
+
+export default connect(mapStateToProps)(HomeContainer);

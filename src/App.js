@@ -11,7 +11,7 @@ const App = () => (
   <div>
     <Nav />
     <Switch>
-      <Route exact path="/" render={HomeContainer} />
+      <Route exact path="/" component={HomeContainer} />
       <Route path="/states/:activeStateId" component={StateContainer} />
     </Switch>
   </div>

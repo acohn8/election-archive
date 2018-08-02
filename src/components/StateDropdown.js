@@ -9,8 +9,8 @@ const StateDropdown = (props) => {
   return (
     <Dropdown
       text="States"
-      fluid
       search
+      fluid
       selection
       options={props.states.map(state => ({
         key: state.id,
@@ -30,6 +30,7 @@ const StateDropdown = (props) => {
 
 const mapStateToProps = state => ({
   states: state.states.states,
+  overlay: state.maps.overlay,
 });
 
 export default connect(mapStateToProps)(StateDropdown);

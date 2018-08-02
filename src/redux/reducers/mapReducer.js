@@ -4,10 +4,11 @@ const initialMapState = {
     hoveredDem: { votes: '', percent: '' },
     hoveredRep: { votes: '', percent: '' },
   },
+  headerHid: false,
   mapDetails: {},
 };
 
-const resultsReducer = (previousState = initialMapState, action) => {
+const mapsReducer = (previousState = initialMapState, action) => {
   switch (action.type) {
     case 'SET_HOVER':
       return {
@@ -33,9 +34,19 @@ const resultsReducer = (previousState = initialMapState, action) => {
           hoveredRep: { votes: '', percent: '' },
         },
       };
+    case 'HIDE_HEADER':
+      return {
+        ...previousState,
+        headerHid: true,
+      };
+    case 'SHOW_HEADER':
+      return {
+        ...previousState,
+        headerHid: false,
+      };
     default:
       return previousState;
   }
 };
 
-export default resultsReducer;
+export default mapsReducer;
