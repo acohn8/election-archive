@@ -3,6 +3,8 @@ import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { resetHover } from '../redux/actions/mapActions';
+
 const StateDropdown = (props) => {
   const importAll = r => r.keys().map(r);
   const images = importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
@@ -11,6 +13,7 @@ const StateDropdown = (props) => {
       text="States"
       search
       fluid
+      onMouseEnter={props.resetHover}
       selection
       options={props.states.map(state => ({
         key: state.id,
@@ -33,4 +36,11 @@ const mapStateToProps = state => ({
   overlay: state.maps.overlay,
 });
 
-export default connect(mapStateToProps)(StateDropdown);
+const mapDispatchToProps = dispatch => ({
+  resetHover: () => dispatch(resetHover()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(StateDropdown);
