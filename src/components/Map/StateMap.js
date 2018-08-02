@@ -76,7 +76,7 @@ class Map extends React.Component {
 
   addResultsLayer = () => {
     //adds the precinct zoom threshold for precinct states
-    const precinctStates = [4, 11, 45];
+    const precinctStates = [4, 11, 45, 14];
     const pa = 3;
     let zoomThreshold;
     if (precinctStates.includes(this.props.geography.result.state)) {
@@ -258,13 +258,20 @@ class Map extends React.Component {
     if (
       this.props.geography.result.state === 45 ||
       this.props.geography.result.state === 11 ||
+      this.props.geography.result.state === 14 ||
       this.props.geography.result.state === 3
     ) {
-      const links = { 3: 'adamcohn.3sna8yq5', 45: 'adamcohn.9iseezid', 11: 'adamcohn.1g8o5usp' };
+      const links = {
+        3: 'adamcohn.3sna8yq5',
+        45: 'adamcohn.9iseezid',
+        11: 'adamcohn.1g8o5usp',
+        14: 'adamcohn.8risplqr',
+      };
       const layers = {
         3: 'pa-2016-final-597cvl',
         45: 'tx-2016-final-7ylsll',
         11: 'ga-2016-final-9bvbyq',
+        14: 'mn-2016-final-53132s',
       };
 
       this.map.addSource('precinct', {
