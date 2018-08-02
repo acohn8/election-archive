@@ -14,7 +14,7 @@ class Nav extends Component {
     return (
       <Menu size="huge">
         <Menu.Item name="home" as={Link} to="/" />
-        <Menu.Item name="about" />
+        {/* <Menu.Item name="about" /> */}
       </Menu>
     );
   }

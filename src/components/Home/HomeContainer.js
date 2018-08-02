@@ -21,8 +21,8 @@ const HomeContainer = props => (
         }}
       >
         <Header as="h1">
-          Select a state
-          <Header.Subheader>Or zoom in</Header.Subheader>
+          President: 2016
+          <Header.Subheader>Select a state or zoom in</Header.Subheader>
         </Header>
       </div>
     )}
