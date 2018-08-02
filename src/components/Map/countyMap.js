@@ -31,7 +31,9 @@ class CountyMap extends React.Component {
 
   addResultsLayer = () => {
     let zoomThreshold;
-    this.props.geography.result.state === 4 ? (zoomThreshold = 8) : (zoomThreshold = 0);
+    this.props.geography.result.state === 4 || this.props.geography.result.state === 45
+      ? (zoomThreshold = 8)
+      : (zoomThreshold = 0);
     this.map.addSource('presResults', {
       url: 'mapbox://adamcohn.7bxery92',
       type: 'vector',
@@ -119,6 +121,59 @@ class CountyMap extends React.Component {
               .padStart(5, '0'),
           ],
           paint: {
+            'fill-outline-color': '#696969',
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              [
+                '-',
+                ['/', ['get', 'G16PREDCli'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+                ['/', ['get', 'G16PRERTru'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+              ],
+              -0.3,
+              '#d6604d',
+              -0.2,
+              '#f4a582',
+              -0.1,
+              '#fddbc7',
+              0.0,
+              '#f7f7f7',
+              0.1,
+              '#d1e5f0',
+              0.2,
+              '#92c5de',
+              0.3,
+              '#4393c3',
+            ],
+            'fill-opacity': 0.7,
+          },
+        },
+        'waterway-label',
+      );
+    }
+
+    if (this.props.geography.result.state === 45) {
+      this.map.addSource('precinct', {
+        url: 'mapbox://adamcohn.9iseezid',
+        type: 'vector',
+      });
+
+      this.map.addLayer(
+        {
+          id: 'precinct',
+          type: 'fill',
+          minzoom: zoomThreshold,
+          source: 'precinct',
+          'source-layer': 'tx-2016-final-7ylsll',
+          filter: [
+            '==',
+            ['get', 'GEOID'],
+            this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
+              .toString()
+              .padStart(5, '0'),
+          ],
+          paint: {
+            'fill-outline-color': '#696969',
             'fill-color': [
               'interpolate',
               ['linear'],

@@ -68,7 +68,6 @@ class Map extends React.Component {
         this.map.getCanvas().style.cursor = 'pointer';
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
-        this.map.setFilter('state-hover-line', ['==', 'STATEFP', '']);
         this.map.setFilter('county-hover-line', ['==', 'GEOID', '']);
         this.props.resetHover();
       }
@@ -78,7 +77,9 @@ class Map extends React.Component {
   addResultsLayer = () => {
     //adds the precinct zoom threshold for WI
     let zoomThreshold;
-    this.props.geography.result.state === 4 ? (zoomThreshold = 8) : (zoomThreshold = 0);
+    this.props.geography.result.state === 4 || this.props.geography.result.state === 45
+      ? (zoomThreshold = 8)
+      : (zoomThreshold = 0);
     this.map.addSource('countyPresResults', {
       //loads the AK state leg map if it's Alaska
       url:
@@ -87,6 +88,7 @@ class Map extends React.Component {
           : 'mapbox://adamcohn.2hweullr',
       type: 'vector',
     });
+
     if (this.props.geography.result.state !== 17) {
       this.map.addLayer(
         {
@@ -104,6 +106,7 @@ class Map extends React.Component {
           ],
 
           paint: {
+            'fill-outline-color': '#696969',
             'fill-color': [
               'interpolate',
               ['linear'],
@@ -154,6 +157,7 @@ class Map extends React.Component {
           maxzoom: zoomThreshold,
           'source-layer': '2016_ak_results-d7n96u',
           paint: {
+            'fill-outline-color': '#696969',
             'fill-color': [
               'interpolate',
               ['linear'],
@@ -201,7 +205,7 @@ class Map extends React.Component {
     });
 
     if (this.props.geography.result.state === 4) {
-      this.map.addSource('wi-precinct', {
+      this.map.addSource('precinct', {
         url: 'mapbox://adamcohn.adwhne7t',
         type: 'vector',
       });
@@ -211,9 +215,55 @@ class Map extends React.Component {
           id: 'wi-pres-precinct',
           type: 'fill',
           minzoom: zoomThreshold,
-          source: 'wi-precinct',
+          source: 'precinct',
           'source-layer': 'wi-2016-final-6apfcm',
           paint: {
+            'fill-outline-color': '#696969',
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              [
+                '-',
+                ['/', ['get', 'G16PREDCli'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+                ['/', ['get', 'G16PRERTru'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+              ],
+              -0.3,
+              '#d6604d',
+              -0.2,
+              '#f4a582',
+              -0.1,
+              '#fddbc7',
+              0.0,
+              '#f7f7f7',
+              0.1,
+              '#d1e5f0',
+              0.2,
+              '#92c5de',
+              0.3,
+              '#4393c3',
+            ],
+            'fill-opacity': 0.7,
+          },
+        },
+        'waterway-label',
+      );
+    }
+
+    if (this.props.geography.result.state === 45) {
+      this.map.addSource('precinct', {
+        url: 'mapbox://adamcohn.9iseezid',
+        type: 'vector',
+      });
+
+      this.map.addLayer(
+        {
+          id: 'precinct',
+          type: 'fill',
+          minzoom: zoomThreshold,
+          source: 'precinct',
+          'source-layer': 'tx-2016-final-7ylsll',
+          paint: {
+            'fill-outline-color': '#696969',
             'fill-color': [
               'interpolate',
               ['linear'],

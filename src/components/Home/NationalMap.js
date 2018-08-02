@@ -131,6 +131,7 @@ class NationalMap extends React.Component {
         maxzoom: zoomThreshold,
         'source-layer': '2016_statewide_results-bui81z',
         paint: {
+          'fill-outline-color': '#696969',
           'fill-color': [
             'interpolate',
             ['linear'],
@@ -160,8 +161,8 @@ class NationalMap extends React.Component {
         minzoom: zoomThreshold,
         'source-layer': '2016_county_results-5wvgz3',
         filter: ['!=', ['get', 'STATEFP'], 15],
-
         paint: {
+          'fill-outline-color': '#696969',
           'fill-color': [
             'interpolate',
             ['linear'],

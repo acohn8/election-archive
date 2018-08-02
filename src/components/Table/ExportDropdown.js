@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 const ExportDropdown = props => (
   <Dropdown text="CSV Export" icon="cloud download" floating labeled button className="icon">
     <Dropdown.Menu>
-      <Dropdown.Header icon="tags" content="Select a geography" />
+      <Dropdown.Header icon="globe" content="Select a geography" />
       <Dropdown.Item
         as="a"
         href={`https://s3.amazonaws.com/stateprecinctresults/countyresults/${props.geography.entities.state[
