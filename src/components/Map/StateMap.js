@@ -77,10 +77,15 @@ class Map extends React.Component {
   addResultsLayer = () => {
     //adds the precinct zoom threshold for precinct states
     const precinctStates = [4, 11, 45];
+    const pa = 3;
     let zoomThreshold;
-    precinctStates.includes(this.props.geography.result.state)
-      ? (zoomThreshold = 8)
-      : (zoomThreshold = 0);
+    if (precinctStates.includes(this.props.geography.result.state)) {
+      zoomThreshold = 8;
+    } else if (this.props.geography.result.state === pa) {
+      zoomThreshold = 9;
+    } else {
+      zoomThreshold = 0;
+    }
     this.map.addSource('countyPresResults', {
       //loads the AK state leg map if it's Alaska
       url:
@@ -250,9 +255,17 @@ class Map extends React.Component {
       );
     }
 
-    if (this.props.geography.result.state === 45 || this.props.geography.result.state === 11) {
-      const links = { 45: 'adamcohn.9iseezid', 11: 'adamcohn.1g8o5usp' };
-      const layers = { 45: 'tx-2016-final-7ylsll', 11: 'ga-2016-final-9bvbyq' };
+    if (
+      this.props.geography.result.state === 45 ||
+      this.props.geography.result.state === 11 ||
+      this.props.geography.result.state === 3
+    ) {
+      const links = { 3: 'adamcohn.3sna8yq5', 45: 'adamcohn.9iseezid', 11: 'adamcohn.1g8o5usp' };
+      const layers = {
+        3: 'pa-2016-final-597cvl',
+        45: 'tx-2016-final-7ylsll',
+        11: 'ga-2016-final-9bvbyq',
+      };
 
       this.map.addSource('precinct', {
         url: `mapbox://${links[this.props.geography.result.state]}`,
