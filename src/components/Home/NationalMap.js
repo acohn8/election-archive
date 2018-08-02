@@ -96,8 +96,6 @@ class NationalMap extends React.Component {
         const state = this.props.states.states.find(
           state => state.attributes.name === features[0].properties.NAME,
         ).id;
-        this.map.removeLayer('county-hover-line');
-        this.map.removeLayer('state-hover-line');
         this.setStateOnClick(state, coords);
       }
     });
@@ -270,7 +268,6 @@ class NationalMap extends React.Component {
       bottom: 0,
       width: '100%',
       height: '100%',
-      // minWidth: 400,
       minHeight: '74em',
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
