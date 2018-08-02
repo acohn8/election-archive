@@ -100,7 +100,7 @@ class CountyMap extends React.Component {
 
     if (this.props.geography.result.state === 4) {
       this.map.addSource('wi-precinct', {
-        url: 'mapbox://adamcohn.59aj7ijb',
+        url: 'mapbox://adamcohn.adwhne7t',
         type: 'vector',
       });
 
@@ -110,7 +110,7 @@ class CountyMap extends React.Component {
           type: 'fill',
           minzoom: zoomThreshold,
           source: 'wi-precinct',
-          'source-layer': 'wi_2016-5i7xwd',
+          'source-layer': 'wi-2016-final-6apfcm',
           filter: [
             '==',
             ['get', 'CNTY_FIPS'],
