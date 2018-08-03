@@ -39,7 +39,7 @@ class StateContainer extends React.Component {
         {this.props.loading === true && <ContentLoader />}
         {this.props.loading === false &&
           this.props.states.activeStateId !== '' && (
-            <Grid columns={2} verticalAlign="middle">
+            <Grid columns={2} verticalAlign="middle" stackable>
               <Grid.Column>
                 <Header size="huge">
                   <Image
