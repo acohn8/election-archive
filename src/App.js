@@ -6,6 +6,7 @@ import StateContainer from './components/stateContainer';
 import HomeContainer from './components/Home/HomeContainer';
 
 import './App.css';
+import Footer from './components/Footer';
 
 const App = () => (
   <div>
@@ -14,6 +15,7 @@ const App = () => (
       <Route exact path="/" component={HomeContainer} />
       <Route path="/states/:activeStateId" component={StateContainer} />
     </Switch>
+    <Footer />
   </div>
 );
 
