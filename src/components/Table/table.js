@@ -109,7 +109,6 @@ class ResultsTable extends React.Component {
         onFilteredChange={filtered => this.setState({ filtered })}
         className="-highlight"
         SubComponent={row => {
-          console.log(row);
           return (
             <div style={{ padding: '20px' }}>
               <CountyContainer row={row} />
