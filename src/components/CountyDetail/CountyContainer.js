@@ -10,7 +10,7 @@ import { fetchPrecinctData } from '../../redux/actions/precinctActions';
 
 class CountyContainer extends React.Component {
   componentDidMount() {
-    this.props.fetchPrecinctData(this.props.row.original.countyId);
+    this.props.fetchPrecinctData(this.props.row.original);
   }
 
   formatCountyToplines = () => {

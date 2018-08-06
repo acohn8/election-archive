@@ -26,116 +26,10 @@ class ResultsTable extends React.Component {
     }
   }
 
-  // makeData = () => {
-  //   const majorCandidates = Object.keys(
-  //     this.props.electionResults.entities.results[this.props.electionResults.result[0]].results,
-  //   );
-  //   const data = [];
-  //   this.props.electionResults.result.forEach(countyId => {
-  //     const countyData = {};
-  //     const countyTotals = Object.values(
-  //       this.props.electionResults.entities.results[countyId].results,
-  //     );
-  //     const countyCandidates = Object.keys(
-  //       this.props.electionResults.entities.results[countyId].results,
-  //     );
-  //     const winnerIndex = countyTotals.indexOf(countyTotals.reduce((a, b) => Math.max(a, b)));
-  //     const winner = countyCandidates[winnerIndex];
-  //     countyData.countyId = countyId;
-  //     countyData.winner = winner;
-  //     countyData.county = this.props.geography.entities.counties[countyId].name;
-  //     data.push(countyData);
-  //   });
-
-  //   data.forEach(county => {
-  //     county.candidates = {};
-  //     majorCandidates.forEach(candidateId => {
-  //       county.candidates[candidateId] = {
-  //         votes: this.props.electionResults.entities.results[county.countyId].results[candidateId],
-  //       };
-  //     });
-  //   });
-  //   return data;
-  // };
-
-  // makeColumns = () => {
-  // const majorCandidates = Object.keys(
-  //   this.props.electionResults.entities.results[this.props.electionResults.result[0]].results,
-  // );
-
-  // const columns = [
-  //   {
-  //     // {
-  //     Header: 'County',
-  //     id: 'county',
-  //     width: 300,
-  //     accessor: d => console.log(d.result),
-  // d.electionResults.entities.counties.map(county => county.name),
-  // filterMethod: (filter, row) =>
-  // this.state.filtered.length > 0 &&
-  // row.county.toLowerCase().includes(this.state.filtered[0].value.toLowerCase()),
-  //   Cell: row => (
-  //     <span>
-  //       <span
-  //         style={{
-  //           color:
-  //             colors[
-  //               this.props.candidates.entities.candidates[row.original.winner].attributes.party
-  //             ],
-  //           transition: 'all .3s ease',
-  //           margin: '3px',
-  //         }}
-  //       >
-  //         &#x25cf;
-  //       </span>
-  //       {row.value}
-  //     </span>
-  //   ),
-  // },
-  //   },
-  // ];
-
-  // majorCandidates.map(candidateId =>
-  //   columns.push({
-  //     id: candidateId,
-  //     Header: `${
-  //       candidateId === 'other'
-  //         ? 'Other'
-  //         : this.props.candidates.entities.candidates[candidateId].attributes.name
-  //     }`,
-  //     columns: [
-  //       {
-  //         Header: 'Votes',
-  //         id: `candidate-votes${candidateId}`,
-  //         accessor: d => d.candidates[candidateId].votes,
-
-  //         filterable: false,
-  //         minWidth: 100,
-  //         Cell: row => (row.value === undefined ? 0 : row.value.toLocaleString()),
-  //       },
-  //       {
-  //         Header: 'Percent',
-  //         id: `candidate-percent-${candidateId}`,
-  //         accessor: d =>
-  //           d.candidates[candidateId].votes /
-  //           majorCandidates
-  //             .map(candidate => d.candidates[candidate].votes)
-  //             .reduce((total, num) => total + num),
-  //         filterable: false,
-  //         minWidth: 100,
-  //         Cell: row => `${Math.max(Math.round(row.value * 100 * 10) / 10)} %`,
-  //       },
-  //     ],
-  //   }),
-  // );
-  // return columns;
-  // };
-
   render() {
     const majorCandidates = Object.keys(
       this.props.electionResults.entities.results[this.props.electionResults.result[0]].results,
     );
-    console.log(majorCandidates);
     return (
       <ReactTable
         data={this.props.electionResults.result}
@@ -145,6 +39,31 @@ class ResultsTable extends React.Component {
             id: 'county',
             width: 300,
             accessor: d => this.props.geography.entities.counties[d].name,
+            filterMethod: (filter, row) =>
+              this.state.filtered.length > 0 &&
+              row.county.toLowerCase().includes(this.state.filtered[0].value.toLowerCase()),
+            Cell: row => {
+              const winningCandidate = Object.keys(row.row)
+                .filter(key => key.includes('votes'))
+                .sort((a, b) => row.row[b] - row.row[a])
+                .map(key => key.split('-'))[0][1];
+              const winnerParty = this.props.candidates.entities.candidates[winningCandidate]
+                .attributes.party;
+              return (
+                <span>
+                  <span
+                    style={{
+                      color: colors[winnerParty],
+                      transition: 'all .3s ease',
+                      margin: '3px',
+                    }}
+                  >
+                    &#x25cf;
+                  </span>
+                  {row.value}
+                </span>
+              );
+            },
           },
         ].concat(
           majorCandidates.map(candidateId => ({
@@ -156,7 +75,7 @@ class ResultsTable extends React.Component {
             }`,
             columns: [
               {
-                id: `candidate-votes${candidateId}`,
+                id: `votes-${candidateId}`,
                 Header: 'Votes',
                 accessor: d => this.props.electionResults.entities.results[d].results[candidateId],
                 filterable: false,
@@ -165,7 +84,7 @@ class ResultsTable extends React.Component {
               },
               {
                 Header: 'Percent',
-                id: `candidate-percent-${candidateId}`,
+                id: `percent-${candidateId}`,
                 accessor: d =>
                   this.props.electionResults.entities.results[d].results[candidateId] /
                   majorCandidates
@@ -181,6 +100,22 @@ class ResultsTable extends React.Component {
             ],
           })),
         )}
+        filterable
+        filtered={this.state.filtered}
+        expanded={this.state.expanded}
+        onExpandedChange={(newExpanded, index, event) => {
+          this.handleRowExpanded(index);
+        }}
+        onFilteredChange={filtered => this.setState({ filtered })}
+        className="-highlight"
+        SubComponent={row => {
+          console.log(row);
+          return (
+            <div style={{ padding: '20px' }}>
+              <CountyContainer row={row} />
+            </div>
+          );
+        }}
       />
     );
   }
@@ -193,20 +128,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(ResultsTable);
-
-// defaultPageSize={this.makeData().length > 50 ? 50 : this.makeData().length}
-// filterable
-// filtered={this.state.filtered}
-// expanded={this.state.expanded}
-// onExpandedChange={(newExpanded, index, event) => {
-//   this.handleRowExpanded(index);
-// }}
-// onFilteredChange={filtered => this.setState({ filtered })}
-// className="-highlight"
-// SubComponent={row => {
-//   return (
-//     <div style={{ padding: '20px' }}>
-//       <CountyContainer row={row} />
-//     </div>
-//   );
-// }}
