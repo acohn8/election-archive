@@ -22,7 +22,7 @@ const HomeContainer = props => (
       >
         <Header as="h1">
           President: 2016
-          <Header.Subheader>Select a state or zoom in</Header.Subheader>
+          <Header.Subheader>Zoom in to see counties or out to see states</Header.Subheader>
         </Header>
       </div>
     )}
