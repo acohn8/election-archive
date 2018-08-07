@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';
-import StateDropdown from '../StateDropdown';
 
 const NationalMapContainer = props => (
   <div>

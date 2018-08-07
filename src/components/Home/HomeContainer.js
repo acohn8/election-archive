@@ -14,9 +14,7 @@ import {
 } from 'semantic-ui-react';
 
 /* eslint-disable react/no-multi-comp */
-/* Heads up! HomepageHeading uses inline styling, however it's not the best practice. Use CSS or styled components for
- * such things.
- */
+
 const HomepageHeading = ({ mobile }) => (
   <Container text fluid>
     <Header
@@ -32,7 +30,7 @@ const HomepageHeading = ({ mobile }) => (
     />
     <Header
       as="h2"
-      content="Select a state for results."
+      content="Select a state for detailed results."
       inverted
       style={{
         fontSize: mobile ? '1.5em' : '1.7em',
@@ -95,7 +93,7 @@ class DesktopContainer extends Component {
                 <Menu.Item name="home" as={Link} to="/" active />
                 <Menu.Item name="National Map" as={Link} to="/national-map" />
                 <Menu.Item name="States" as={Link} to="/states" />
-                <Menu.Item as="a">About</Menu.Item>
+                {/* <Menu.Item as="a">About</Menu.Item> */}
               </Container>
             </Menu>
             <HomepageHeading />
@@ -134,7 +132,7 @@ class MobileContainer extends Component {
             <Menu.Item name="home" as={Link} to="/" active />
             <Menu.Item name="National Map" as={Link} to="/national-map" />
             <Menu.Item name="States" as={Link} to="/states" />
-            <Menu.Item as="a">About</Menu.Item>
+            {/* <Menu.Item as="a">About</Menu.Item> */}
           </Sidebar>
 
           <Sidebar.Pusher
