@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Container,
-  Divider,
-  Grid,
   Header,
   Icon,
-  Image,
-  List,
   Menu,
   Responsive,
   Segment,
@@ -95,10 +92,12 @@ class DesktopContainer extends Component {
               color="white"
             >
               <Container>
-                <Menu.Item as="a" active>
+                <Menu.Item as={Link} to="/" active>
                   Home
                 </Menu.Item>
-                <Menu.Item as="a">National Map</Menu.Item>
+                <Menu.Item as={Link} to="/national-map">
+                  National Map
+                </Menu.Item>
                 <Menu.Item as="a">States</Menu.Item>
                 <Menu.Item as="a">About</Menu.Item>
               </Container>
@@ -135,11 +134,9 @@ class MobileContainer extends Component {
     return (
       <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
         <Sidebar.Pushable>
-          <Sidebar as={Menu} animation="uncover" inverted vertical visible={sidebarOpened}>
-            <Menu.Item as="a" active>
-              Home
-            </Menu.Item>
-            <Menu.Item as="a">National Map</Menu.Item>
+          <Sidebar as={Menu} animation="uncover" vertical visible={sidebarOpened}>
+            <Menu.Item name="home" as={Link} to="/" active />
+            <Menu.Item name="National Map" as={Link} to="/national-map" />
             <Menu.Item as="a">States</Menu.Item>
             <Menu.Item as="a">About</Menu.Item>
           </Sidebar>
