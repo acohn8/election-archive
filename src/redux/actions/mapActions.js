@@ -22,5 +22,6 @@ const showHeader = () => ({ type: 'SHOW_HEADER' });
 const hideHeader = () => ({ type: 'HIDE_HEADER' });
 
 const setMapDetails = details => ({ type: 'SET_MAP_DETAILS', details });
+const resetMapDetails = () => ({ type: 'RESET_MAP_DETAILS' });
 
-export { getHoverInfo, setMapDetails, resetHover, hideHeader, showHeader };
+export { getHoverInfo, setMapDetails, resetHover, hideHeader, showHeader, resetMapDetails };

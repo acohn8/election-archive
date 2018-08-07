@@ -4,7 +4,12 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
-import { getHoverInfo, setMapDetails, resetHover } from '../../redux/actions/mapActions';
+import {
+  getHoverInfo,
+  setMapDetails,
+  resetHover,
+  resetMapDetails,
+} from '../../redux/actions/mapActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -19,6 +24,10 @@ class Map extends React.Component {
       this.map.remove();
       this.createMap();
     }
+  }
+
+  componentWillUnmount() {
+    this.props.resetMapDetails();
   }
 
   getCoords = () => {
@@ -348,6 +357,7 @@ const mapDispatchToProps = dispatch => ({
   getHoverInfo: (countyName, demMargin, demVotes, gopMargin, gopVotes) =>
     dispatch(getHoverInfo(countyName, demMargin, demVotes, gopMargin, gopVotes)),
   resetHover: () => dispatch(resetHover()),
+  resetMapDetails: () => dispatch(resetMapDetails()),
 });
 
 const mapStateToProps = state => ({

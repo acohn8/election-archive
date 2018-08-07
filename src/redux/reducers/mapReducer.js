@@ -25,6 +25,11 @@ const mapsReducer = (previousState = initialMapState, action) => {
         ...previousState,
         mapDetails: action.details,
       };
+    case 'RESET_MAP_DETAILS':
+      return {
+        ...previousState,
+        mapDetails: {},
+      };
     case 'RESET_HOVER':
       return {
         ...previousState,
