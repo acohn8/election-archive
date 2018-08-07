@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import { fetchStatesList } from './redux/actions/stateActions';
 import StateContainer from './components/stateContainer';
@@ -33,7 +34,7 @@ const mapDispatchToProps = dispatch => ({
   fetchStatesList: () => dispatch(fetchStatesList()),
 });
 
-export default connect(
+export default withRouter(connect(
   null,
   mapDispatchToProps,
-)(App);
+)(App));

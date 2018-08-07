@@ -40,7 +40,7 @@ const HomepageHeading = ({ mobile }) => (
         marginTop: '0.5em',
       }}
     />
-    <Button primary size="huge" color="teal">
+    <Button primary size="huge" color="teal" as={Link} to="/national-map">
       Get Started
       <Icon name="right arrow" />
     </Button>
@@ -95,9 +95,7 @@ class DesktopContainer extends Component {
                 <Menu.Item as={Link} to="/" active>
                   Home
                 </Menu.Item>
-                <Menu.Item as={Link} to="/national-map">
-                  National Map
-                </Menu.Item>
+                <Menu.Item name="National Map" as={Link} to="/national-map" />
                 <Menu.Item as="a">States</Menu.Item>
                 <Menu.Item as="a">About</Menu.Item>
               </Container>
@@ -191,5 +189,5 @@ ResponsiveContainer.propTypes = {
 };
 
 const HomeContainer = () => <ResponsiveContainer />;
+
 export default HomeContainer;
-// https://s3.amazonaws.com/stateprecinctresults/Images/banner.png
