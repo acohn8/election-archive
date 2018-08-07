@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Breadcrumb, Divider } from 'semantic-ui-react';
+import { Header, Breadcrumb, Responsive, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -39,39 +39,35 @@ const NationalMapContainer = props => (
         <StateDropdown />
       </div>
     )}
-    <div
-      style={{
-        position: 'absolute',
-        zIndex: 1,
-        right: 60,
-        top: 8,
-        width: 250,
-      }}
-    />
-    <div
-      style={{
-        position: 'absolute',
-        zIndex: 1,
-        backgroundColor: 'white',
-        opacity: '0.8',
-        padding: '20px',
-        margin: 'auto',
-        right: 60,
-        top: 8,
-        width: 250,
-        borderColor: 'gray',
-        borderStyle: 'solid',
-        borderWidth: '0.5px',
-      }}
-    >
-      <MapInfo />
-    </div>
+    {props.overlay.hoveredDem.votes !== '' && (
+      <Responsive
+        as="div"
+        {...Responsive.onlyComputer}
+        style={{
+          position: 'absolute',
+          zIndex: 1,
+          backgroundColor: 'white',
+          opacity: '0.8',
+          padding: '20px',
+          margin: 'auto',
+          right: 60,
+          top: 8,
+          width: 250,
+          borderColor: 'gray',
+          borderStyle: 'solid',
+          borderWidth: '0.5px',
+        }}
+      >
+        <MapInfo />
+      </Responsive>
+    )}
     <NationalMap />
   </div>
 );
 
 const mapStateToProps = state => ({
   headerHid: state.maps.headerHid,
+  overlay: state.maps.overlay,
 });
 
 export default connect(mapStateToProps)(NationalMapContainer);
