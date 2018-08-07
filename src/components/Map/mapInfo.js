@@ -5,22 +5,7 @@ import { connect } from 'react-redux';
 const MapInfo = props => (
   <div>
     {props.overlay.hoveredDem.votes !== '' && (
-      <div
-        style={{
-          position: 'absolute',
-          zIndex: 1,
-          backgroundColor: 'white',
-          opacity: '0.8',
-          padding: props.overlay.isNational === true ? '20px' : '10px',
-          margin: 'auto',
-          right: props.overlay.isNational ? 60 : 30,
-          top: props.overlay.isNational ? 8 : 50,
-          width: props.overlay.isNational && 250,
-          borderColor: 'gray',
-          borderStyle: 'solid',
-          borderWidth: '0.5px',
-        }}
-      >
+      <div>
         <Header as={props.overlay.isNational === true ? 'h3' : 'h4'}>
           {props.overlay.hoveredGeography}
           {props.overlay.isStatewide === true && (

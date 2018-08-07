@@ -48,7 +48,24 @@ const NationalMapContainer = props => (
         width: 250,
       }}
     />
-    <MapInfo />
+    <div
+      style={{
+        position: 'absolute',
+        zIndex: 1,
+        backgroundColor: 'white',
+        opacity: '0.8',
+        padding: '20px',
+        margin: 'auto',
+        right: 60,
+        top: 8,
+        width: 250,
+        borderColor: 'gray',
+        borderStyle: 'solid',
+        borderWidth: '0.5px',
+      }}
+    >
+      <MapInfo />
+    </div>
     <NationalMap />
   </div>
 );
