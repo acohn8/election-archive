@@ -270,6 +270,7 @@ class NationalMap extends React.Component {
       width: '100%',
       height: '100%',
       minHeight: '72em',
+      'touch-action': 'none',
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }

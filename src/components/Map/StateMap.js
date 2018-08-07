@@ -21,6 +21,7 @@ class Map extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
+      console.log(this.props);
       this.map.remove();
       this.createMap();
     }
