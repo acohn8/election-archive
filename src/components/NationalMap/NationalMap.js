@@ -43,6 +43,7 @@ class NationalMap extends React.Component {
       this.enableHover();
       this.map.addControl(new mapboxgl.FullscreenControl());
       this.map.on('movestart', () => this.props.hideHeader());
+      this.map.on('moveend', () => this.props.showHeader());
     });
   };
 
@@ -263,7 +264,7 @@ class NationalMap extends React.Component {
 
   render() {
     const style = {
-      position: 'relative',
+      position: 'absolute',
       top: 0,
       bottom: 0,
       width: '100%',
