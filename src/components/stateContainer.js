@@ -37,7 +37,7 @@ class StateContainer extends React.Component {
     const images = this.importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
     return (
       <div>
-        <Nav />>
+        <Nav />
         <Container>
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&

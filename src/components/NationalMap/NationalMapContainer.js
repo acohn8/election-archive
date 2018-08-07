@@ -17,7 +17,7 @@ const NationalMapContainer = props => (
           left: 30,
           'border-radius': '25px',
           top: 8,
-          width: 250,
+          width: 270,
           backgroundColor: 'white',
           padding: '20px',
           opacity: '0.8',
@@ -36,6 +36,7 @@ const NationalMapContainer = props => (
             Zoom in to see counties or out to see states. Click for details.
           </Header.Subheader>
         </Header>
+        <StateDropdown />
       </div>
     )}
     <div
@@ -46,9 +47,7 @@ const NationalMapContainer = props => (
         top: 8,
         width: 250,
       }}
-    >
-      <StateDropdown />
-    </div>
+    />
     <MapInfo />
     <NationalMap />
   </div>

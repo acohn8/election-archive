@@ -92,11 +92,9 @@ class DesktopContainer extends Component {
               color="white"
             >
               <Container>
-                <Menu.Item as={Link} to="/" active>
-                  Home
-                </Menu.Item>
+                <Menu.Item name="home" as={Link} to="/" active />
                 <Menu.Item name="National Map" as={Link} to="/national-map" />
-                <Menu.Item as="a">States</Menu.Item>
+                <Menu.Item name="States" as={Link} to="/states" />
                 <Menu.Item as="a">About</Menu.Item>
               </Container>
             </Menu>
@@ -135,7 +133,7 @@ class MobileContainer extends Component {
           <Sidebar as={Menu} animation="uncover" vertical visible={sidebarOpened}>
             <Menu.Item name="home" as={Link} to="/" active />
             <Menu.Item name="National Map" as={Link} to="/national-map" />
-            <Menu.Item as="a">States</Menu.Item>
+            <Menu.Item name="States" as={Link} to="/states" />
             <Menu.Item as="a">About</Menu.Item>
           </Sidebar>
 
