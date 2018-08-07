@@ -1,34 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import { Header } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import NationalMap from './NationalMap';
-import MapInfo from '../Map/mapInfo';
-import StateDropdown from '../StateDropdown';
-
-const HomeContainer = props => (
-  <div>
-    {!props.headerHid && (
-      <div
-        style={{
-          position: 'absolute',
-          zIndex: 1,
-          left: 60,
-          top: 72,
-          width: 250,
-          backgroundColor: 'white',
-          padding: '20px',
-          opacity: '0.8',
-        }}
-      >
-        <Header as="h1">
-          President: 2016
-          <Header.Subheader>Zoom in to see counties or out to see states</Header.Subheader>
-        </Header>
-      </div>
-    )}
-    <div
-=======
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
@@ -52,7 +21,6 @@ const HomepageHeading = ({ mobile }) => (
       as="h1"
       content="Election Archive"
       inverted
->>>>>>> big-refactor
       style={{
         fontSize: mobile ? '2em' : '4em',
         fontWeight: 'normal',
