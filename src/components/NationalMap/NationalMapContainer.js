@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Breadcrumb, Responsive, Segment } from 'semantic-ui-react';
+import { Header, Breadcrumb, Responsive, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -18,7 +18,6 @@ const NationalMapContainer = props => (
           'border-radius': '25px',
           top: 8,
           width: 300,
-          height: 150,
           backgroundColor: 'white',
           padding: '20px',
           opacity: '0.8',
@@ -34,38 +33,20 @@ const NationalMapContainer = props => (
           <Breadcrumb.Divider />
           <Breadcrumb.Section active>National Map</Breadcrumb.Section>
         </Breadcrumb>
-        <Header as="h3">
-          President: 2016
-          <Header.Subheader>
-            Zoom in to see counties or out to see states. Click for details.
-          </Header.Subheader>
-        </Header>
-        {/* <StateDropdown /> */}
+        {props.overlay.hoveredDem.votes === '' ? (
+          <Header as="h2">
+            President: 2016
+            <Header.Subheader>
+              Zoom in to see counties or out to see states. Click for details.
+            </Header.Subheader>
+          </Header>
+        ) : (
+          <div>
+            <Divider hidden />
+            <MapInfo />
+          </div>
+        )}
       </div>
-    )}
-    {props.overlay.hoveredDem.votes !== '' && (
-      <Responsive
-        as="div"
-        {...Responsive.onlyComputer}
-        style={{
-          position: 'absolute',
-          zIndex: 1,
-          backgroundColor: 'white',
-          opacity: '0.8',
-          padding: '20px',
-          margin: 'auto',
-          right: 50,
-          top: 8,
-          width: 300,
-          height: 150,
-          'border-radius': '25px',
-          borderColor: 'gray',
-          borderStyle: 'solid',
-          borderWidth: '0.5px',
-        }}
-      >
-        <MapInfo />
-      </Responsive>
     )}
     <NationalMap />
   </div>
