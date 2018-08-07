@@ -21,6 +21,9 @@ const NationalMapContainer = props => (
           backgroundColor: 'white',
           padding: '20px',
           opacity: '0.8',
+          borderColor: 'gray',
+          borderStyle: 'solid',
+          borderWidth: '0.5px',
         }}
       >
         <Breadcrumb>
@@ -30,7 +33,7 @@ const NationalMapContainer = props => (
           <Breadcrumb.Divider />
           <Breadcrumb.Section active>National Map</Breadcrumb.Section>
         </Breadcrumb>
-        <Header as="h1">
+        <Header as="h2">
           President: 2016
           <Header.Subheader>
             Zoom in to see counties or out to see states. Click for details.
@@ -50,9 +53,10 @@ const NationalMapContainer = props => (
           opacity: '0.8',
           padding: '20px',
           margin: 'auto',
-          right: 60,
-          top: 8,
+          right: 12,
+          top: 55,
           width: 250,
+          'border-radius': '25px',
           borderColor: 'gray',
           borderStyle: 'solid',
           borderWidth: '0.5px',
