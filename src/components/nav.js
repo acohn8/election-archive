@@ -7,7 +7,7 @@ const Nav = () => (
     <Menu.Item name="home" as={Link} to="/" />
     <Menu.Item name="National Map" as={Link} to="/national-map" />
     <Menu.Item name="States" as={Link} to="/states" />
-    <Menu.Item as="a">About</Menu.Item>
+    {/* <Menu.Item as="a">About</Menu.Item> */}
   </Menu>
 );
 
