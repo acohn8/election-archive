@@ -17,7 +17,8 @@ const NationalMapContainer = props => (
           left: 30,
           'border-radius': '25px',
           top: 8,
-          width: 270,
+          width: 300,
+          height: 150,
           backgroundColor: 'white',
           padding: '20px',
           opacity: '0.8',
@@ -33,13 +34,13 @@ const NationalMapContainer = props => (
           <Breadcrumb.Divider />
           <Breadcrumb.Section active>National Map</Breadcrumb.Section>
         </Breadcrumb>
-        <Header as="h2">
+        <Header as="h3">
           President: 2016
           <Header.Subheader>
             Zoom in to see counties or out to see states. Click for details.
           </Header.Subheader>
         </Header>
-        <StateDropdown />
+        {/* <StateDropdown /> */}
       </div>
     )}
     {props.overlay.hoveredDem.votes !== '' && (
@@ -53,9 +54,10 @@ const NationalMapContainer = props => (
           opacity: '0.8',
           padding: '20px',
           margin: 'auto',
-          right: 12,
-          top: 55,
-          width: 250,
+          right: 50,
+          top: 8,
+          width: 300,
+          height: 150,
           'border-radius': '25px',
           borderColor: 'gray',
           borderStyle: 'solid',
