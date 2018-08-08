@@ -19,14 +19,6 @@ class Map extends React.Component {
     this.createMap();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props !== prevProps) {
-      console.log(this.props);
-      this.map.remove();
-      this.createMap();
-    }
-  }
-
   componentWillUnmount() {
     this.props.resetMapDetails();
   }
@@ -348,7 +340,7 @@ class Map extends React.Component {
       bottom: 0,
       width: '100%',
       minHeight: 400,
-      'touch-action': 'none',
+      // 'touch-action': 'none',
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }

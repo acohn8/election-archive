@@ -32,7 +32,7 @@ class CountyContainer extends React.Component {
     return (
       <Segment raised padded>
         {this.props.precinctResults.precincts !== undefined ? (
-          <Grid centered columns={2}>
+          <Grid centered stackable columns={2}>
             <Grid.Row />
             <Grid.Row>
               <List horizontal size="big">
