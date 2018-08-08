@@ -51,7 +51,7 @@ class ResultsTable extends React.Component {
             {
               Header: 'County',
               id: 'county',
-              maxWidth: this.state.windowWidth * 0.2,
+              maxWidth: this.state.windowWidth * 0.25,
               accessor: d => this.props.geography.entities.counties[d].name,
               filterMethod: (filter, row) =>
                 this.state.filtered.length > 0 &&
@@ -93,7 +93,6 @@ class ResultsTable extends React.Component {
                     {
                       id: `votes-${candidateId}`,
                       Header: 'Votes',
-                      // width: this.state.windowWidth * 0.1,
                       accessor: d =>
                         this.props.electionResults.entities.results[d].results[candidateId],
                       filterable: false,
@@ -102,7 +101,6 @@ class ResultsTable extends React.Component {
                     {
                       Header: 'Percent',
                       id: `percent-${candidateId}`,
-                      // width: this.state.windowWidth * 0.1,
                       accessor: d =>
                         this.props.electionResults.entities.results[d].results[candidateId] /
                         majorCandidates
