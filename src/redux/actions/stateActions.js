@@ -9,10 +9,10 @@ const fetchStatesList = () => async (dispatch) => {
   dispatch({ type: 'SET_STATES', states: response.data.data });
 };
 
-const setActiveState = (stateId, fetch = true) => (dispatch) => {
+const setActiveState = (stateId, fetch = true) => (dispatch, getState) => {
   dispatch({ type: 'ACTIVE_STATE', stateId });
   dispatch(resetHover());
-  fetch === false && dispatch(push(`/states/${stateId}`));
+  fetch === false && dispatch(push(`/states/${getState().states.activeStateId}`));
   fetch === true && dispatch(fetchStateData(stateId));
 };
 

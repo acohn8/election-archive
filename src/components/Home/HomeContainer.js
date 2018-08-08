@@ -87,7 +87,6 @@ class DesktopContainer extends Component {
               pointing={!fixed}
               secondary={!fixed}
               size="large"
-              color="white"
             >
               <Container>
                 <Menu.Item name="home" as={Link} to="/" active />
