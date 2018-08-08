@@ -9,7 +9,9 @@ const TableContainer = () => (
     <Header as="h2">County Results</Header>
     <ExportDropdown />
     <Divider hidden />
-    <ResultsTable />
+    <div style={{ overflow: 'scroll' }}>
+      <ResultsTable />
+    </div>
   </div>
 );
 
