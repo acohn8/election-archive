@@ -17,6 +17,10 @@ class NationalMap extends React.Component {
     this.props.showHeader();
   }
 
+  componentWillUnmount() {
+    this.map.remove();
+  }
+
   getCoords = () => {
     const foundCounty = this.props.geography.result.counties.find(
       countyId =>

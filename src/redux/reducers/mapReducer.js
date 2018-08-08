@@ -3,6 +3,7 @@ const initialMapState = {
     geographyName: '',
     hoveredDem: { votes: '', percent: '' },
     hoveredRep: { votes: '', percent: '' },
+    isNational: false,
   },
   headerHid: false,
   mapDetails: {},
@@ -37,6 +38,7 @@ const mapsReducer = (previousState = initialMapState, action) => {
           hoveredGeography: '',
           hoveredDem: { votes: '', percent: '' },
           hoveredRep: { votes: '', percent: '' },
+          isNational: false,
         },
       };
     case 'HIDE_HEADER':
