@@ -12,7 +12,12 @@ const fetchStatesList = () => async (dispatch) => {
 const setActiveState = (stateId, fetch = true) => (dispatch, getState) => {
   dispatch({ type: 'ACTIVE_STATE', stateId });
   dispatch(resetHover());
-  fetch === false && dispatch(push(`/states/${getState().states.activeStateId}`));
+  fetch === false &&
+    dispatch(push(`/states/${getState()
+      .states.states.find(state => state.id === getState().states.activeStateId)
+      .attributes.name.split(' ')
+      .join('-')
+      .toLowerCase()}`));
   fetch === true && dispatch(fetchStateData(stateId));
 };
 

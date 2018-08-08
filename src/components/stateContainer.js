@@ -11,17 +11,17 @@ import StateDropdown from './StateDropdown';
 import Nav from '../components/nav';
 
 class StateContainer extends React.Component {
-  componentDidMount() {
-    if (this.props.states.activeStateId === '') {
-      this.props.setActiveState(this.props.match.params.activeStateId);
-    }
-  }
   componentDidUpdate() {
-    if (
-      this.props.states.activeStateId === '' ||
-      this.props.match.params.activeStateId !== this.props.states.activeStateId
-    ) {
-      this.props.setActiveState(this.props.match.params.activeStateId);
+    const state = this.props.states.states.find(
+      state =>
+        state.attributes.name
+          .split(' ')
+          .join('-')
+          .toLowerCase() === this.props.match.params.activeStateName.toLowerCase(),
+    );
+    if (state.id !== this.props.states.activeStateId) {
+      console.log(state);
+      this.props.setActiveState(state.id);
     }
   }
 

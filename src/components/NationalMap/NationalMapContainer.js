@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Breadcrumb, Responsive, Divider } from 'semantic-ui-react';
+import { Header, Breadcrumb, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ const NationalMapContainer = props => (
           position: 'absolute',
           zIndex: 1,
           left: 30,
-          'border-radius': '25px',
+          borderRadius: '25px',
           top: 8,
           width: 300,
           backgroundColor: 'white',

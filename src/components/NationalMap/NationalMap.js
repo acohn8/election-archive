@@ -96,20 +96,20 @@ class NationalMap extends React.Component {
         const coords = e.lngLat;
         const state = this.props.states.states.find(
           state => state.attributes.name === features[0].properties.NAME,
-        ).id;
+        );
         this.setStateOnClick(state, coords);
       }
     });
   };
 
   setStateOnClick = (state, coords) => {
-    this.props.fetchStateData(state);
+    this.props.fetchStateData(state.id);
     this.map.flyTo({
       center: coords,
       zoom: 6,
-      speed: 0.55,
+      speed: 0.75,
     });
-    this.map.on('moveend', () => this.props.setActiveState(state, false));
+    this.map.on('moveend', () => this.props.setActiveState(state.id, false));
   };
 
   addResultsLayer = () => {

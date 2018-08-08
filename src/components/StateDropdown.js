@@ -20,7 +20,10 @@ const StateDropdown = (props) => {
         value: state.id,
         text: state.attributes.name,
         as: Link,
-        to: `/states/${state.id}`,
+        to: `/states/${state.attributes.name
+          .split(' ')
+          .join('-')
+          .toLowerCase()}`,
         image: {
           size: 'tiny',
           src: images.find(image =>
