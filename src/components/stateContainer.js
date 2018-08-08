@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Header, Image, Container } from 'semantic-ui-react';
+import { Grid, Header, Image, Container, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import TableContainer from './Table/tableContainer';
@@ -41,40 +41,41 @@ class StateContainer extends React.Component {
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&
             this.props.states.activeStateId !== '' && (
-              <Grid columns={2} verticalAlign="middle" stackable>
-                <Grid.Column>
-                  <Header size="huge">
-                    <Image
-                      src={images.find(image =>
-                        image.includes(
-                          `/static/media/${this.props.geography.entities.state[
-                            this.props.geography.result.state
-                          ].short_name.toLowerCase()}`,
-                        ),
-                      )}
-                    />
-                    {
-                      this.props.states.states.find(
-                        state => state.id === this.props.states.activeStateId,
-                      ).attributes.name
-                    }
-                  </Header>
-                </Grid.Column>
-                <Grid.Column>
-                  <StateDropdown />
-                </Grid.Column>
-                <Grid.Row>
+              <div>
+                <Grid columns={2} verticalAlign="middle" stackable>
                   <Grid.Column>
-                    <ToplinesContainer />
+                    <Header size="huge">
+                      <Image
+                        src={images.find(image =>
+                          image.includes(
+                            `/static/media/${this.props.geography.entities.state[
+                              this.props.geography.result.state
+                            ].short_name.toLowerCase()}`,
+                          ),
+                        )}
+                      />
+                      {
+                        this.props.states.states.find(
+                          state => state.id === this.props.states.activeStateId,
+                        ).attributes.name
+                      }
+                    </Header>
                   </Grid.Column>
                   <Grid.Column>
-                    <MapContainer />
+                    <StateDropdown />
                   </Grid.Column>
-                </Grid.Row>
-                <Grid.Row colums={1}>
-                  <TableContainer />
-                </Grid.Row>
-              </Grid>
+                  <Grid.Row>
+                    <Grid.Column>
+                      <ToplinesContainer />
+                    </Grid.Column>
+                    <Grid.Column>
+                      <MapContainer />
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Divider />
+                </Grid>
+                <TableContainer />
+              </div>
             )}
         </Container>
       </div>

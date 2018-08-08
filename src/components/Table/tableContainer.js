@@ -1,18 +1,19 @@
 import React from 'react';
-import { Divider, Header } from 'semantic-ui-react';
+import { Divider, Header, Grid, Container } from 'semantic-ui-react';
 import ResultsTable from './table';
 import ExportDropdown from './ExportDropdown';
 
 const TableContainer = () => (
-  <div>
-    <Divider />
+  <Grid columns={1} verticalAlign="middle" stackable>
     <Header as="h2">County Results</Header>
     <ExportDropdown />
     <Divider hidden />
-    <div style={{ overflow: 'scroll' }}>
-      <ResultsTable />
-    </div>
-  </div>
+    <Grid.Row centered>
+      <Container fluid>
+        <ResultsTable />
+      </Container>
+    </Grid.Row>
+  </Grid>
 );
 
 export default TableContainer;
