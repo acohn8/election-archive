@@ -13,7 +13,7 @@ class StateListContainer extends React.Component {
     return (
       <ResponsiveNav>
         <Container>
-          <Header as="h1">Select a State</Header>
+          <Header size="huge">Select a State</Header>
           <Card.Group stackable itemsPerRow={3}>
             {this.props.states.map(state => (
               <StateCard

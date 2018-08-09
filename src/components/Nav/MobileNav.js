@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
+import { Container, Divider, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
 
 class MobileNav extends Component {
   state = {};
@@ -38,15 +38,26 @@ class MobileNav extends Component {
             onClick={this.handlePusherClick}
             style={{ minHeight: '100vh' }}
           >
-            <Segment textAlign="center" vertical basic>
-              <Container>
-                <Menu secondary size="large">
+            <Segment
+              textAlign="center"
+              vertical
+              basic
+              inverted
+              color="teal"
+              style={{ maxHeight: '8vh', margin: 0, padding: 0 }}
+            >
+              <Container textAlign="center" style={{ maxHeight: '8vh' }}>
+                <Menu secondary size="small" inverted>
                   <Menu.Item onClick={this.handleToggle}>
                     <Icon name="sidebar" />
+                    <Menu.Item header as="h3">
+                      Election Archive
+                    </Menu.Item>
                   </Menu.Item>
                 </Menu>
               </Container>
             </Segment>
+            <Divider hidden />
             {children}
           </Sidebar.Pusher>
         </Sidebar.Pushable>

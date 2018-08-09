@@ -15,7 +15,7 @@ const NationalMapContainer = props => (
           zIndex: 1,
           left: 30,
           borderRadius: '25px',
-          top: 8,
+          top: 80,
           width: 300,
           backgroundColor: 'white',
           padding: '20px',
@@ -25,13 +25,6 @@ const NationalMapContainer = props => (
           borderWidth: '0.5px',
         }}
       >
-        <Breadcrumb>
-          <Breadcrumb.Section as={Link} to="/">
-            Home
-          </Breadcrumb.Section>
-          <Breadcrumb.Divider />
-          <Breadcrumb.Section active>National Map</Breadcrumb.Section>
-        </Breadcrumb>
         {props.overlay.hoveredDem.votes === '' ? (
           <Header as="h2">
             President: 2016
@@ -41,7 +34,6 @@ const NationalMapContainer = props => (
           </Header>
         ) : (
           <div>
-            <Divider hidden />
             <MapInfo />
           </div>
         )}

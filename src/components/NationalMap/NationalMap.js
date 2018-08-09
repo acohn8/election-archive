@@ -7,6 +7,7 @@ import bbox from '@turf/bbox';
 import { setActiveState } from '../../redux/actions/stateActions';
 import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
+import ResponsiveNav from '../Nav/ResponsiveNav';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -268,15 +269,19 @@ class NationalMap extends React.Component {
 
   render() {
     const style = {
-      position: 'absolute',
+      position: 'relative',
       top: 0,
       bottom: 0,
       width: '100%',
       height: '100%',
-      minHeight: '72em',
+      minHeight: '90vh',
       // 'touch-action': 'none',
     };
-    return <div style={style} ref={el => (this.mapContainer = el)} />;
+    return (
+      <ResponsiveNav>
+        <div style={style} ref={el => (this.mapContainer = el)} />
+      </ResponsiveNav>
+    );
   }
 }
 
