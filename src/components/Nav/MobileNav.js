@@ -40,14 +40,13 @@ class MobileNav extends Component {
           >
             <Segment textAlign="center" vertical basic>
               <Container>
-                <Menu secondary size="small">
+                <Menu secondary size="large">
                   <Menu.Item onClick={this.handleToggle}>
                     <Icon name="sidebar" />
                   </Menu.Item>
                 </Menu>
               </Container>
             </Segment>
-
             {children}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
