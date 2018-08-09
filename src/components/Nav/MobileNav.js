@@ -1,18 +1,6 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Button,
-  Container,
-  Header,
-  Icon,
-  Menu,
-  Responsive,
-  Segment,
-  Sidebar,
-  Visibility,
-  Image,
-} from 'semantic-ui-react';
+import { Container, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
 
 class MobileNav extends Component {
   state = {};
@@ -52,7 +40,7 @@ class MobileNav extends Component {
           >
             <Segment textAlign="center" vertical basic>
               <Container>
-                <Menu secondary size="large">
+                <Menu secondary size="small">
                   <Menu.Item onClick={this.handleToggle}>
                     <Icon name="sidebar" />
                   </Menu.Item>

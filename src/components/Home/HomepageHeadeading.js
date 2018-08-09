@@ -1,10 +1,19 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import { Button, Header, Icon, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { Button, Container, Header, Icon } from 'semantic-ui-react';
 
 const HomepageHeading = ({ mobile }) => (
-  <Container text fluid>
+  <Segment
+    inverted
+    textAlign="center"
+    style={{
+      background:
+        "linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), no-repeat center, url('https://s3.amazonaws.com/stateprecinctresults/Images/crop-v2.png') 0 0 /cover",
+      minHeight: '90vh',
+      padding: '1em 0em',
+    }}
+    vertical
+  >
     <Header
       as="h1"
       content="Election Archive"
@@ -13,7 +22,7 @@ const HomepageHeading = ({ mobile }) => (
         fontSize: mobile ? '2em' : '4em',
         fontWeight: 'normal',
         marginBottom: 0,
-        marginTop: '30%',
+        marginTop: '18%',
       }}
     />
     <Header
@@ -30,11 +39,7 @@ const HomepageHeading = ({ mobile }) => (
       Get Started
       <Icon name="right arrow" />
     </Button>
-  </Container>
+  </Segment>
 );
-
-HomepageHeading.propTypes = {
-  mobile: PropTypes.bool,
-};
 
 export default HomepageHeading;

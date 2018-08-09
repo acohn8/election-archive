@@ -11,7 +11,6 @@ class DesktopNav extends Component {
 
   render() {
     const { fixed } = this.state;
-    const activeItem = this.props.activeItem;
     return (
       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
         <Visibility

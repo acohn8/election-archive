@@ -8,9 +8,6 @@ import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
 import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
 import StateDropdown from './StateDropdown';
-import Nav from '../components/nav';
-import DesktopNav from './Nav/DesktopNav';
-import MobileNav from './Nav/MobileNav';
 import ResponsiveNav from './Nav/ResponsiveNav';
 
 class StateContainer extends React.Component {
@@ -39,7 +36,7 @@ class StateContainer extends React.Component {
     const images = this.importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
     return (
       <div>
-        <ResponsiveNav activeItem="states">
+        <ResponsiveNav>
           <Container>
             {this.props.loading === true && <ContentLoader />}
             {this.props.loading === false &&
