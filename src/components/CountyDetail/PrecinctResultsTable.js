@@ -30,26 +30,41 @@ class PrecinctResultsTable extends React.Component {
           showPagination={false}
           columns={[
             {
-              Header: 'Precinct',
+              Header: (
+                <span style={{ fontSize: this.state.windowWidth < 300 && '0.8em' }}>Precinct</span>
+              ),
               id: 'precinct',
+              style: {
+                textAlign: 'left',
+                fontSize: this.state.windowWidth < 300 && '.8em',
+              },
               maxWidth: this.state.windowWidth * 0.2,
-              minWidth: 1,
+              minWidth: 1.5,
               accessor: d => d.name,
             },
           ].concat(
             majorCandidates.map(candidateId => ({
               id: candidateId,
-                maxWidth: this.state.windowWidth * 0.2,
-                minWidth: 1,
-              Header: `${
-                candidateId === 'other'
-                  ? 'Other'
-                  : this.props.candidates.entities.candidates[candidateId].attributes[
-                      'normalized-name'
-                    ].replace(/\b\w/g, l => l.toUpperCase())
-              }`,
+              style: {
+                fontSize: this.state.windowWidth < 300 && '.8em',
+              },
+              maxWidth: this.state.windowWidth * 0.2,
+              minWidth: 1.5,
+              Header: (
+                <span style={{ fontSize: this.state.windowWidth < 300 && '0.8em' }}>
+                  {`${
+                    candidateId === 'other'
+                      ? 'Other'
+                      : this.props.candidates.entities.candidates[candidateId].attributes[
+                          'normalized-name'
+                        ].replace(/\b\w/g, l => l.toUpperCase())
+                  }
+                  `}
+                </span>
+              ),
               accessor: d => d.results[candidateId],
               filterable: false,
+              Cell: row => <span style={{ whiteSpace: 'normal' }}>{row.value}</span>,
             })),
           )}
           style={{ maxHeight: '400px' }}

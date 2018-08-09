@@ -49,10 +49,20 @@ class ResultsTable extends React.Component {
           data={this.props.electionResults.result}
           columns={[
             {
-              Header: 'County',
+              Header: (
+                <span
+                  style={{
+                    fontSize: this.state.windowWidth < 400 && '.8em',
+                  }}
+                >
+                  County
+                </span>
+              ),
+              style: {
+                textAlign: 'left',
+              },
               id: 'county',
-              // maxWidth: this.state.windowWidth * 0.3,
-              minWidth: 1,
+              minWidth: 1.5,
               accessor: d => this.props.geography.entities.counties[d].name,
               filterMethod: (filter, row) =>
                 this.state.filtered.length > 0 &&
@@ -75,7 +85,14 @@ class ResultsTable extends React.Component {
                     >
                       &#x25cf;
                     </span>
-                    <span style={{ whiteSpace: 'normal' }}>{row.value.replace(/County/g, '')}</span>
+                    <span
+                      style={{
+                        whiteSpace: 'normal',
+                        fontSize: this.state.windowWidth < 400 && '.8em',
+                      }}
+                    >
+                      {row.value.replace(/County/g, '')}
+                    </span>
                   </span>
                 );
               },
@@ -84,7 +101,7 @@ class ResultsTable extends React.Component {
             this.state.windowWidth >= 600
               ? majorCandidates.map(candidateId => ({
                   id: candidateId,
-                  maxWidth: this.state.windowWidth * 0.175,
+                  maxWidth: this.state.windowWidth * 0.2,
                   minWidth: 1,
                   Header: `${
                     candidateId === 'other'
@@ -120,19 +137,27 @@ class ResultsTable extends React.Component {
                 }))
               : majorCandidates.map(candidateId => ({
                   id: candidateId,
-                  maxWidth: this.state.windowWidth * 0.175,
+                  // maxWidth: this.state.windowWidth * 0.175,
                   minWidth: 1,
-                  Header: `${
-                    candidateId === 'other'
-                      ? 'Other'
-                      : this.props.candidates.entities.candidates[candidateId].attributes[
-                          'normalized-name'
-                        ].replace(/\b\w/g, l => l.toUpperCase())
-                  }`,
+                  Header: (
+                    <span style={{ fontSize: '0.8em' }}>
+                      {`${
+                        candidateId === 'other'
+                          ? 'Other'
+                          : this.props.candidates.entities.candidates[candidateId].attributes[
+                              'normalized-name'
+                            ].replace(/\b\w/g, l => l.toUpperCase())
+                      }
+                      `}
+                    </span>
+                  ),
                   columns: [
                     {
                       id: `votes-${candidateId}`,
-                      Header: 'Votes',
+                      Header: <span style={{ fontSize: '0.8em' }}>Votes</span>,
+                      style: {
+                        fontSize: '.8em',
+                      },
                       minWidth: 1,
                       accessor: d =>
                         this.props.electionResults.entities.results[d].results[candidateId],
