@@ -47,7 +47,7 @@ class MobileNav extends Component {
               style={{ maxHeight: '8vh', margin: 0, padding: 0 }}
             >
               <Container textAlign="center" style={{ maxHeight: '8vh' }}>
-                <Menu secondary size="small" inverted>
+                <Menu secondary size="large" inverted>
                   <Menu.Item onClick={this.handleToggle}>
                     <Icon name="sidebar" />
                     <Menu.Item header as="h3">
