@@ -11,6 +11,7 @@ import NationalMapContainer from './components/NationalMap/NationalMapContainer'
 import './App.css';
 import Footer from './components/Footer';
 import StateListContainer from './components/StateList/StateListContainer';
+import DesktopNav from './components/Nav/DesktopNav';
 
 class App extends React.Component {
   componentDidMount() {

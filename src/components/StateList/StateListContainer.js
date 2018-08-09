@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, Container } from 'semantic-ui-react';
+import { Card, Container, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import StateCard from './StateCard';
-import Nav from '../nav';
+import ResponsiveNav from '../Nav/ResponsiveNav';
 
 class StateListContainer extends React.Component {
   importAll = r => r.keys().map(r);
@@ -11,9 +11,9 @@ class StateListContainer extends React.Component {
     const images = this.importAll(require.context('../state-flags', false, /\.(png|jpe?g|svg)$/));
 
     return (
-      <div>
-        <Nav />
+      <ResponsiveNav>
         <Container>
+          <Header as="h1">Select a State</Header>
           <Card.Group stackable itemsPerRow={3}>
             {this.props.states.map(state => (
               <StateCard
@@ -27,7 +27,7 @@ class StateListContainer extends React.Component {
             ))}
           </Card.Group>
         </Container>
-      </div>
+      </ResponsiveNav>
     );
   }
 }
