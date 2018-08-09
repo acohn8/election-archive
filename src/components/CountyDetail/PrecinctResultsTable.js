@@ -33,12 +33,14 @@ class PrecinctResultsTable extends React.Component {
               Header: 'Precinct',
               id: 'precinct',
               maxWidth: this.state.windowWidth * 0.2,
+              minWidth: 1,
               accessor: d => d.name,
             },
           ].concat(
             majorCandidates.map(candidateId => ({
               id: candidateId,
-              maxWidth: this.state.windowWidth * 0.2,
+                maxWidth: this.state.windowWidth * 0.2,
+                minWidth: 1,
               Header: `${
                 candidateId === 'other'
                   ? 'Other'

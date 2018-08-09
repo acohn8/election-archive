@@ -51,7 +51,8 @@ class ResultsTable extends React.Component {
             {
               Header: 'County',
               id: 'county',
-              maxWidth: this.state.windowWidth * 0.25,
+              // maxWidth: this.state.windowWidth * 0.3,
+              minWidth: 1,
               accessor: d => this.props.geography.entities.counties[d].name,
               filterMethod: (filter, row) =>
                 this.state.filtered.length > 0 &&
@@ -80,10 +81,11 @@ class ResultsTable extends React.Component {
               },
             },
           ].concat(
-            this.state.windowWidth >= 800
+            this.state.windowWidth >= 600
               ? majorCandidates.map(candidateId => ({
                   id: candidateId,
-                  maxWidth: this.state.windowWidth * 0.2,
+                  maxWidth: this.state.windowWidth * 0.175,
+                  minWidth: 1,
                   Header: `${
                     candidateId === 'other'
                       ? 'Other'
@@ -93,6 +95,7 @@ class ResultsTable extends React.Component {
                     {
                       id: `votes-${candidateId}`,
                       Header: 'Votes',
+                      minWidth: 1,
                       accessor: d =>
                         this.props.electionResults.entities.results[d].results[candidateId],
                       filterable: false,
@@ -101,6 +104,7 @@ class ResultsTable extends React.Component {
                     {
                       Header: 'Percent',
                       id: `percent-${candidateId}`,
+                      minWidth: 1,
                       accessor: d =>
                         this.props.electionResults.entities.results[d].results[candidateId] /
                         majorCandidates
@@ -116,7 +120,8 @@ class ResultsTable extends React.Component {
                 }))
               : majorCandidates.map(candidateId => ({
                   id: candidateId,
-                  maxWidth: this.state.windowWidth * 0.15,
+                  maxWidth: this.state.windowWidth * 0.175,
+                  minWidth: 1,
                   Header: `${
                     candidateId === 'other'
                       ? 'Other'
@@ -128,6 +133,7 @@ class ResultsTable extends React.Component {
                     {
                       id: `votes-${candidateId}`,
                       Header: 'Votes',
+                      minWidth: 1,
                       accessor: d =>
                         this.props.electionResults.entities.results[d].results[candidateId],
                       filterable: false,
