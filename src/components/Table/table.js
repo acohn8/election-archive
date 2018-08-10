@@ -91,7 +91,7 @@ class ResultsTable extends React.Component {
                         fontSize: this.state.windowWidth < 400 && '.8em',
                       }}
                     >
-                      {row.value.replace(/County/g, '')}
+                      {row.value !== null ? row.value.replace(/County/g, '') : 'Unknown'}
                     </span>
                   </span>
                 );
