@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import { fetchStatesList } from './redux/actions/stateActions';
+import fetchOfficesList from './redux/actions/officeActions';
 import StateContainer from './components/stateContainer';
 import HomeContainer from './components/Home/HomeContainer';
 import NationalMapContainer from './components/NationalMap/NationalMapContainer';
@@ -15,6 +16,7 @@ import StateListContainer from './components/StateList/StateListContainer';
 class App extends React.Component {
   componentDidMount() {
     this.props.fetchStatesList();
+    this.props.fetchOfficesList();
   }
 
   render() {
@@ -34,6 +36,7 @@ class App extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   fetchStatesList: () => dispatch(fetchStatesList()),
+  fetchOfficesList: () => dispatch(fetchOfficesList()),
 });
 
 export default withRouter(connect(
