@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
+import { hideHeader, showHeader } from '../../redux/actions/mapActions';
 import { connect } from 'react-redux';
 
 class MobileNav extends Component {
@@ -10,6 +11,11 @@ class MobileNav extends Component {
     const { sidebarOpened } = this.state;
 
     if (sidebarOpened) this.setState({ sidebarOpened: false });
+    if (sidebarOpened && this.props.activeItem === 'national map') {
+      this.props.showHeader();
+    } else if (!sidebarOpened && this.props.activeItem === 'national map') {
+      this.props.hideHeader();
+    }
   };
 
   handleToggle = () => this.setState({ sidebarOpened: !this.state.sidebarOpened });
@@ -72,8 +78,16 @@ class MobileNav extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  hideHeader: () => dispatch(hideHeader()),
+  showHeader: () => dispatch(showHeader()),
+});
+
 const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
 });
 
-export default connect(mapStateToProps)(MobileNav);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MobileNav);
