@@ -1,10 +1,15 @@
 import React from 'react';
-import { Card, Container, Header } from 'semantic-ui-react';
+import { Card, Container, Header, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import StateCard from './StateCard';
 import ResponsiveNav from '../Nav/ResponsiveNav';
+import setActive from '../../redux/actions/navActions';
 
 class StateListContainer extends React.Component {
+  componentDidMount() {
+    this.props.setActive('states');
+  }
+
   importAll = r => r.keys().map(r);
 
   render() {
@@ -13,7 +18,9 @@ class StateListContainer extends React.Component {
     return (
       <ResponsiveNav>
         <Container>
+          <Divider hidden />
           <Header size="huge">Select a State</Header>
+          <Divider hidden />
           <Card.Group stackable itemsPerRow={3}>
             {this.props.states.map(state => (
               <StateCard
@@ -32,8 +39,15 @@ class StateListContainer extends React.Component {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  setActive: name => dispatch(setActive(name)),
+});
+
 const mapStateToProps = state => ({
   states: state.states.states,
 });
 
-export default connect(mapStateToProps)(StateListContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(StateListContainer);

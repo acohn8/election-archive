@@ -7,10 +7,15 @@ import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
 import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
+import setActive from '../redux/actions/navActions';
 import StateDropdown from './StateDropdown';
 import ResponsiveNav from './Nav/ResponsiveNav';
 
 class StateContainer extends React.Component {
+  componentDidMount() {
+    this.props.setActive('states');
+  }
+
   componentDidUpdate() {
     const state = this.props.states.states.find(
       state =>
@@ -35,51 +40,50 @@ class StateContainer extends React.Component {
   render() {
     const images = this.importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
     return (
-      <div>
-        <ResponsiveNav>
-          <Container>
-            {this.props.loading === true && <ContentLoader />}
-            {this.props.loading === false &&
-              this.props.states.activeStateId !== '' && (
-                <div>
-                  <Grid columns={2} verticalAlign="middle" stackable>
+      <ResponsiveNav>
+        <Divider hidden />
+        <Container>
+          {this.props.loading === true && <ContentLoader />}
+          {this.props.loading === false &&
+            this.props.states.activeStateId !== '' && (
+              <div>
+                <Grid columns={2} verticalAlign="middle" stackable>
+                  <Grid.Column>
+                    <Header size="huge">
+                      <Image
+                        src={images.find(image =>
+                          image.includes(
+                            `/static/media/${this.props.geography.entities.state[
+                              this.props.geography.result.state
+                            ].short_name.toLowerCase()}`,
+                          ),
+                        )}
+                      />
+                      {
+                        this.props.states.states.find(
+                          state => state.id === this.props.states.activeStateId,
+                        ).attributes.name
+                      }
+                    </Header>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <StateDropdown />
+                  </Grid.Column>
+                  <Grid.Row>
                     <Grid.Column>
-                      <Header size="huge">
-                        <Image
-                          src={images.find(image =>
-                            image.includes(
-                              `/static/media/${this.props.geography.entities.state[
-                                this.props.geography.result.state
-                              ].short_name.toLowerCase()}`,
-                            ),
-                          )}
-                        />
-                        {
-                          this.props.states.states.find(
-                            state => state.id === this.props.states.activeStateId,
-                          ).attributes.name
-                        }
-                      </Header>
+                      <ToplinesContainer />
                     </Grid.Column>
                     <Grid.Column>
-                      <StateDropdown />
+                      <MapContainer />
                     </Grid.Column>
-                    <Grid.Row>
-                      <Grid.Column>
-                        <ToplinesContainer />
-                      </Grid.Column>
-                      <Grid.Column>
-                        <MapContainer />
-                      </Grid.Column>
-                    </Grid.Row>
-                    <Divider />
-                  </Grid>
-                  <TableContainer />
-                </div>
-              )}
-          </Container>
-        </ResponsiveNav>
-      </div>
+                  </Grid.Row>
+                  <Divider />
+                </Grid>
+                <TableContainer />
+              </div>
+            )}
+        </Container>
+      </ResponsiveNav>
     );
   }
 }
@@ -93,6 +97,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setActiveState: stateId => dispatch(setActiveState(stateId)),
   resetActiveState: () => dispatch(resetActiveState()),
+  setActive: name => dispatch(setActive(name)),
 });
 
 export default connect(

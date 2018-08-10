@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 
 import { setActiveState } from '../../redux/actions/stateActions';
+import setActive from '../../redux/actions/navActions';
 import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
 import ResponsiveNav from '../Nav/ResponsiveNav';
@@ -16,6 +17,7 @@ class NationalMap extends React.Component {
   componentDidMount() {
     this.createMap();
     this.props.showHeader();
+    this.props.setActive('national map');
   }
 
   componentWillUnmount() {
@@ -293,6 +295,7 @@ const mapDispatchToProps = dispatch => ({
   fetchStateData: id => dispatch(fetchStateData(id)),
   hideHeader: () => dispatch(hideHeader()),
   showHeader: () => dispatch(showHeader()),
+  setActive: name => dispatch(setActive(name)),
 });
 
 const mapStateToProps = state => ({

@@ -26,7 +26,7 @@ const NationalMapContainer = props => (
         }}
       >
         {props.overlay.hoveredDem.votes === '' ? (
-          <Header as="h2">
+          <Header size="huge">
             President: 2016
             <Header.Subheader>
               Zoom in to see counties or out to see states. Click for details.

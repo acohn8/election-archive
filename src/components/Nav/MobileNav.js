@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Divider, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
+import { Container, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 class MobileNav extends Component {
   state = {};
@@ -16,6 +17,7 @@ class MobileNav extends Component {
   render() {
     const { children } = this.props;
     const { sidebarOpened } = this.state;
+    const activeItem = this.props.activeItem;
 
     return (
       <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
@@ -27,9 +29,14 @@ class MobileNav extends Component {
             visible={sidebarOpened}
             style={{ padding: '1em 0em' }}
           >
-            <Menu.Item name="home" as={Link} to="/" />
-            <Menu.Item name="National Map" as={Link} to="/national-map" />
-            <Menu.Item name="States" as={Link} to="/states" />
+            <Menu.Item name="home" as={Link} to="/" active={activeItem === 'home'} />
+            <Menu.Item
+              name="national map"
+              as={Link}
+              to="/national-map"
+              active={activeItem === 'national map'}
+            />
+            <Menu.Item name="states" as={Link} to="/states" active={activeItem === 'states'} />
             {/* <Menu.Item as="a">About</Menu.Item> */}
           </Sidebar>
 
@@ -44,7 +51,7 @@ class MobileNav extends Component {
               basic
               inverted
               color="teal"
-              style={{ minHeight: '8vh', margin: 0, padding: 0 }}
+              style={{ minHeight: '70px', margin: 0, padding: 0 }}
             >
               <Container textAlign="center" style={{ maxHeight: '8vh' }}>
                 <Menu secondary size="large" inverted>
@@ -57,7 +64,6 @@ class MobileNav extends Component {
                 </Menu>
               </Container>
             </Segment>
-            <Divider hidden />
             {children}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
@@ -66,4 +72,8 @@ class MobileNav extends Component {
   }
 }
 
-export default MobileNav;
+const mapStateToProps = state => ({
+  activeItem: state.nav.activePage,
+});
+
+export default connect(mapStateToProps)(MobileNav);
