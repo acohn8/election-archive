@@ -44,7 +44,7 @@ class MobileNav extends Component {
               basic
               inverted
               color="teal"
-              style={{ maxHeight: '8vh', margin: 0, padding: 0 }}
+              style={{ minHeight: '8vh', margin: 0, padding: 0 }}
             >
               <Container textAlign="center" style={{ maxHeight: '8vh' }}>
                 <Menu secondary size="large" inverted>
