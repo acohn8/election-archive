@@ -1,7 +1,6 @@
 import React from 'react';
-import { Header, Breadcrumb, Divider } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';

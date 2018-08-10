@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import { Select } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -9,8 +9,8 @@ const StateDropdown = (props) => {
   const importAll = r => r.keys().map(r);
   const images = importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
   return (
-    <Dropdown
-      text="States"
+    <Select
+      text="Select a state"
       search
       fluid
       onMouseEnter={props.resetHover}
