@@ -275,7 +275,7 @@ class NationalMap extends React.Component {
       top: 0,
       bottom: 0,
       width: '100%',
-      height: '100%',
+      // height: '100%',
       minHeight: '90vh',
       // 'touch-action': 'none',
     };
