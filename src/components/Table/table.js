@@ -39,10 +39,34 @@ class ResultsTable extends React.Component {
     }
   }
 
-  render() {
-    const majorCandidates = Object.keys(
-      this.props.electionResults.entities.results[this.props.electionResults.result[0]].results,
+  statewideCandidateResults = () => {
+    const statewideResults = {};
+    const stateCandidates = this.props.candidates.result;
+    stateCandidates.forEach(candidateId => {
+      statewideResults[candidateId] = 0;
+    });
+    this.props.electionResults.result.forEach(countyId => {
+      stateCandidates.forEach(candidateId => {
+        statewideResults[candidateId] += this.props.electionResults.entities.results[
+          countyId
+        ].results[candidateId];
+      });
+    });
+    return statewideResults;
+  };
+
+  sortedCandidates = () => {
+    const candidatesWithResults = Object.keys(this.statewideCandidateResults()).filter(
+      candidateId => Boolean(this.statewideCandidateResults()[candidateId]),
     );
+    const sortedIds = candidatesWithResults.sort(
+      (a, b) => this.statewideCandidateResults()[b] - this.statewideCandidateResults()[a],
+    );
+    return sortedIds;
+  };
+
+  render() {
+    const majorCandidates = this.sortedCandidates();
     return (
       <div ref={divElement => (this.divElement = divElement)}>
         <ReactTable

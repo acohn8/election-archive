@@ -46,10 +46,14 @@ class DesktopNav extends Component {
                   color="teal"
                   active={activeItem === 'states'}
                 />
-                <Menu.Item>
-                  <StateDropdown />
-                </Menu.Item>
                 {/* <Menu.Item as="a">About</Menu.Item> */}
+                {this.props.activeItem === 'states' && (
+                  <Menu.Menu position="right">
+                    <Menu.Item style={{ width: '25vw' }}>
+                      <StateDropdown />
+                    </Menu.Item>
+                  </Menu.Menu>
+                )}
               </Container>
             </Menu>
           </Segment>
