@@ -36,7 +36,7 @@ const ToplinesContainer = (props) => {
   };
 
   return (
-    <Card.Group itemsPerRow={3}>
+    <Card.Group itemsPerRow={filterAndSortCandidatesWithResults().length}>
       {filterAndSortCandidatesWithResults()
         .slice(0, 3)
         .map(candidateId => (

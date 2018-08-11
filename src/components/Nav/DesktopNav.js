@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Container, Menu, Responsive, Visibility, Segment } from 'semantic-ui-react';
 
+import StateDropdown from '../StateDropdown';
+
 class DesktopNav extends Component {
   state = {};
 
@@ -44,6 +46,9 @@ class DesktopNav extends Component {
                   color="teal"
                   active={activeItem === 'states'}
                 />
+                <Menu.Item>
+                  <StateDropdown />
+                </Menu.Item>
                 {/* <Menu.Item as="a">About</Menu.Item> */}
               </Container>
             </Menu>

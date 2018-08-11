@@ -3,15 +3,14 @@ import { normalize } from 'normalizr';
 
 import { stateCounties, candidateListSchema, resultListSchema } from './schema';
 
-const fetchStateData = (stateId, officeId = '309') => async (dispatch) => {
+const fetchStateData = stateId => async (dispatch, getState) => {
   const url = 'http://localhost:3000/api/v1';
   dispatch({ type: 'START_FETCH' });
   const response = await Promise.all([
     axios.get(`${url}/states/${stateId}/counties`),
-    axios.get(`${url}/states/${stateId}/offices/${officeId}/candidates`),
-    axios.get(`${url}/states/${stateId}/offices/${officeId}/results/county`),
+    axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/candidates`),
+    axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/county`),
   ]);
-
   const geography = normalize(response[0].data, stateCounties);
   const electionResults = normalize(response[2].data.results, resultListSchema);
   const candidates = normalize(response[1].data.data, candidateListSchema);

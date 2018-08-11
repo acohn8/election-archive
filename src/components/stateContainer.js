@@ -10,6 +10,7 @@ import { setActiveState, resetActiveState } from '../redux/actions/stateActions'
 import setActive from '../redux/actions/navActions';
 import StateDropdown from './StateDropdown';
 import ResponsiveNav from './Nav/ResponsiveNav';
+import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -67,7 +68,7 @@ class StateContainer extends React.Component {
                     </Header>
                   </Grid.Column>
                   <Grid.Column>
-                    <StateDropdown />
+                    <OfficeDropdown />
                   </Grid.Column>
                   <Grid.Row>
                     <Grid.Column>

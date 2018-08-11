@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
 import { fetchStatesList } from './redux/actions/stateActions';
-import fetchOfficesList from './redux/actions/officeActions';
+import { fetchOfficesList } from './redux/actions/officeActions';
 import StateContainer from './components/stateContainer';
 import HomeContainer from './components/Home/HomeContainer';
 import NationalMapContainer from './components/NationalMap/NationalMapContainer';
