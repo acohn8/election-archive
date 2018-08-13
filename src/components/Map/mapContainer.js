@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Map from './StateMap';
 import MapInfo from './mapInfo';
+import StateMapTest from './StateMapTest';
 
 const MapContainer = props => (
   <div>
@@ -25,7 +26,7 @@ const MapContainer = props => (
         <MapInfo />
       </div>
     )}
-    <Map />
+    <StateMapTest />
   </div>
 );
 

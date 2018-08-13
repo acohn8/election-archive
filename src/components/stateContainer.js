@@ -27,6 +27,8 @@ class StateContainer extends React.Component {
     );
     if (state.id !== this.props.states.activeStateId) {
       this.props.setActiveState(state.id);
+    }
+    if (state.id !== this.props.states.activeStateId && this.props.states.activeStateId !== '') {
       this.props.fetchStateOffices();
     }
   }
