@@ -14,7 +14,7 @@ const fetchStateOffices = () => async (dispatch, getState) => {
 
 const setActiveOffice = (officeId = '308') => async (dispatch, getState) => {
   dispatch({ type: 'SET_ACTIVE_OFFICE', officeId });
-  dispatch(setActiveState(getState().states.activeStateId, true));
+  dispatch(setActiveState(getState().states.activeStateId, true, officeId));
 };
 
 const resetOffice = () => dispatch => dispatch({ type: 'RESET_OFFICE' });

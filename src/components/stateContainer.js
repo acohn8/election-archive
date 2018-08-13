@@ -47,7 +47,7 @@ class StateContainer extends React.Component {
       state.id === this.props.states.activeStateId &&
       office.id !== this.props.offices.selectedOfficeId
     ) {
-      this.props.setActiveOffice(office.id);
+      this.props.setActiveState(state.id, false, office.id);
     } else if (
       state !== undefined &&
       office !== undefined &&
@@ -142,7 +142,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setActiveState: stateId => dispatch(setActiveState(stateId)),
+  setActiveState: (stateId, fetch, officeId) => dispatch(setActiveState(stateId, fetch, officeId)),
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
   fetchStateOffices: () => dispatch(fetchStateOffices()),
