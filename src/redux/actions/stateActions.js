@@ -10,17 +10,27 @@ const fetchStatesList = () => async (dispatch) => {
   dispatch({ type: 'SET_STATES', states: response.data.data });
 };
 
-const setActiveState = (stateId, fetch = true) => (dispatch, getState) => {
+const setActiveState = (stateId, fetch = true, officeId = null) => (dispatch, getState) => {
   dispatch({ type: 'ACTIVE_STATE', stateId });
   dispatch(resetHover());
   dispatch(fetchStateOffices());
   fetch === false &&
     dispatch(push(`/states/${getState()
-      .states.states.find(state => state.id === getState().states.activeStateId)
+      .states.states.find(state => state.id === stateId)
       .attributes.name.split(' ')
       .join('-')
       .toLowerCase()}/${getState()
       .offices.offices.find(office => office.id === getState().offices.selectedOfficeId.toString())
+      .attributes.name.split(' ')
+      .join('-')
+      .toLowerCase()}`));
+  officeId !== null &&
+    dispatch(push(`/states/${getState()
+      .states.states.find(state => state.id === stateId)
+      .attributes.name.split(' ')
+      .join('-')
+      .toLowerCase()}/${getState()
+      .offices.offices.find(office => office.id === officeId)
       .attributes.name.split(' ')
       .join('-')
       .toLowerCase()}`));

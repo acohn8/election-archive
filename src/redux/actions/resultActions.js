@@ -4,6 +4,7 @@ import { normalize } from 'normalizr';
 import { stateCounties, candidateListSchema, resultListSchema } from './schema';
 
 const fetchStateData = stateId => async (dispatch, getState) => {
+  console.log(stateId);
   const url = 'http://localhost:3000/api/v1';
   dispatch({ type: 'START_FETCH' });
   const response = await Promise.all([

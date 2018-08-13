@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-import { fetchStateData } from './resultActions';
 import { setActiveState } from './stateActions';
 
 const fetchOfficesList = () => async (dispatch) => {
@@ -13,10 +12,11 @@ const fetchStateOffices = () => async (dispatch, getState) => {
   dispatch({ type: 'SET_OFFICES', offices: response.data.data });
 };
 
-const setActiveOffice = officeId => async (dispatch, getState) => {
+const setActiveOffice = (officeId = '308') => async (dispatch, getState) => {
   dispatch({ type: 'SET_ACTIVE_OFFICE', officeId });
-  dispatch(setActiveState(getState().states.activeStateId, false));
-  dispatch(fetchStateData(getState().states.activeStateId));
+  dispatch(setActiveState(getState().states.activeStateId, true));
 };
 
-export { fetchOfficesList, setActiveOffice, fetchStateOffices };
+const resetOffice = () => dispatch => dispatch({ type: 'RESET_OFFICE' });
+
+export { fetchOfficesList, setActiveOffice, fetchStateOffices, resetOffice };

@@ -18,7 +18,7 @@ const OfficDropdown = props => (
       key: office.id,
       value: office.id,
       text: office.attributes.name,
-      onClick: () => props.setActiveOffice(office.id),
+      onClick: () => props.setActiveOffice(office.id.toString()),
     }))}
   />
 );
