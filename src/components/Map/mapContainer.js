@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Map from './StateMap';
 import MapInfo from './mapInfo';
-import StateMapTest from './StateMapTest';
+import StateMap from './StateMap';
 
 const MapContainer = props => (
   <div>
@@ -26,7 +25,7 @@ const MapContainer = props => (
         <MapInfo />
       </div>
     )}
-    <StateMapTest />
+    <StateMap />
   </div>
 );
 

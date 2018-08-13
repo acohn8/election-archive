@@ -6,7 +6,7 @@ const StateCard = props => (
     href={`/states/${props.name
       .split(' ')
       .join('-')
-      .toLowerCase()}`}
+      .toLowerCase()}/us-president`}
   >
     <Image fluid src={props.image} style={{ height: '200px' }} />
     <Card.Content>

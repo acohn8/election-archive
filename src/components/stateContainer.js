@@ -7,7 +7,7 @@ import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
 import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
-import { fetchStateOffices } from '../redux/actions/officeActions';
+import { fetchStateOffices, setActiveOffice } from '../redux/actions/officeActions';
 import setActive from '../redux/actions/navActions';
 import ResponsiveNav from './Nav/ResponsiveNav';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
@@ -18,6 +18,13 @@ class StateContainer extends React.Component {
   }
 
   componentDidUpdate() {
+    const office = this.props.offices.offices.find(
+      office =>
+        office.attributes.name
+          .split(' ')
+          .join('-')
+          .toLowerCase() === this.props.match.params.selectedOfficeId.toLowerCase(),
+    );
     const state = this.props.states.states.find(
       state =>
         state.attributes.name
@@ -28,8 +35,12 @@ class StateContainer extends React.Component {
     if (state.id !== this.props.states.activeStateId) {
       this.props.setActiveState(state.id);
     }
-    if (state.id !== this.props.states.activeStateId && this.props.states.activeStateId !== '') {
-      this.props.fetchStateOffices();
+    if (
+      this.props.offices.offices.length > 0 &&
+      office.id !== this.props.offices.selectedOfficeId &&
+      office.id !== undefined
+    ) {
+      this.props.setActiveOffice(office.id);
     }
   }
 
@@ -96,6 +107,7 @@ const mapStateToProps = state => ({
   loading: state.results.loading,
   geography: state.results.geography,
   states: state.states,
+  offices: state.offices,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -103,6 +115,7 @@ const mapDispatchToProps = dispatch => ({
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
   fetchStateOffices: () => dispatch(fetchStateOffices()),
+  setActiveOffice: officeId => dispatch(setActiveOffice(officeId)),
 });
 
 export default connect(

@@ -20,7 +20,7 @@ const StateDropdown = (props) => {
         to: `/states/${state.attributes.name
           .split(' ')
           .join('-')
-          .toLowerCase()}`,
+          .toLowerCase()}/us-president`,
         image: {
           size: 'tiny',
           src: images.find(image =>
@@ -33,6 +33,7 @@ const StateDropdown = (props) => {
 
 const mapStateToProps = state => ({
   states: state.states.states,
+  offices: state.offices,
 });
 
 export default connect(mapStateToProps)(StateDropdown);
