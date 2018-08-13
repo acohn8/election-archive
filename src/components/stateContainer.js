@@ -32,9 +32,11 @@ class StateContainer extends React.Component {
           .join('-')
           .toLowerCase() === this.props.match.params.activeStateName.toLowerCase(),
     );
-    if (state.id !== this.props.states.activeStateId) {
+
+    if (state.id !== this.props.states.activeStateId && state.id !== undefined) {
       this.props.setActiveState(state.id);
     }
+
     if (
       this.props.offices.offices.length > 0 &&
       office.id !== this.props.offices.selectedOfficeId &&

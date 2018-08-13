@@ -47,9 +47,46 @@ class MapTest extends React.Component {
     });
 
     this.map.on('load', () => {
-      this.addResultsLayer();
+      this.map.addSource('counties', {
+        type: 'vector',
+        url: 'mapbox://adamcohn.1k3u9fep',
+      });
+
+      const maxValue = 14;
+
+      this.map.addLayer(
+        {
+          id: 'counties-join',
+          type: 'fill',
+          source: 'counties',
+          'source-layer': 'cb_2017_us_county_500k-7qwbcn',
+          filter: [
+            '==',
+            ['get', 'STATEFP'],
+            this.props.geography.entities.state[this.props.geography.result.state].fips
+              .toString()
+              .padStart(2, '0'),
+          ],
+          paint: {
+            'fill-color': [
+              'rgba',
+              0,
+              ['*', ['/', ['feature-state', 'dem_mrgin'], maxValue], 255],
+              0,
+              0.9,
+            ],
+          },
+        },
+        'waterway-label',
+      );
+
       // this.props.geography.result.state !== 17 && this.enableHover();
-      this.map.addControl(new mapboxgl.FullscreenControl());
+      // this.map.addControl(new mapboxgl.FullscreenControl());
+      if (this.map.isSourceLoaded('counties')) {
+        this.setStates({ sourceId: 'counties', isSourceLoaded: true });
+      } else {
+        this.map.on('sourcedata', this.setStates);
+      }
     });
   };
 
@@ -77,269 +114,24 @@ class MapTest extends React.Component {
     });
   };
 
-  addResultsLayer = () => {
-    const mapFeatures = this.map
-      .querySourceFeatures('composite', {
-        sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
-      })
-      .filter(
-        county =>
-          county.properties.STATEFP ===
-          this.props.geography.entities.state[this.props.geography.result.state].fips
-            .toString()
-            .padStart(2, '0'),
+  // addResultsLayer = () => {
+
+  // };
+
+  setStates = e => {
+    if (e.sourceId === 'counties' && e.isSourceLoaded) {
+      this.map.off('sourcedata', this.setStates);
+      this.props.electionResults.result.forEach(resultId =>
+        this.map.setFeatureState(
+          {
+            source: 'counties',
+            sourceLayer: 'cb_2017_us_county_5m-2n1v3o',
+            id: this.props.electionResults.entities.results[resultId].fips,
+          },
+          this.props.electionResults.entities.results[resultId],
+        ),
       );
-    this.map.addSource('counties', {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: mapFeatures,
-      },
-    });
-    console.log(this.map.getStyle().sources);
-    //adds the precinct zoom threshold for precinct states
-    // const precinctStates = [4, 11, 45, 14];
-    // const pa = 3;
-    // let zoomThreshold;
-    // if (precinctStates.includes(this.props.geography.result.state)) {
-    //   zoomThreshold = 8;
-    // } else if (this.props.geography.result.state === pa) {
-    //   zoomThreshold = 9;
-    // } else {
-    //   zoomThreshold = 0;
-    // }
-    // this.map.addSource('countyPresResults', {
-    //   //loads the AK state leg map if it's Alaska
-    //   url:
-    //     this.props.geography.result.state !== 17
-    //       ? 'mapbox://adamcohn.7bxery92'
-    //       : 'mapbox://adamcohn.2hweullr',
-    //   type: 'vector',
-    // });
-    // if (this.props.geography.result.state !== 17) {
-    //   this.map.addLayer(
-    //     {
-    //       id: 'dem-margin',
-    //       type: 'fill',
-    //       source: 'countyPresResults',
-    //       maxzoom: zoomThreshold,
-    //       'source-layer': '2016_county_results-5wvgz3',
-    //       filter: [
-    //         '==',
-    //         ['get', 'STATEFP'],
-    //         this.props.geography.entities.state[this.props.geography.result.state].fips
-    //           .toString()
-    //           .padStart(2, '0'),
-    //       ],
-    //       paint: {
-    //         'fill-outline-color': '#696969',
-    //         'fill-color': [
-    //           'interpolate',
-    //           ['linear'],
-    //           ['get', 'county_r_2'],
-    //           -0.3,
-    //           '#d6604d',
-    //           -0.2,
-    //           '#f4a582',
-    //           -0.1,
-    //           '#fddbc7',
-    //           0.0,
-    //           '#f7f7f7',
-    //           0.1,
-    //           '#d1e5f0',
-    //           0.2,
-    //           '#92c5de',
-    //           0.3,
-    //           '#4393c3',
-    //         ],
-    //         'fill-opacity': 0.7,
-    //       },
-    //     },
-    //     'waterway-label',
-    //   );
-    //   this.map.addLayer(
-    //     {
-    //       id: 'county-hover-line',
-    //       type: 'line',
-    //       source: 'countyPresResults',
-    //       maxzoom: zoomThreshold,
-    //       'source-layer': '2016_county_results-5wvgz3',
-    //       filter: ['==', 'GEOID', ''],
-    //       paint: {
-    //         'line-width': 2,
-    //         'line-color': '#696969',
-    //         'line-opacity': 1,
-    //       },
-    //     },
-    //     'waterway-label',
-    //   );
-    // } else if (this.props.geography.result.state === 17) {
-    //   this.map.addLayer(
-    //     {
-    //       id: 'dem-margin',
-    //       type: 'fill',
-    //       source: 'countyPresResults',
-    //       maxzoom: zoomThreshold,
-    //       'source-layer': '2016_ak_results-d7n96u',
-    //       paint: {
-    //         'fill-outline-color': '#696969',
-    //         'fill-color': [
-    //           'interpolate',
-    //           ['linear'],
-    //           ['get', 'ak_resul_2'],
-    //           -0.3,
-    //           '#d6604d',
-    //           -0.2,
-    //           '#f4a582',
-    //           -0.1,
-    //           '#fddbc7',
-    //           0.0,
-    //           '#f7f7f7',
-    //           0.1,
-    //           '#d1e5f0',
-    //           0.2,
-    //           '#92c5de',
-    //           0.3,
-    //           '#4393c3',
-    //         ],
-    //         'fill-opacity': 0.7,
-    //       },
-    //     },
-    //     'waterway-label',
-    //   );
-    // }
-    // const mapFeatures = this.map
-    //   .querySourceFeatures('composite', {
-    //     sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
-    //   })
-    //   .filter(
-    //     county =>
-    //       county.properties.STATEFP ===
-    //       this.props.geography.entities.state[this.props.geography.result.state].fips
-    //         .toString()
-    //         .padStart(2, '0'),
-    //   );
-    // this.map.addSource('counties', {
-    //   type: 'geojson',
-    //   data: {
-    //     type: 'FeatureCollection',
-    //     features: mapFeatures,
-    //   },
-    // });
-    // if (this.props.geography.result.state === 4) {
-    //   this.map.addSource('precinct', {
-    //     url: 'mapbox://adamcohn.adwhne7t',
-    //     type: 'vector',
-    //   });
-    //   this.map.addLayer(
-    //     {
-    //       id: 'wi-pres-precinct',
-    //       type: 'fill',
-    //       minzoom: zoomThreshold,
-    //       source: 'precinct',
-    //       'source-layer': 'wi-2016-final-6apfcm',
-    //       paint: {
-    //         'fill-outline-color': '#696969',
-    //         'fill-color': [
-    //           'interpolate',
-    //           ['linear'],
-    //           [
-    //             '-',
-    //             ['/', ['get', 'G16PREDCli'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
-    //             ['/', ['get', 'G16PRERTru'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
-    //           ],
-    //           -0.3,
-    //           '#d6604d',
-    //           -0.2,
-    //           '#f4a582',
-    //           -0.1,
-    //           '#fddbc7',
-    //           0.0,
-    //           '#f7f7f7',
-    //           0.1,
-    //           '#d1e5f0',
-    //           0.2,
-    //           '#92c5de',
-    //           0.3,
-    //           '#4393c3',
-    //         ],
-    //         'fill-opacity': 0.7,
-    //       },
-    //     },
-    //     'waterway-label',
-    //   );
-    // }
-    // if (
-    //   this.props.geography.result.state === 45 ||
-    //   this.props.geography.result.state === 11 ||
-    //   this.props.geography.result.state === 14 ||
-    //   this.props.geography.result.state === 3
-    // ) {
-    //   const links = {
-    //     3: 'adamcohn.3sna8yq5',
-    //     45: 'adamcohn.9iseezid',
-    //     11: 'adamcohn.1g8o5usp',
-    //     14: 'adamcohn.8risplqr',
-    //   };
-    //   const layers = {
-    //     3: 'pa-2016-final-597cvl',
-    //     45: 'tx-2016-final-7ylsll',
-    //     11: 'ga-2016-final-9bvbyq',
-    //     14: 'mn-2016-final-53132s',
-    //   };
-    //   this.map.addSource('precinct', {
-    //     url: `mapbox://${links[this.props.geography.result.state]}`,
-    //     type: 'vector',
-    //   });
-    //   this.map.addLayer(
-    //     {
-    //       id: 'precinct',
-    //       type: 'fill',
-    //       minzoom: zoomThreshold,
-    //       source: 'precinct',
-    //       'source-layer': layers[this.props.geography.result.state],
-    //       paint: {
-    //         'fill-outline-color': '#696969',
-    //         'fill-color': [
-    //           'interpolate',
-    //           ['linear'],
-    //           [
-    //             '-',
-    //             ['/', ['get', 'G16PREDCli'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
-    //             ['/', ['get', 'G16PRERTru'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
-    //           ],
-    //           -0.3,
-    //           '#d6604d',
-    //           -0.2,
-    //           '#f4a582',
-    //           -0.1,
-    //           '#fddbc7',
-    //           0.0,
-    //           '#f7f7f7',
-    //           0.1,
-    //           '#d1e5f0',
-    //           0.2,
-    //           '#92c5de',
-    //           0.3,
-    //           '#4393c3',
-    //         ],
-    //         'fill-opacity': 0.7,
-    //       },
-    //     },
-    //     'waterway-label',
-    //   );
-    // }
-    // const boundingBox = bbox(this.map.getSource('counties')._data);
-    // this.map.fitBounds(boundingBox, { padding: 20, animate: false });
-    // this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
-    // this.props.geography.result.state !== 17 &&
-    //   this.map.moveLayer('county-hover-line', 'poi-parks-scalerank2');
-    // const mapDetails = {
-    //   center: this.map.getCenter(),
-    //   zoom: this.map.getZoom(),
-    //   bbox: boundingBox,
-    // };
-    // this.props.setMapDetails(mapDetails);
+    }
   };
 
   render() {
