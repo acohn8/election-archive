@@ -11,7 +11,6 @@ const fetchStatesList = () => async (dispatch) => {
 };
 
 const setActiveState = (stateId, fetch = true) => (dispatch, getState) => {
-  console.log(stateId);
   dispatch({ type: 'ACTIVE_STATE', stateId });
   dispatch(resetHover());
   dispatch(fetchStateOffices());
