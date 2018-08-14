@@ -14,7 +14,7 @@ class CountyContainer extends React.Component {
   }
 
   formatCountyToplines = () => {
-    const countyResults = this.props.electionResults.entities.results[
+    const countyResults = this.props.countyResults.entities.results[
       this.props.precinctResults.county_id
     ].results;
     const countyCandidates = Object.keys(countyResults);
@@ -65,7 +65,7 @@ const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
   precinctResults: state.results.precinctResults,
-  electionResults: state.results.electionResults,
+  countyResults: state.results.countyResults,
 });
 
 const mapDispatchToProps = dispatch => ({

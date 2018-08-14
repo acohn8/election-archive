@@ -5,49 +5,22 @@ import { connect } from 'react-redux';
 import ToplinesCard from './toplinesCard';
 
 const ToplinesContainer = (props) => {
-  const statewideCandidateResults = () => {
-    const statewideResults = {};
-    const stateCandidates = props.candidates.result;
-    stateCandidates.forEach((candidateId) => {
-      statewideResults[candidateId] = 0;
-    });
-    props.electionResults.result.forEach((countyId) => {
-      stateCandidates.forEach((candidateId) => {
-        statewideResults[candidateId] +=
-          props.electionResults.entities.results[countyId].results[candidateId];
-      });
-    });
-    return statewideResults;
-  };
-
-  const filterAndSortCandidatesWithResults = () => {
-    const candidatesWithResults = Object.keys(statewideCandidateResults()).filter(candidateId =>
-      Boolean(statewideCandidateResults()[candidateId]));
-    const sortedIds = candidatesWithResults.sort((a, b) => statewideCandidateResults()[b] - statewideCandidateResults()[a]);
-    return sortedIds;
-  };
-
-  const getStatewideTotal = () => {
-    let statewideTotal = 0;
-    filterAndSortCandidatesWithResults().forEach((candidateId) => {
-      statewideTotal += statewideCandidateResults()[candidateId];
-    });
-    return statewideTotal;
-  };
-
+  const sortedCandidates = Object.keys(props.stateResults)
+    .filter(id => id !== 'other')
+    .map(id => parseInt(id))
+    .sort((a, b) => props.stateResults[b] - props.stateResults[a]);
+  const total = Object.values(props.stateResults).reduce((total, num) => total + num);
   return (
-    <Card.Group itemsPerRow={filterAndSortCandidatesWithResults().length}>
-      {filterAndSortCandidatesWithResults()
-        .slice(0, 3)
-        .map(candidateId => (
-          <ToplinesCard
-            candidate={props.candidates.entities.candidates[candidateId]}
-            key={candidateId}
-            votes={statewideCandidateResults()[candidateId]}
-            winner={filterAndSortCandidatesWithResults()[0]}
-            total={getStatewideTotal()}
-          />
-        ))}
+    <Card.Group itemsPerRow={sortedCandidates.length}>
+      {sortedCandidates.map(candidateId => (
+        <ToplinesCard
+          candidate={props.candidates.entities.candidates[candidateId]}
+          key={candidateId}
+          votes={props.stateResults[candidateId]}
+          winner={sortedCandidates[0]}
+          total={total}
+        />
+      ))}
     </Card.Group>
   );
 };
@@ -55,7 +28,8 @@ const ToplinesContainer = (props) => {
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
-  electionResults: state.results.electionResults,
+  countyResults: state.results.countyResults,
+  stateResults: state.results.stateResults,
 });
 
 export default connect(mapStateToProps)(ToplinesContainer);

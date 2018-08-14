@@ -24,9 +24,9 @@ class PrecinctResultsTable extends React.Component {
     stateCandidates.forEach(candidateId => {
       statewideResults[candidateId] = 0;
     });
-    this.props.electionResults.result.forEach(countyId => {
+    this.props.countyResults.result.forEach(countyId => {
       stateCandidates.forEach(candidateId => {
-        statewideResults[candidateId] += this.props.electionResults.entities.results[
+        statewideResults[candidateId] += this.props.countyResults.entities.results[
           countyId
         ].results[candidateId];
       });
@@ -101,7 +101,7 @@ class PrecinctResultsTable extends React.Component {
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
-  electionResults: state.results.electionResults,
+  countyResults: state.results.countyResults,
   precinctResults: state.results.precinctResults,
 });
 

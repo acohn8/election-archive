@@ -2,7 +2,8 @@ const initialResultsState = {
   loading: false,
   geography: {},
   candidates: [],
-  electionResults: [],
+  stateResults: {},
+  countyResults: [],
   precinctResults: {},
 };
 
@@ -14,7 +15,8 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         loading: true,
         geography: {},
         candidates: [],
-        electionResults: [],
+        stateResults: {},
+        countyResults: [],
         precinctResults: {},
       };
     case 'SET_STATE_DATA':
@@ -23,7 +25,8 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         loading: false,
         geography: action.geography,
         candidates: action.candidates,
-        electionResults: action.electionResults,
+        stateResults: action.stateResults,
+        countyResults: action.countyResults,
       };
     case 'START_PRECINCT_FETCH':
       return {
@@ -40,7 +43,8 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         loading: false,
         geography: {},
         candidates: [],
-        electionResults: [],
+        stateResults: {},
+        countyResults: [],
         precinctResults: {},
       };
     default:

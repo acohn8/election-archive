@@ -121,14 +121,14 @@ class MapTest extends React.Component {
   setStates = e => {
     if (e.sourceId === 'counties' && e.isSourceLoaded) {
       this.map.off('sourcedata', this.setStates);
-      this.props.electionResults.result.forEach(resultId =>
+      this.props.countyResults.result.forEach(resultId =>
         this.map.setFeatureState(
           {
             source: 'counties',
             sourceLayer: 'cb_2017_us_county_5m-2n1v3o',
-            id: this.props.electionResults.entities.results[resultId].fips,
+            id: this.props.countyResults.entities.results[resultId].fips,
           },
-          this.props.electionResults.entities.results[resultId],
+          this.props.countyResults.entities.results[resultId],
         ),
       );
     }
@@ -158,7 +158,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   states: state.states,
   geography: state.results.geography,
-  electionResults: state.results.electionResults,
+  countyResults: state.results.countyResults,
   candidates: state.results.candidates,
 });
 

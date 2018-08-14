@@ -45,9 +45,9 @@ class ResultsTable extends React.Component {
     stateCandidates.forEach(candidateId => {
       statewideResults[candidateId] = 0;
     });
-    this.props.electionResults.result.forEach(countyId => {
+    this.props.countyResults.result.forEach(countyId => {
       stateCandidates.forEach(candidateId => {
-        statewideResults[candidateId] += this.props.electionResults.entities.results[
+        statewideResults[candidateId] += this.props.countyResults.entities.results[
           countyId
         ].results[candidateId];
       });
@@ -70,7 +70,7 @@ class ResultsTable extends React.Component {
     return (
       <div ref={divElement => (this.divElement = divElement)}>
         <ReactTable
-          data={this.props.electionResults.result}
+          data={this.props.countyResults.result}
           columns={[
             {
               Header: (
@@ -138,7 +138,7 @@ class ResultsTable extends React.Component {
                       Header: 'Votes',
                       minWidth: 1,
                       accessor: d =>
-                        this.props.electionResults.entities.results[d].results[candidateId],
+                        this.props.countyResults.entities.results[d].results[candidateId],
                       filterable: false,
                       Cell: row => (row.value === undefined ? 0 : row.value.toLocaleString()),
                     },
@@ -147,11 +147,11 @@ class ResultsTable extends React.Component {
                       id: `percent-${candidateId}`,
                       minWidth: 1,
                       accessor: d =>
-                        this.props.electionResults.entities.results[d].results[candidateId] /
+                        this.props.countyResults.entities.results[d].results[candidateId] /
                         majorCandidates
                           .map(
                             candidateId =>
-                              this.props.electionResults.entities.results[d].results[candidateId],
+                              this.props.countyResults.entities.results[d].results[candidateId],
                           )
                           .reduce((total, num) => total + num),
                       filterable: false,
@@ -184,7 +184,7 @@ class ResultsTable extends React.Component {
                       },
                       minWidth: 1,
                       accessor: d =>
-                        this.props.electionResults.entities.results[d].results[candidateId],
+                        this.props.countyResults.entities.results[d].results[candidateId],
                       filterable: false,
                       Cell: row => (row.value === undefined ? 0 : row.value.toLocaleString()),
                     },
@@ -215,7 +215,7 @@ class ResultsTable extends React.Component {
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
-  electionResults: state.results.electionResults,
+  countyResults: state.results.countyResults,
 });
 
 export default connect(mapStateToProps)(ResultsTable);

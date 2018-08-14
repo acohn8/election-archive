@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { setActiveState } from './stateActions';
-import { push } from 'connected-react-router';
 
 const fetchOfficesList = () => async (dispatch) => {
   const response = await axios.get('http://localhost:3000/api/v1/offices');

@@ -6,13 +6,14 @@ const colors = {
   republican: 'red',
   libertarian: 'yellow',
   green: 'green',
+  'working families': 'purple',
 };
 
 const ToplinesCard = ({
   candidate, votes, total, winner,
 }) => (
   <Card color={colors[candidate.attributes.party]}>
-    {candidate.id === winner ? (
+    {parseInt(candidate.id) === winner ? (
       <Image
         fluid
         label={{
