@@ -39,30 +39,13 @@ class ResultsTable extends React.Component {
     }
   }
 
-  statewideCandidateResults = () => {
-    const statewideResults = {};
-    const stateCandidates = this.props.candidates.result;
-    stateCandidates.forEach(candidateId => {
-      statewideResults[candidateId] = 0;
-    });
-    this.props.countyResults.result.forEach(countyId => {
-      stateCandidates.forEach(candidateId => {
-        statewideResults[candidateId] += this.props.countyResults.entities.results[
-          countyId
-        ].results[candidateId];
-      });
-    });
-    return statewideResults;
-  };
-
   sortedCandidates = () => {
-    const candidatesWithResults = Object.keys(this.statewideCandidateResults()).filter(
-      candidateId => Boolean(this.statewideCandidateResults()[candidateId]),
-    );
-    const sortedIds = candidatesWithResults.sort(
-      (a, b) => this.statewideCandidateResults()[b] - this.statewideCandidateResults()[a],
-    );
-    return sortedIds;
+    const sortedCandidates = Object.keys(this.props.stateResults)
+      .filter(id => id !== 'other')
+      .map(id => parseInt(id))
+      .sort((a, b) => this.props.stateResults[b] - this.props.stateResults[a]);
+    sortedCandidates.push('other');
+    return sortedCandidates;
   };
 
   render() {
@@ -216,6 +199,7 @@ const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
   countyResults: state.results.countyResults,
+  stateResults: state.results.stateResults,
 });
 
 export default connect(mapStateToProps)(ResultsTable);
