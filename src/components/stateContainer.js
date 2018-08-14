@@ -51,11 +51,10 @@ class StateContainer extends React.Component {
                         this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
                       }
                       <Header.Subheader>
-                        2016 <OfficeDropdown /> results
+                        Results for <OfficeDropdown />
                       </Header.Subheader>
                     </Header>
                   </Grid.Column>
-                  <Grid.Column />
                   <Grid.Row>
                     <Grid.Column>
                       <ToplinesContainer />

@@ -1,16 +1,18 @@
 import React from 'react';
-import { Header, Dropdown } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import { setActiveOffice } from '../../redux/actions/officeActions';
 
 const OfficDropdown = (props) => {
-  const options = props.offices.offices.map(office => ({
-    key: office.id,
-    value: office.id,
-    text: office.attributes.name,
-    onClick: () => props.setActiveOffice(office.id),
-  }));
+  const options = props.offices.offices
+    .map(office => ({
+      key: office.id,
+      value: office.id,
+      text: office.attributes.name,
+      onClick: () => props.setActiveOffice(office.id),
+    }))
+    .sort((a, b) => b.text - a.text);
 
   return (
     <Dropdown
