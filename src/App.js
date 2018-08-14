@@ -26,7 +26,7 @@ class App extends React.Component {
           <Route exact path="/" component={HomeContainer} />
           <Route exact path="/national-map" component={NationalMapContainer} />
           <Route exact path="/states" component={StateListContainer} />
-          <Route path="/states/:activeStateName/:selectedOfficeId" component={StateContainer} />
+          <Route path="/states/:activeStateName" component={StateContainer} />
         </Switch>
         <Footer />
       </div>

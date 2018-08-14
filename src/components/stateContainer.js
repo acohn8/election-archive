@@ -18,58 +18,15 @@ class StateContainer extends React.Component {
   }
 
   componentDidUpdate() {
-    const office = this.props.offices.offices.find(
-      office =>
-        office.attributes.name
-          .split(' ')
-          .join('-')
-          .toLowerCase() === this.props.match.params.selectedOfficeId.toLowerCase(),
-    );
-
-    const state = this.props.states.states.find(
-      state =>
-        state.attributes.name
-          .split(' ')
-          .join('-')
-          .toLowerCase() === this.props.match.params.activeStateName.toLowerCase(),
-    );
-
-    if (
-      state !== undefined &&
-      office !== undefined &&
-      state.id !== this.props.states.activeStateId &&
-      office.id !== this.props.offices.selectedOfficeId
-    ) {
-      this.props.setActiveState(state.id, false, office.id);
-    } else if (
-      state !== undefined &&
-      office !== undefined &&
-      state.id === this.props.states.activeStateId &&
-      office.id !== this.props.offices.selectedOfficeId
-    ) {
-      this.props.setActiveState(state.id, false, office.id);
-    } else if (
-      state !== undefined &&
-      office !== undefined &&
-      state.id !== this.props.states.activeStateId
-    ) {
+    const state = this.props.states.states.find(state =>
+      state.attributes.name
+        .split(' ')
+        .join('-')
+        .toLowerCase() === this.props.match.params.activeStateName.toLowerCase());
+    if (state !== undefined && state.id !== this.props.states.activeStateId) {
+      this.props.resetOffice();
       this.props.setActiveState(state.id);
     }
-    // if (
-    //   state.id !== this.props.states.activeStateId &&
-    //   state.id !== undefined &&
-    //   this.props.states.activeStateId !== undefined
-    // ) {
-    //   this.props.setActiveState(state.id);
-    // }
-
-    // if (
-    //   this.props.offices.offices.length > 0 &&
-    //   office.id !== this.props.offices.selectedOfficeId &&
-    //   office.id !== undefined
-    // ) {
-    //   this.props.setActiveOffice(office.id);
-    // }
   }
 
   componentWillUnmount() {
@@ -77,12 +34,7 @@ class StateContainer extends React.Component {
     this.props.resetOffice();
   }
 
-  importAll = r => {
-    return r.keys().map(r);
-  };
-
   render() {
-    const images = this.importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
     return (
       <ResponsiveNav>
         <Divider hidden />
@@ -95,25 +47,15 @@ class StateContainer extends React.Component {
                 <Grid columns={2} verticalAlign="middle" stackable>
                   <Grid.Column>
                     <Header size="huge">
-                      <Image
-                        src={images.find(image =>
-                          image.includes(
-                            `/static/media/${this.props.geography.entities.state[
-                              this.props.geography.result.state
-                            ].short_name.toLowerCase()}`,
-                          ),
-                        )}
-                      />
                       {
-                        this.props.states.states.find(
-                          state => state.id === this.props.states.activeStateId,
-                        ).attributes.name
+                        this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
                       }
+                      <Header.Subheader>
+                        2016 <OfficeDropdown /> results
+                      </Header.Subheader>
                     </Header>
                   </Grid.Column>
-                  <Grid.Column>
-                    <OfficeDropdown />
-                  </Grid.Column>
+                  <Grid.Column />
                   <Grid.Row>
                     <Grid.Column>
                       <ToplinesContainer />
@@ -142,7 +84,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setActiveState: (stateId, fetch, officeId) => dispatch(setActiveState(stateId, fetch, officeId)),
+  setActiveState: (stateId, fetch) => dispatch(setActiveState(stateId, fetch)),
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
   fetchStateOffices: () => dispatch(fetchStateOffices()),

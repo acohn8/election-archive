@@ -20,7 +20,7 @@ const StateDropdown = (props) => {
         to: `/states/${state.attributes.name
           .split(' ')
           .join('-')
-          .toLowerCase()}/us-president`,
+          .toLowerCase()}`,
         image: {
           size: 'tiny',
           src: images.find(image =>
