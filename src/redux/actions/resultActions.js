@@ -11,7 +11,10 @@ const fetchStateData = stateId => async (dispatch, getState) => {
     axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/candidates`),
     axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/county`),
     axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/state`),
+    axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/state`),
+    // axios.get(`https://en.wikipedia.org/w/api.php?action=query&prop=imageinfo&iiprop=url&generator=images&titles=United+States+Senate+election+in+${getState().states.states[activeStateId].attributes.name}%2C+2016&format=json`),
   ]);
+
   const geography = normalize(response[0].data, stateCounties);
   const countyResults = normalize(response[2].data.results, resultListSchema);
   const stateResults = response[3].data.results;

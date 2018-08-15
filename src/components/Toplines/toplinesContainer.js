@@ -9,7 +9,7 @@ const ToplinesContainer = (props) => {
     .filter(id => id !== 'other')
     .map(id => parseInt(id))
     .sort((a, b) => props.stateResults[b] - props.stateResults[a]);
-  const total = Object.values(props.stateResults).reduce((total, num) => total + num);
+  const total = Object.values(props.stateResults).reduce((sum, num) => sum + num);
   return (
     <Card.Group itemsPerRow={sortedCandidates.length}>
       {sortedCandidates.map(candidateId => (
