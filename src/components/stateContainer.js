@@ -51,7 +51,10 @@ class StateContainer extends React.Component {
                         this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
                       }
                       <Header.Subheader>
-                        Results for <OfficeDropdown />
+                        Results for{' '}
+                        <span style={{ color: '#00B5AD' }}>
+                          <OfficeDropdown />
+                        </span>
                       </Header.Subheader>
                     </Header>
                   </Grid.Column>

@@ -44,7 +44,7 @@ class ResultsTable extends React.Component {
       .filter(id => id !== 'other')
       .map(id => parseInt(id))
       .sort((a, b) => this.props.stateResults[b] - this.props.stateResults[a]);
-    sortedCandidates.push('other');
+    this.props.stateResults.other > 0 && sortedCandidates.push('other');
     return sortedCandidates;
   };
 
