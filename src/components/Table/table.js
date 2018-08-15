@@ -44,7 +44,7 @@ class ResultsTable extends React.Component {
       .filter(id => id !== 'other')
       .map(id => parseInt(id))
       .sort((a, b) => this.props.stateResults[b] - this.props.stateResults[a]);
-    this.props.stateResults.other > 0 && sortedCandidates.push('other');
+    sortedCandidates.push('other');
     return sortedCandidates;
   };
 
@@ -130,13 +130,12 @@ class ResultsTable extends React.Component {
                       id: `percent-${candidateId}`,
                       minWidth: 1,
                       accessor: d =>
-                        this.props.countyResults.entities.results[d].results[candidateId] /
-                        majorCandidates
-                          .map(
-                            candidateId =>
-                              this.props.countyResults.entities.results[d].results[candidateId],
-                          )
-                          .reduce((total, num) => total + num),
+                        this.props.countyResults.entities.results[d].results[candidateId] > 0
+                          ? this.props.countyResults.entities.results[d].results[candidateId] /
+                            Object.values(
+                              this.props.countyResults.entities.results[d].results,
+                            ).reduce((total, num) => total + num)
+                          : 0,
                       filterable: false,
                       Cell: row => `${Math.max(Math.round(row.value * 100 * 10) / 10)} %`,
                     },
