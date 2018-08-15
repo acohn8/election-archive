@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';
+import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
 
 const NationalMapContainer = props => (
   <div>
@@ -24,9 +25,9 @@ const NationalMapContainer = props => (
           borderWidth: '0.5px',
         }}
       >
-        {props.overlay.hoveredDem.votes === '' ? (
+        {props.overlay.hoveredDem.votes === '' && props.offices.offices.length > 0 ? (
           <Header size="huge">
-            President: 2016
+            <OfficeDropdown />
             <Header.Subheader>
               Zoom in to see counties or out to see states. Click for details.
             </Header.Subheader>
@@ -45,6 +46,7 @@ const NationalMapContainer = props => (
 const mapStateToProps = state => ({
   headerHid: state.maps.headerHid,
   overlay: state.maps.overlay,
+  offices: state.offices,
 });
 
 export default connect(mapStateToProps)(NationalMapContainer);

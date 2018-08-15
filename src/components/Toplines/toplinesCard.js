@@ -15,6 +15,7 @@ const ToplinesCard = ({
   <Card color={colors[candidate.attributes.party]}>
     {parseInt(candidate.id, 10) === winner ? (
       <Image
+        fluid
         label={{
           color: colors[candidate.attributes.party],
           icon: 'winner',
@@ -23,7 +24,7 @@ const ToplinesCard = ({
         src={candidate.attributes.image}
       />
     ) : (
-      <Image src={candidate.attributes.image} disabled />
+      <Image src={candidate.attributes.image} disabled fluid />
     )}
     <Card.Content>
       <Card.Header>{candidate.attributes.name}</Card.Header>
