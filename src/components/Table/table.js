@@ -42,7 +42,7 @@ class ResultsTable extends React.Component {
   sortedCandidates = () => {
     const sortedCandidates = Object.keys(this.props.stateResults)
       .filter(id => id !== 'other')
-      .map(id => parseInt(id))
+      .map(id => parseInt(id, 10))
       .sort((a, b) => this.props.stateResults[b] - this.props.stateResults[a]);
     sortedCandidates.push('other');
     return sortedCandidates;

@@ -18,6 +18,7 @@ class CountyContainer extends React.Component {
       this.props.precinctResults.county_id
     ].results;
     const countyCandidates = Object.keys(countyResults);
+
     const formattedData = countyCandidates
       .map(candidate => ({
         candidate: this.props.candidates.entities.candidates[candidate],
@@ -25,7 +26,11 @@ class CountyContainer extends React.Component {
       }))
       .filter(candidate => candidate.candidate !== undefined)
       .sort((a, b) => b.votes - a.votes);
-    return formattedData;
+    return this.props.stateResults[formattedData[2].candidate.id] /
+      Object.values(this.props.stateResults).reduce((sum, num) => sum + num) <=
+      0.05
+      ? formattedData.slice(0, 2)
+      : formattedData;
   };
 
   render() {
@@ -66,6 +71,7 @@ const mapStateToProps = state => ({
   geography: state.results.geography,
   precinctResults: state.results.precinctResults,
   countyResults: state.results.countyResults,
+  stateResults: state.results.stateResults,
 });
 
 const mapDispatchToProps = dispatch => ({

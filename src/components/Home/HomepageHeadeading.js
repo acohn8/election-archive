@@ -35,7 +35,7 @@ const HomepageHeading = ({ mobile }) => (
         marginTop: '0.5em',
       }}
     />
-    <Button primary size="huge" color="teal" as={Link} to="/national-map">
+    <Button size="huge" color="teal" as={Link} to="/national-map">
       Get Started
       <Icon name="right arrow" />
     </Button>
