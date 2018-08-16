@@ -6,7 +6,7 @@ import StateMap from './StateMap';
 
 const MapContainer = props => (
   <div>
-    {props.overlay.hoveredDem.votes !== '' && (
+    {props.overlay.hoveredWinner.votes !== '' && (
       <div
         style={{
           position: 'absolute',
