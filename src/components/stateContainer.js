@@ -24,14 +24,12 @@ class StateContainer extends React.Component {
         .join('-')
         .toLowerCase() === this.props.match.params.activeStateName.toLowerCase());
     if (state !== undefined && state.id !== this.props.states.activeStateId) {
-      console.log('update');
       this.props.resetOffice();
       this.props.setActiveState(state.id);
     }
   }
 
   componentWillUnmount() {
-    console.log('unmount');
     this.props.resetOffice();
     this.props.resetActiveState();
   }
@@ -44,7 +42,7 @@ class StateContainer extends React.Component {
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&
             this.props.offices.offices.length > 0 &&
-            this.props.states.activeStateId !== '' && (
+            this.props.states.activeStateId !== null && (
               <div>
                 <Grid columns={2} verticalAlign="middle" stackable>
                   <Grid.Column>
