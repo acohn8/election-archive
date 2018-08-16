@@ -17,13 +17,10 @@ class NationalMap extends React.Component {
   componentDidMount() {
     this.props.showHeader();
     this.props.setActive('national map');
-    this.props.states.activeStateId === null &&
-      this.props.offices.offices.length === 3 &&
-      this.createMap();
+    this.createMap();
   }
 
   componentDidUpdate(prevProps) {
-    this.props.offices.offices.length !== 3 && this.props.fetchOfficesList();
     if (
       this.props.offices.selectedOfficeId !== prevProps.offices.selectedOfficeId &&
       this.map !== undefined
