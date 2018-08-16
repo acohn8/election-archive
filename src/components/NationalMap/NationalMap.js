@@ -2,14 +2,13 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
-import bbox from '@turf/bbox';
 
 import { setActiveState } from '../../redux/actions/stateActions';
 import setActive from '../../redux/actions/navActions';
 import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
 import ResponsiveNav from '../Nav/ResponsiveNav';
-import linearColorScale from '../../functions/ColorScale';
+import { StateColorScale, CountyColorScale } from '../../functions/ColorScale';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -147,7 +146,7 @@ class NationalMap extends React.Component {
         source: 'statewideResults',
         maxzoom: zoomThreshold,
         'source-layer': 'cb_2017_us_state_500k',
-        paint: linearColorScale,
+        paint: StateColorScale,
       },
       'waterway-label',
     );
@@ -160,7 +159,7 @@ class NationalMap extends React.Component {
         minzoom: zoomThreshold,
         'source-layer': 'cb_2017_us_county_500k',
         filter: ['!=', ['get', 'STATEFP'], 15],
-        paint: linearColorScale,
+        paint: CountyColorScale,
       },
       'waterway-label',
     );
