@@ -3,12 +3,14 @@ import axios from 'axios';
 import { setActiveState } from './stateActions';
 
 const fetchOfficesList = () => async (dispatch) => {
-  const response = await axios.get('http://localhost:3000/api/v1/offices');
+  const response = await axios.get('https://election-data-2016.herokuapp.com/api/v1/offices');
   dispatch({ type: 'SET_OFFICES', offices: response.data.data });
 };
 
 const fetchStateOffices = () => async (dispatch, getState) => {
-  const response = await axios.get(`http://localhost:3000/api/v1/states/${getState().states.activeStateId}/offices`);
+  const response = await axios.get(`https://election-data-2016.herokuapp.com/api/v1/states/${
+    getState().states.activeStateId
+  }/offices`);
   dispatch({ type: 'SET_OFFICES', offices: response.data.data });
 };
 
