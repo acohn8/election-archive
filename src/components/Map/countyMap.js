@@ -47,7 +47,7 @@ class CountyMap extends React.Component {
     } else {
       zoomThreshold = 0;
     }
-    this.map.addSource('presResults', {
+    this.map.addSource('countyResults', {
       url: `mapbox://adamcohn.${
         this.props.offices.offices.find(
           office => office.id === this.props.offices.selectedOfficeId.toString(),
@@ -60,7 +60,7 @@ class CountyMap extends React.Component {
       {
         id: 'dem-margin',
         type: 'fill',
-        source: 'presResults',
+        source: 'countyResults',
         'source-layer': 'cb_2017_us_county_500k',
         maxzoom: zoomThreshold,
         filter: [
@@ -72,6 +72,29 @@ class CountyMap extends React.Component {
         ],
 
         paint: CountyColorScale,
+      },
+      'waterway-label',
+    );
+
+    this.map.addLayer(
+      {
+        id: 'county-lines',
+        type: 'line',
+        maxzoom: zoomThreshold,
+        source: 'countyResults',
+        'source-layer': 'cb_2017_us_county_500k',
+        filter: [
+          '==',
+          ['get', 'GEOID'],
+          this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
+            .toString()
+            .padStart(5, '0'),
+        ],
+        paint: {
+          'line-width': 0.5,
+          'line-color': '#696969',
+          'line-opacity': 0.8,
+        },
       },
       'waterway-label',
     );

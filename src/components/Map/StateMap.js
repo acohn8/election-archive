@@ -51,6 +51,7 @@ class Map extends React.Component {
       this.addResultsLayer();
       this.props.geography.result.state !== 17 && this.enableHover();
       this.map.addControl(new mapboxgl.FullscreenControl());
+      this.map.addControl(new mapboxgl.NavigationControl());
     });
   };
 

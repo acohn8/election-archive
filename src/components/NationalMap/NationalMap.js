@@ -59,6 +59,7 @@ class NationalMap extends React.Component {
       this.stateSelection();
       this.enableHover();
       this.map.addControl(new mapboxgl.FullscreenControl());
+      this.map.addControl(new mapboxgl.NavigationControl());
       this.map.on('movestart', () => this.props.hideHeader());
       this.map.on('moveend', () => this.props.showHeader());
     });
