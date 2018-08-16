@@ -2,19 +2,27 @@ import axios from 'axios';
 
 const getHoverInfo = (
   geographyName,
-  demMargin,
-  demVotes,
-  gopMargin,
-  gopVotes,
+  winnerName,
+  winnerParty,
+  winnerMargin,
+  winnerVotes,
+  secondName,
+  secondParty,
+  secondMargin,
+  secondVotes,
   isNational = false,
 ) => dispatch =>
   dispatch({
     type: 'SET_HOVER',
     geographyName,
-    demMargin,
-    demVotes,
-    gopMargin,
-    gopVotes,
+    winnerName,
+    winnerParty,
+    winnerMargin,
+    winnerVotes,
+    secondName,
+    secondParty,
+    secondMargin,
+    secondVotes,
     isNational,
   });
 

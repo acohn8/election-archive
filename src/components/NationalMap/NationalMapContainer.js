@@ -25,7 +25,7 @@ const NationalMapContainer = props => (
           borderWidth: '0.5px',
         }}
       >
-        {props.overlay.hoveredDem.votes === '' && props.offices.offices.length > 0 ? (
+        {props.overlay.hoveredWinner.votes === '' && props.offices.offices.length > 0 ? (
           <Header size="huge">
             <OfficeDropdown />
             <Header.Subheader>

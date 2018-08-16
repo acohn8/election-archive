@@ -2,6 +2,14 @@ import React from 'react';
 import { List, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
+const colors = {
+  democratic: 'blue',
+  republican: 'red',
+  libertarian: 'yellow',
+  green: 'green',
+  'working families': 'purple',
+};
+
 const MapInfo = props => (
   <div>
     <Header as={props.overlay.isNational === true ? 'h2' : 'h4'}>
@@ -15,18 +23,18 @@ const MapInfo = props => (
             <span>
               <span
                 style={{
-                  color: '#2085D0',
+                  color: colors[props.overlay.hoveredWinner.party],
                   transition: 'all .3s ease',
                   margin: '3px',
                 }}
               >
                 &#x25cf;
               </span>
-              Hillary Clinton
+              {props.overlay.hoveredWinner.name}
             </span>
           </List.Header>
           <List.Description>
-            {`${props.overlay.hoveredDem.votes.toLocaleString()} votes (${Math.round(props.overlay.hoveredDem.percent * 100)}%)`}
+            {`${props.overlay.hoveredWinner.votes.toLocaleString()} votes (${Math.round(props.overlay.hoveredWinner.percent * 100)}%)`}
           </List.Description>
         </List.Content>
       </List.Item>
@@ -36,18 +44,18 @@ const MapInfo = props => (
             <span>
               <span
                 style={{
-                  color: '#DB2828',
+                  color: colors[props.overlay.hoveredSecond.party],
                   transition: 'all .3s ease',
                   margin: '3px',
                 }}
               >
                 &#x25cf;
               </span>
-              Donald Trump
+              {props.overlay.hoveredSecond.name}
             </span>
           </List.Header>
           <List.Description>
-            {`${props.overlay.hoveredRep.votes.toLocaleString()} votes (${Math.round(props.overlay.hoveredRep.percent * 100)}%)`}
+            {`${props.overlay.hoveredSecond.votes.toLocaleString()} votes (${Math.round(props.overlay.hoveredSecond.percent * 100)}%)`}
           </List.Description>
         </List.Content>
       </List.Item>

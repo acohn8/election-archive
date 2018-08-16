@@ -1,8 +1,18 @@
 const initialMapState = {
   overlay: {
     geographyName: '',
-    hoveredDem: { votes: '', percent: '' },
-    hoveredRep: { votes: '', percent: '' },
+    hoveredWinner: {
+      name: '',
+      party: '',
+      votes: '',
+      percent: '',
+    },
+    hoveredSecond: {
+      name: '',
+      party: '',
+      votes: '',
+      percent: '',
+    },
     isNational: false,
   },
   headerHid: false,
@@ -16,8 +26,18 @@ const mapsReducer = (previousState = initialMapState, action) => {
         ...previousState,
         overlay: {
           hoveredGeography: action.geographyName,
-          hoveredDem: { votes: action.demVotes, percent: action.demMargin },
-          hoveredRep: { votes: action.gopVotes, percent: action.gopMargin },
+          hoveredWinner: {
+            name: action.winnerName,
+            party: action.winnerParty,
+            votes: action.winnerVotes,
+            percent: action.winnerMargin,
+          },
+          hoveredSecond: {
+            name: action.secondName,
+            party: action.secondParty,
+            votes: action.secondVotes,
+            percent: action.secondMargin,
+          },
           isNational: action.isNational,
         },
       };
@@ -36,8 +56,18 @@ const mapsReducer = (previousState = initialMapState, action) => {
         ...previousState,
         overlay: {
           hoveredGeography: '',
-          hoveredDem: { votes: '', percent: '' },
-          hoveredRep: { votes: '', percent: '' },
+          hoveredWinner: {
+            name: '',
+            party: '',
+            votes: '',
+            percent: '',
+          },
+          hoveredSecond: {
+            name: '',
+            party: '',
+            votes: '',
+            percent: '',
+          },
           isNational: false,
         },
       };
