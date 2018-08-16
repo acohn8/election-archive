@@ -20,6 +20,20 @@ class NationalMap extends React.Component {
     this.props.setActive('national map');
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.offices.selectedOfficeId !== prevProps.offices.selectedOfficeId) {
+      this.map.removeLayer('dem-statewide-margin');
+      this.map.removeLayer('dem-county-margin');
+      this.map.removeLayer('state-lines');
+      this.map.removeLayer('county-hover-line');
+      this.map.removeLayer('state-hover-line');
+      this.map.removeSource('countyResults');
+      this.map.removeSource('statewideResults');
+      this.map.removeSource('counties');
+      this.addResultsLayer();
+    }
+  }
+
   componentWillUnmount() {
     this.map.remove();
   }
@@ -47,10 +61,10 @@ class NationalMap extends React.Component {
     this.map.on('load', () => {
       this.addResultsLayer();
       this.stateSelection();
-      this.enableHover();
+      // this.enableHover();
       this.map.addControl(new mapboxgl.FullscreenControl());
-      this.map.on('movestart', () => this.props.hideHeader());
-      this.map.on('moveend', () => this.props.showHeader());
+      // this.map.on('movestart', () => this.props.hideHeader());
+      // this.map.on('moveend', () => this.props.showHeader());
     });
   };
 
@@ -121,13 +135,21 @@ class NationalMap extends React.Component {
 
   addResultsLayer = () => {
     const zoomThreshold = 4.2;
-    this.map.addSource('countyPresResults', {
-      url: 'mapbox://adamcohn.7bxery92',
+    this.map.addSource('countyResults', {
+      url: `mapbox://adamcohn.${
+        this.props.offices.offices.find(
+          office => office.id === this.props.offices.selectedOfficeId.toString(),
+        ).attributes['county-map']
+      }`,
       type: 'vector',
     });
 
-    this.map.addSource('statewidePresResults', {
-      url: 'mapbox://adamcohn.bhhjwsxl',
+    this.map.addSource('statewideResults', {
+      url: `mapbox://adamcohn.${
+        this.props.offices.offices.find(
+          office => office.id === this.props.offices.selectedOfficeId.toString(),
+        ).attributes['state-map']
+      }`,
       type: 'vector',
     });
 
@@ -135,15 +157,15 @@ class NationalMap extends React.Component {
       {
         id: 'dem-statewide-margin',
         type: 'fill',
-        source: 'statewidePresResults',
+        source: 'statewideResults',
         maxzoom: zoomThreshold,
-        'source-layer': '2016_statewide_results-bui81z',
+        'source-layer': 'cb_2017_us_state_500k',
         paint: {
           'fill-outline-color': '#696969',
           'fill-color': [
             'interpolate',
             ['linear'],
-            ['get', 'statewid_2'],
+            ['get', 'dem_margin'],
             -0.05,
             '#d6604d',
             -0.01,
@@ -165,16 +187,16 @@ class NationalMap extends React.Component {
       {
         id: 'dem-county-margin',
         type: 'fill',
-        source: 'countyPresResults',
+        source: 'countyResults',
         minzoom: zoomThreshold,
-        'source-layer': '2016_county_results-5wvgz3',
+        'source-layer': 'cb_2017_us_county_500k',
         filter: ['!=', ['get', 'STATEFP'], 15],
         paint: {
           'fill-outline-color': '#696969',
           'fill-color': [
             'interpolate',
             ['linear'],
-            ['get', 'county_r_2'],
+            ['get', 'dem_margin'],
             -0.3,
             '#d6604d',
             -0.2,
@@ -200,9 +222,9 @@ class NationalMap extends React.Component {
       {
         id: 'state-lines',
         type: 'line',
-        source: 'statewidePresResults',
+        source: 'statewideResults',
         minzoom: zoomThreshold,
-        'source-layer': '2016_statewide_results-bui81z',
+        'source-layer': 'cb_2017_us_state_500k',
         paint: {
           'line-width': 0.5,
           'line-color': '#696969',
@@ -214,7 +236,7 @@ class NationalMap extends React.Component {
 
     const mapFeatures = this.map
       .querySourceFeatures('composite', {
-        sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
+        sourceLayer: 'statewideResults',
       })
       .filter(
         feature => feature.properties.STATEFP !== '15' && feature.properties.STATEFP !== '02',
@@ -231,9 +253,9 @@ class NationalMap extends React.Component {
       {
         id: 'county-hover-line',
         type: 'line',
-        source: 'countyPresResults',
+        source: 'countyResults',
         minzoom: zoomThreshold,
-        'source-layer': '2016_county_results-5wvgz3',
+        'source-layer': 'cb_2017_us_county_500k',
         filter: ['==', 'GEOID', ''],
         paint: {
           'line-width': 2,
@@ -248,9 +270,9 @@ class NationalMap extends React.Component {
       {
         id: 'state-hover-line',
         type: 'line',
-        source: 'statewidePresResults',
+        source: 'statewideResults',
         maxzoom: zoomThreshold,
-        'source-layer': '2016_statewide_results-bui81z',
+        'source-layer': 'cb_2017_us_state_500k',
         filter: ['==', 'STATEFP', ''],
         paint: {
           'line-width': 2,
@@ -261,8 +283,8 @@ class NationalMap extends React.Component {
       'waterway-label',
     );
 
-    const boundingBox = bbox(this.map.getSource('counties')._data);
-    this.map.fitBounds(boundingBox, { padding: 20, animate: false });
+    // const boundingBox = bbox(this.map.getSource('counties')._data);
+    // this.map.fitBounds(boundingBox, { padding: 20, animate: false });
     this.map.moveLayer('dem-county-margin', 'poi-parks-scalerank2');
     this.map.moveLayer('county-hover-line', 'poi-parks-scalerank2');
     this.map.moveLayer('state-hover-line', 'poi-parks-scalerank2');
@@ -301,6 +323,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   states: state.states,
   geography: state.results.geography,
+  offices: state.offices,
 });
 
 export default connect(

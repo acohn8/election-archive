@@ -1,6 +1,6 @@
 const initialStatesState = {
   states: [],
-  activeStateId: '',
+  activeStateId: null,
 };
 
 const resultsReducer = (previousState = initialStatesState, action) => {
