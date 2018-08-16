@@ -8,11 +8,12 @@ const StateDropdown = (props) => {
   const images = importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
   return (
     <Dropdown
-      text="Select a state"
+      text={
+        props.states.states.find(state => state.id === props.states.activeStateId).attributes.name
+      }
       search
-      fluid
-      selection
-      options={props.states.map(state => ({
+      transparent="true"
+      options={props.states.states.map(state => ({
         key: state.id,
         value: state.id,
         text: state.attributes.name,
@@ -32,7 +33,7 @@ const StateDropdown = (props) => {
 };
 
 const mapStateToProps = state => ({
-  states: state.states.states,
+  states: state.states,
   offices: state.offices,
 });
 

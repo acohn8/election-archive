@@ -17,7 +17,7 @@ class NationalMap extends React.Component {
   componentDidMount() {
     this.props.showHeader();
     this.props.setActive('national map');
-    this.createMap();
+    this.props.states.activeStateId === null && this.createMap();
   }
 
   componentDidUpdate(prevProps) {
@@ -108,7 +108,9 @@ class NationalMap extends React.Component {
       if (features.length) {
         const coords = e.lngLat;
         const state = this.props.states.states.find(
-          state => state.attributes.name === features[0].properties.NAME,
+          state =>
+            state.attributes['short-name'].toLowerCase() ===
+            features[0].properties.STUSPS.toLowerCase(),
         );
         this.setStateOnClick(state, coords);
       }
@@ -117,6 +119,7 @@ class NationalMap extends React.Component {
 
   setStateOnClick = (state, coords) => {
     this.props.fetchStateData(state.id);
+    console.log(state.id);
     this.map.flyTo({
       center: coords,
       zoom: 6,

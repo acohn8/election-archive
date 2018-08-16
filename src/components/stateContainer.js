@@ -35,7 +35,6 @@ class StateContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    // this.props.fetchOfficesList();
     this.props.resetOffice();
     this.props.resetActiveState();
   }

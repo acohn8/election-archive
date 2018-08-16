@@ -12,8 +12,6 @@ class NationalMapContainer extends React.Component {
   componentDidUpdate() {
     if (this.props.offices.offices.length !== 3) {
       this.props.fetchOfficesList();
-    } else if (this.props.states !== null) {
-      this.props.resetActiveState();
     }
   }
 

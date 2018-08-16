@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Container, Menu, Responsive, Visibility, Segment } from 'semantic-ui-react';
+import { Container, Menu, Responsive, Visibility, Segment, Image } from 'semantic-ui-react';
 
 import StateDropdown from '../StateDropdown';
 
@@ -15,6 +15,8 @@ class DesktopNav extends Component {
     const { fixed } = this.state;
     const activeItem = this.props.activeItem;
 
+    const importAll = r => r.keys().map(r);
+    const images = importAll(require.context('../state-flags', false, /\.(png|jpe?g|svg)$/));
     return (
       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
         <Visibility
@@ -22,7 +24,7 @@ class DesktopNav extends Component {
           onBottomPassed={this.showFixedMenu}
           onBottomPassedReverse={this.hideFixedMenu}
         >
-          <Segment textAlign="center" basic>
+          <Segment basic>
             <Menu fixed={fixed ? 'top' : null} pointing={!fixed} secondary={!fixed} size="large">
               <Container>
                 <Menu.Item
@@ -47,13 +49,25 @@ class DesktopNav extends Component {
                   active={activeItem === 'states' || activeItem === 'statesShow'}
                 />
                 {/* <Menu.Item as="a">About</Menu.Item> */}
-                {this.props.activeItem === 'statesShow' && (
-                  <Menu.Menu position="right">
-                    <Menu.Item style={{ width: '25vw' }}>
-                      <StateDropdown />
-                    </Menu.Item>
-                  </Menu.Menu>
-                )}
+                {this.props.activeItem === 'statesShow' &&
+                  this.props.states.activeStateId !== null && (
+                    <Menu.Menu position="right">
+                      <Menu.Item>
+                        <Image
+                          size="mini"
+                          spaced
+                          src={images.find(image =>
+                            image.includes(
+                              this.props.states.states
+                                .find(state => state.id === this.props.states.activeStateId)
+                                .attributes['short-name'].toLowerCase(),
+                            ),
+                          )}
+                        />
+                        <StateDropdown />
+                      </Menu.Item>
+                    </Menu.Menu>
+                  )}
               </Container>
             </Menu>
           </Segment>
@@ -66,6 +80,7 @@ class DesktopNav extends Component {
 
 const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
+  states: state.states,
 });
 
 export default connect(mapStateToProps)(DesktopNav);
