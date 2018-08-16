@@ -1,16 +1,19 @@
 import React from 'react';
+import { Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import { Header } from 'semantic-ui-react';
 import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';
 import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
 import { fetchOfficesList } from '../../redux/actions/officeActions';
+import { resetActiveState } from '../../redux/actions/stateActions';
 
 class NationalMapContainer extends React.Component {
   componentDidUpdate() {
     if (this.props.offices.offices.length !== 3) {
       this.props.fetchOfficesList();
+    } else if (this.props.states !== null) {
+      this.props.resetActiveState();
     }
   }
 
@@ -56,6 +59,7 @@ class NationalMapContainer extends React.Component {
 }
 const mapDispatchToProps = dispatch => ({
   fetchOfficesList: () => dispatch(fetchOfficesList()),
+  resetActiveState: () => dispatch(resetActiveState()),
 });
 
 const mapStateToProps = state => ({

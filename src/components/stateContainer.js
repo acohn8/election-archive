@@ -7,14 +7,19 @@ import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
 import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
-import { fetchStateOffices, setActiveOffice, resetOffice } from '../redux/actions/officeActions';
+import {
+  fetchStateOffices,
+  setActiveOffice,
+  resetOffice,
+  fetchOfficesList,
+} from '../redux/actions/officeActions';
 import setActive from '../redux/actions/navActions';
 import ResponsiveNav from './Nav/ResponsiveNav';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 
 class StateContainer extends React.Component {
   componentDidMount() {
-    this.props.setActive('states');
+    this.props.setActive('statesShow');
   }
 
   componentDidUpdate() {
@@ -30,6 +35,7 @@ class StateContainer extends React.Component {
   }
 
   componentWillUnmount() {
+    // this.props.fetchOfficesList();
     this.props.resetOffice();
     this.props.resetActiveState();
   }
@@ -92,6 +98,7 @@ const mapDispatchToProps = dispatch => ({
   fetchStateOffices: () => dispatch(fetchStateOffices()),
   setActiveOffice: officeId => dispatch(setActiveOffice(officeId)),
   resetOffice: () => dispatch(resetOffice()),
+  fetchOfficesList: () => dispatch(fetchOfficesList()),
 });
 
 export default connect(

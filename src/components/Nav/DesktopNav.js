@@ -44,10 +44,10 @@ class DesktopNav extends Component {
                   as={Link}
                   to="/states"
                   color="teal"
-                  active={activeItem === 'states'}
+                  active={activeItem === 'states' || activeItem === 'statesShow'}
                 />
                 {/* <Menu.Item as="a">About</Menu.Item> */}
-                {this.props.activeItem === 'states' && (
+                {this.props.activeItem === 'statesShow' && (
                   <Menu.Menu position="right">
                     <Menu.Item style={{ width: '25vw' }}>
                       <StateDropdown />

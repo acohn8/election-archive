@@ -42,7 +42,7 @@ class MobileNav extends Component {
               to="/national-map"
               active={activeItem === 'national map'}
             />
-            <Menu.Item name="states" as={Link} to="/states" active={activeItem === 'states'} />
+            <Menu.Item name="states" as={Link} to="/states" active={activeItem === 'states' || activeItem === 'statesShow'} />
             {/* <Menu.Item as="a">About</Menu.Item> */}
           </Sidebar>
 
