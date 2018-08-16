@@ -87,9 +87,15 @@ class Map extends React.Component {
     const precinctStates = [4, 11, 45, 14];
     const pa = 3;
     let zoomThreshold;
-    if (precinctStates.includes(this.props.geography.result.state)) {
+    if (
+      precinctStates.includes(this.props.geography.result.state) &&
+      this.props.offices.selectedOfficeId === 308
+    ) {
       zoomThreshold = 8;
-    } else if (this.props.geography.result.state === pa) {
+    } else if (
+      this.props.geography.result.state === pa &&
+      this.props.offices.selectedOfficeId === 308
+    ) {
       zoomThreshold = 9;
     } else {
       zoomThreshold = 0;
@@ -113,7 +119,7 @@ class Map extends React.Component {
           id: 'dem-margin',
           type: 'fill',
           source: 'countyResults',
-          minzoom: zoomThreshold,
+          maxzoom: zoomThreshold,
           'source-layer': 'cb_2017_us_county_500k',
           filter: [
             '==',
@@ -131,7 +137,7 @@ class Map extends React.Component {
         {
           id: 'county-lines',
           type: 'line',
-          minzoom: zoomThreshold,
+          maxzoom: zoomThreshold,
           source: 'countyResults',
           'source-layer': 'cb_2017_us_county_500k',
           filter: [
@@ -238,7 +244,7 @@ class Map extends React.Component {
       },
     });
 
-    if (this.props.geography.result.state === 4) {
+    if (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 4) {
       this.map.addSource('precinct', {
         url: 'mapbox://adamcohn.adwhne7t',
         type: 'vector',
@@ -251,17 +257,43 @@ class Map extends React.Component {
           minzoom: zoomThreshold,
           source: 'precinct',
           'source-layer': 'wi-2016-final-6apfcm',
-          paint: CountyColorScale,
+          paint: {
+            'fill-outline-color': '#696969',
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              [
+                '-',
+                ['/', ['get', 'G16PREDCli'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+                ['/', ['get', 'G16PRERTru'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+              ],
+              -0.3,
+              '#d6604d',
+              -0.2,
+              '#f4a582',
+              -0.1,
+              '#fddbc7',
+              0.0,
+              '#f7f7f7',
+              0.1,
+              '#d1e5f0',
+              0.2,
+              '#92c5de',
+              0.3,
+              '#4393c3',
+            ],
+            'fill-opacity': 0.7,
+          },
         },
         'waterway-label',
       );
     }
 
     if (
-      this.props.geography.result.state === 45 ||
-      this.props.geography.result.state === 11 ||
-      this.props.geography.result.state === 14 ||
-      this.props.geography.result.state === 3
+      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 45) ||
+      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 11) ||
+      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 14) ||
+      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 3)
     ) {
       const links = {
         3: 'adamcohn.3sna8yq5',
@@ -288,7 +320,33 @@ class Map extends React.Component {
           minzoom: zoomThreshold,
           source: 'precinct',
           'source-layer': layers[this.props.geography.result.state],
-          paint: CountyColorScale,
+          paint: {
+            'fill-outline-color': '#696969',
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              [
+                '-',
+                ['/', ['get', 'G16PREDCli'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+                ['/', ['get', 'G16PRERTru'], ['+', ['get', 'G16PREDCli'], ['get', 'G16PRERTru']]],
+              ],
+              -0.3,
+              '#d6604d',
+              -0.2,
+              '#f4a582',
+              -0.1,
+              '#fddbc7',
+              0.0,
+              '#f7f7f7',
+              0.1,
+              '#d1e5f0',
+              0.2,
+              '#92c5de',
+              0.3,
+              '#4393c3',
+            ],
+            'fill-opacity': 0.7,
+          },
         },
         'waterway-label',
       );

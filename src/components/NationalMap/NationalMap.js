@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { setActiveState } from '../../redux/actions/stateActions';
 import setActive from '../../redux/actions/navActions';
 import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
+import { fetchOfficesList } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
 import ResponsiveNav from '../Nav/ResponsiveNav';
 import { StateColorScale, CountyColorScale } from '../../functions/ColorScale';
@@ -16,10 +17,13 @@ class NationalMap extends React.Component {
   componentDidMount() {
     this.props.showHeader();
     this.props.setActive('national map');
-    this.props.states.activeStateId === null && this.createMap();
+    this.props.states.activeStateId === null &&
+      this.props.offices.offices.length === 3 &&
+      this.createMap();
   }
 
   componentDidUpdate(prevProps) {
+    this.props.offices.offices.length !== 3 && this.props.fetchOfficesList();
     if (
       this.props.offices.selectedOfficeId !== prevProps.offices.selectedOfficeId &&
       this.map !== undefined
@@ -290,6 +294,7 @@ const mapDispatchToProps = dispatch => ({
   hideHeader: () => dispatch(hideHeader()),
   showHeader: () => dispatch(showHeader()),
   setActive: name => dispatch(setActive(name)),
+  fetchOfficesList: () => dispatch(fetchOfficesList()),
 });
 
 const mapStateToProps = state => ({

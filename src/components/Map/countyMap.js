@@ -3,6 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
+import { CountyColorScale } from '../../functions/ColorScale';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -33,7 +34,10 @@ class CountyMap extends React.Component {
     let zoomThreshold;
     const precinctStates = [4, 11, 45, 14];
     const pa = 3;
-    if (precinctStates.includes(this.props.geography.result.state)) {
+    if (
+      precinctStates.includes(this.props.geography.result.state) &&
+      this.props.offices.selectedOfficeId === 308
+    ) {
       zoomThreshold = 8;
     } else if (this.props.geography.result.state === pa) {
       zoomThreshold = 9;
@@ -41,7 +45,11 @@ class CountyMap extends React.Component {
       zoomThreshold = 0;
     }
     this.map.addSource('presResults', {
-      url: 'mapbox://adamcohn.7bxery92',
+      url: `mapbox://adamcohn.${
+        this.props.offices.offices.find(
+          office => office.id === this.props.offices.selectedOfficeId.toString(),
+        ).attributes['county-map']
+      }`,
       type: 'vector',
     });
 
@@ -50,7 +58,7 @@ class CountyMap extends React.Component {
         id: 'dem-margin',
         type: 'fill',
         source: 'presResults',
-        'source-layer': '2016_county_results-5wvgz3',
+        'source-layer': 'cb_2017_us_county_500k',
         maxzoom: zoomThreshold,
         filter: [
           '==',
@@ -60,28 +68,7 @@ class CountyMap extends React.Component {
             .padStart(5, '0'),
         ],
 
-        paint: {
-          'fill-color': [
-            'interpolate',
-            ['linear'],
-            ['get', 'county_r_2'],
-            -0.3,
-            '#d6604d',
-            -0.2,
-            '#f4a582',
-            -0.1,
-            '#fddbc7',
-            0.0,
-            '#f7f7f7',
-            0.1,
-            '#d1e5f0',
-            0.2,
-            '#92c5de',
-            0.3,
-            '#4393c3',
-          ],
-          'fill-opacity': 0.7,
-        },
+        paint: CountyColorScale,
       },
       'waterway-label',
     );
@@ -106,7 +93,7 @@ class CountyMap extends React.Component {
       },
     });
 
-    if (this.props.geography.result.state === 4) {
+    if (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 4) {
       this.map.addSource('wi-precinct', {
         url: 'mapbox://adamcohn.adwhne7t',
         type: 'vector',
@@ -159,10 +146,10 @@ class CountyMap extends React.Component {
     }
 
     if (
-      this.props.geography.result.state === 45 ||
-      this.props.geography.result.state === 11 ||
-      this.props.geography.result.state === 14 ||
-      this.props.geography.result.state === 3
+      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 45) ||
+      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 11) ||
+      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 14) ||
+      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 3)
     ) {
       const links = {
         3: 'adamcohn.3sna8yq5',
@@ -252,6 +239,7 @@ const mapStateToProps = state => ({
   candidates: state.results.candidates,
   precinctResults: state.results.precinctResults,
   mapDetails: state.maps.mapDetails,
+  offices: state.offices,
 });
 
 export default connect(mapStateToProps)(CountyMap);
