@@ -43,7 +43,6 @@ class NationalMap extends React.Component {
   }
 
   componentWillUnmount() {
-    this.map.off();
     this.map.remove();
   }
 

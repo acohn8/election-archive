@@ -39,7 +39,10 @@ class CountyMap extends React.Component {
       this.props.offices.selectedOfficeId === 308
     ) {
       zoomThreshold = 8;
-    } else if (this.props.geography.result.state === pa) {
+    } else if (
+      this.props.geography.result.state === pa &&
+      this.props.offices.selectedOfficeId === 308
+    ) {
       zoomThreshold = 9;
     } else {
       zoomThreshold = 0;
