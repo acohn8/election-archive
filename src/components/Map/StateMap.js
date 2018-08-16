@@ -200,23 +200,23 @@ class Map extends React.Component {
         },
         'waterway-label',
       );
-    }
 
-    this.map.addLayer(
-      {
-        id: 'county-lines',
-        type: 'line',
-        minzoom: zoomThreshold,
-        source: 'countyResults',
-        'source-layer': '2016_ak_results-d7n96u',
-        paint: {
-          'line-width': 0.3,
-          'line-color': '#696969',
-          'line-opacity': 0.5,
+      this.map.addLayer(
+        {
+          id: 'county-lines',
+          type: 'line',
+          minzoom: zoomThreshold,
+          source: 'countyResults',
+          'source-layer': '2016_ak_results-d7n96u',
+          paint: {
+            'line-width': 0.3,
+            'line-color': '#696969',
+            'line-opacity': 0.5,
+          },
         },
-      },
-      'waterway-label',
-    );
+        'waterway-label',
+      );
+    }
 
     const mapFeatures = this.map
       .querySourceFeatures('composite', {

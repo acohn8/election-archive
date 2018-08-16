@@ -24,14 +24,16 @@ class StateContainer extends React.Component {
         .join('-')
         .toLowerCase() === this.props.match.params.activeStateName.toLowerCase());
     if (state !== undefined && state.id !== this.props.states.activeStateId) {
+      console.log('update');
       this.props.resetOffice();
       this.props.setActiveState(state.id);
     }
   }
 
   componentWillUnmount() {
-    this.props.resetActiveState();
+    console.log('unmount');
     this.props.resetOffice();
+    this.props.resetActiveState();
   }
 
   render() {

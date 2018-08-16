@@ -47,6 +47,7 @@ const mapStateToProps = state => ({
   headerHid: state.maps.headerHid,
   overlay: state.maps.overlay,
   offices: state.offices,
+  states: state.states.activeStateId,
 });
 
 export default connect(mapStateToProps)(NationalMapContainer);

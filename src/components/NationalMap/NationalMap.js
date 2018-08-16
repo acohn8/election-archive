@@ -9,19 +9,21 @@ import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/ac
 import { fetchStateData } from '../../redux/actions/resultActions';
 import ResponsiveNav from '../Nav/ResponsiveNav';
 import { StateColorScale, CountyColorScale } from '../../functions/ColorScale';
-
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
 
 class NationalMap extends React.Component {
   componentDidMount() {
-    this.createMap();
     this.props.showHeader();
     this.props.setActive('national map');
+    this.props.states.activeStateId === null && this.createMap();
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.offices.selectedOfficeId !== prevProps.offices.selectedOfficeId) {
+    if (
+      this.props.offices.selectedOfficeId !== prevProps.offices.selectedOfficeId &&
+      this.map !== undefined
+    ) {
       this.map.removeLayer('dem-statewide-margin');
       this.map.removeLayer('dem-county-margin');
       this.map.removeLayer('state-lines');
@@ -31,10 +33,13 @@ class NationalMap extends React.Component {
       this.map.removeSource('countyResults');
       this.map.removeSource('statewideResults');
       this.addResultsLayer();
+    } else if (this.map === undefined) {
+      this.createMap();
     }
   }
 
   componentWillUnmount() {
+    this.map.off();
     this.map.remove();
   }
 
