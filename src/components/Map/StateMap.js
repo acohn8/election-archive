@@ -171,14 +171,52 @@ class Map extends React.Component {
         {
           id: 'dem-margin',
           type: 'fill',
-          source: 'countyPresResults',
+          source: 'countyResults',
           maxzoom: zoomThreshold,
           'source-layer': '2016_ak_results-d7n96u',
-          paint: CountyColorScale,
+          paint: {
+            'fill-outline-color': '#696969',
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'ak_resul_2'],
+              -0.3,
+              '#d6604d',
+              -0.2,
+              '#f4a582',
+              -0.1,
+              '#fddbc7',
+              0.0,
+              '#f7f7f7',
+              0.1,
+              '#d1e5f0',
+              0.2,
+              '#92c5de',
+              0.3,
+              '#4393c3',
+            ],
+            'fill-opacity': 0.7,
+          },
         },
         'waterway-label',
       );
     }
+
+    this.map.addLayer(
+      {
+        id: 'county-lines',
+        type: 'line',
+        minzoom: zoomThreshold,
+        source: 'countyResults',
+        'source-layer': '2016_ak_results-d7n96u',
+        paint: {
+          'line-width': 0.3,
+          'line-color': '#696969',
+          'line-opacity': 0.5,
+        },
+      },
+      'waterway-label',
+    );
 
     const mapFeatures = this.map
       .querySourceFeatures('composite', {
