@@ -119,7 +119,6 @@ class NationalMap extends React.Component {
 
   setStateOnClick = (state, coords) => {
     this.props.fetchStateData(state.id);
-    console.log(state.id);
     this.map.flyTo({
       center: coords,
       zoom: 6,
