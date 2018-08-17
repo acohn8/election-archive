@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Header, List, Divider } from 'semantic-ui-react';
+import { Header, Divider } from 'semantic-ui-react';
 import ContactButtons from './ContactButtons';
 
 const AboutMe = () => (

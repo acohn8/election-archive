@@ -4,20 +4,6 @@ import 'react-table/react-table.css';
 import { connect } from 'react-redux';
 
 class PrecinctResultsTable extends React.Component {
-  state = { windowWidth: '' };
-  componentDidMount() {
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-  }
-
-  updateWindowDimensions = () => {
-    this.setState({ windowWidth: this.divElement.clientWidth });
-  };
-
   statewideCandidateResults = () => {
     const statewideResults = {};
     const stateCandidates = this.props.candidates.result;
@@ -55,14 +41,14 @@ class PrecinctResultsTable extends React.Component {
           columns={[
             {
               Header: (
-                <span style={{ fontSize: this.state.windowWidth < 300 && '0.8em' }}>Precinct</span>
+                <span style={{ fontSize: this.props.windowWidth < 300 && '0.8em' }}>Precinct</span>
               ),
               id: 'precinct',
               style: {
                 textAlign: 'left',
-                fontSize: this.state.windowWidth < 300 && '.8em',
+                fontSize: this.props.windowWidth < 300 && '.8em',
               },
-              maxWidth: this.state.windowWidth * 0.2,
+              maxWidth: this.props.windowWidth * 0.2,
               minWidth: 1.5,
               accessor: d => d.name,
             },
@@ -70,12 +56,12 @@ class PrecinctResultsTable extends React.Component {
             majorCandidates.map(candidateId => ({
               id: candidateId,
               style: {
-                fontSize: this.state.windowWidth < 300 && '.8em',
+                fontSize: this.props.windowWidth < 300 && '.8em',
               },
-              maxWidth: this.state.windowWidth * 0.2,
+              maxWidth: this.props.windowWidth * 0.2,
               minWidth: 1.5,
               Header: (
-                <span style={{ fontSize: this.state.windowWidth < 300 && '0.8em' }}>
+                <span style={{ fontSize: this.props.windowWidth < 300 && '0.8em' }}>
                   {`${
                     candidateId === 'other'
                       ? 'Other'
@@ -103,6 +89,7 @@ const mapStateToProps = state => ({
   geography: state.results.geography,
   countyResults: state.results.countyResults,
   precinctResults: state.results.precinctResults,
+  windowWidth: state.nav.windowWidth,
 });
 
 export default connect(mapStateToProps)(PrecinctResultsTable);

@@ -2,9 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import HomepageHeading from './HomepageHeadeading';
-import MobileNav from '../Nav/MobileNav';
-import DesktopNav from '../Nav/DesktopNav';
-import setActive from '../../redux/actions/navActions';
+import { setActive } from '../../redux/actions/navActions';
 import { resetActiveState } from '../../redux/actions/stateActions';
 import { fetchOfficesList } from '../../redux/actions/officeActions';
 
@@ -22,16 +20,7 @@ class HomeContainer extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        <MobileNav>
-          <HomepageHeading mobile />
-        </MobileNav>
-        <DesktopNav>
-          <HomepageHeading />
-        </DesktopNav>
-      </div>
-    );
+    return <HomepageHeading />;
   }
 }
 

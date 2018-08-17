@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
+import { Container, Icon, Menu, Segment, Sidebar } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import { hideHeader, showHeader } from '../../redux/actions/mapActions';
@@ -29,7 +29,7 @@ class MobileNav extends Component {
     const activeItem = this.props.activeItem;
 
     return (
-      <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+      <div>
         <Sidebar.Pushable>
           <Sidebar
             as={Menu}
@@ -51,6 +51,7 @@ class MobileNav extends Component {
               to="/states"
               active={activeItem === 'states' || activeItem === 'statesShow'}
             />
+            <Menu.Item name="faq" as={Link} to="/faq" color="teal" active={activeItem === 'faq'} />
             <Menu.Item name="about" as={Link} to="/about" active={activeItem === 'about'} />
           </Sidebar>
 
@@ -97,7 +98,7 @@ class MobileNav extends Component {
             {children}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
-      </Responsive>
+      </div>
     );
   }
 }

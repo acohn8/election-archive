@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon, Header, Segment } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 const ContactButtons = () => (
   <div>
@@ -28,7 +28,6 @@ const ContactButtons = () => (
       as="a"
       href="mailto:adamcohn88@gmail.com"
       target="_top"
-      icon="mail"
     />
     <Button
       circular

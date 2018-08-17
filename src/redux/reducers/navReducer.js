@@ -1,5 +1,6 @@
 const initialNavState = {
   activePage: '',
+  windowWidth: '',
 };
 
 const navReducer = (previousState = initialNavState, action) => {
@@ -8,6 +9,11 @@ const navReducer = (previousState = initialNavState, action) => {
       return {
         ...previousState,
         activePage: action.name,
+      };
+    case 'SET_WINDOW':
+      return {
+        ...previousState,
+        windowWidth: action.windowWidth,
       };
     default:
       return previousState;

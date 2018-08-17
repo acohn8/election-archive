@@ -10,9 +10,10 @@ import HomeContainer from './components/Home/HomeContainer';
 import NationalMapContainer from './components/NationalMap/NationalMapContainer';
 
 import './App.css';
-import Footer from './components/Footer';
 import StateListContainer from './components/StateList/StateListContainer';
 import AboutContainer from './components/About/AboutContainer';
+import ResponsiveNav from './components/Nav/ResponsiveNav';
+import FrequentlyAskedQuestionsContainer from './components/Faq/FrequentlyAskedQuestionsContainer';
 
 class App extends React.Component {
   componentDidMount() {
@@ -22,15 +23,16 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <ResponsiveNav>
         <Switch>
           <Route exact path="/" component={HomeContainer} />
           <Route exact path="/national-map" component={NationalMapContainer} />
           <Route exact path="/states" component={StateListContainer} />
           <Route path="/states/:activeStateName" component={StateContainer} />
           <Route path="/about" component={AboutContainer} />
+          <Route path="/faq" component={FrequentlyAskedQuestionsContainer} />
         </Switch>
-      </div>
+      </ResponsiveNav>
     );
   }
 }

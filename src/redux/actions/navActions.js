@@ -2,4 +2,8 @@ const setActive = name => (dispatch) => {
   dispatch({ type: 'SET_ACTIVE', name });
 };
 
-export default setActive;
+const setWindowWidth = windowWidth => (dispatch) => {
+  dispatch({ type: 'SET_WINDOW', windowWidth });
+};
+
+export { setActive, setWindowWidth };

@@ -13,20 +13,7 @@ const colors = {
 };
 
 class ResultsTable extends React.Component {
-  state = { filtered: [], expanded: {}, prevIndex: '', windowWidth: '' };
-
-  componentDidMount() {
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-  }
-
-  updateWindowDimensions = () => {
-    this.setState({ windowWidth: this.divElement.clientWidth });
-  };
+  state = { filtered: [], expanded: {}, prevIndex: '' };
 
   handleRowExpanded(index) {
     if (this.state.prevIndex !== '' && index - this.state.prevIndex === 0) {
@@ -59,7 +46,7 @@ class ResultsTable extends React.Component {
               Header: (
                 <span
                   style={{
-                    fontSize: this.state.windowWidth < 400 && '.8em',
+                    fontSize: this.props.windowWidth < 400 && '.8em',
                   }}
                 >
                   County
@@ -95,7 +82,7 @@ class ResultsTable extends React.Component {
                     <span
                       style={{
                         whiteSpace: 'normal',
-                        fontSize: this.state.windowWidth < 400 && '.8em',
+                        fontSize: this.props.windowWidth < 400 && '.8em',
                       }}
                     >
                       {row.value !== null ? row.value.replace(/County/g, '') : 'Unknown'}
@@ -105,10 +92,10 @@ class ResultsTable extends React.Component {
               },
             },
           ].concat(
-            this.state.windowWidth >= 600
+            this.props.windowWidth >= 600
               ? majorCandidates.map(candidateId => ({
                   id: candidateId,
-                  maxWidth: this.state.windowWidth * 0.2,
+                  maxWidth: this.props.windowWidth * 0.2,
                   minWidth: 1,
                   Header: `${
                     candidateId === 'other'
@@ -143,7 +130,7 @@ class ResultsTable extends React.Component {
                 }))
               : majorCandidates.map(candidateId => ({
                   id: candidateId,
-                  // maxWidth: this.state.windowWidth * 0.175,
+                  // maxWidth: this.props.windowWidth * 0.175,
                   minWidth: 1,
                   Header: (
                     <span style={{ fontSize: '0.8em' }}>
@@ -199,6 +186,7 @@ const mapStateToProps = state => ({
   geography: state.results.geography,
   countyResults: state.results.countyResults,
   stateResults: state.results.stateResults,
+  windowWidth: state.nav.windowWidth,
 });
 
 export default connect(mapStateToProps)(ResultsTable);

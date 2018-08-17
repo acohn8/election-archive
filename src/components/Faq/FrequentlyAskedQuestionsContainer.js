@@ -3,20 +3,18 @@ import { Container, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import { setActive } from '../../redux/actions/navActions';
-import AboutMe from './AboutMe';
-import OtherProjects from './OtherProjects';
+import FrequentlyAskedQuestions from './FrequentlyAskedQuestions';
 
 class AboutContainer extends React.Component {
   componentDidMount() {
-    this.props.setActive('about');
+    this.props.setActive('faq');
   }
 
   render() {
     return (
       <Container text>
         <Divider hidden />
-        <AboutMe />
-        <OtherProjects />
+        <FrequentlyAskedQuestions />
       </Container>
     );
   }

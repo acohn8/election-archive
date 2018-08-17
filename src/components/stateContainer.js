@@ -13,8 +13,7 @@ import {
   resetOffice,
   fetchOfficesList,
 } from '../redux/actions/officeActions';
-import setActive from '../redux/actions/navActions';
-import ResponsiveNav from './Nav/ResponsiveNav';
+import { setActive } from '../redux/actions/navActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 
 class StateContainer extends React.Component {
@@ -41,7 +40,7 @@ class StateContainer extends React.Component {
 
   render() {
     return (
-      <ResponsiveNav>
+      <div>
         <Divider hidden />
         <Container>
           {this.props.loading === true && <ContentLoader />}
@@ -77,7 +76,7 @@ class StateContainer extends React.Component {
               </div>
             )}
         </Container>
-      </ResponsiveNav>
+      </div>
     );
   }
 }
