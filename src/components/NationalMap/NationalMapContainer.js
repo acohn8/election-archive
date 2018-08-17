@@ -42,7 +42,7 @@ class NationalMapContainer extends React.Component {
               borderRadius: this.state.windowWidth >= 768 ? '25px' : 0,
               height: this.state.windowWidth <= 768 && '10vh',
               top: this.state.windowWidth >= 768 ? 80 : 0,
-              bottom: this.state.windowWidth <= 768 ? 0 : 80,
+              bottom: this.state.windowWidth <= 768 ? 0 : 120,
               marginTop: this.state.windowWidth >= 768 ? 0 : '75vh',
               width: this.state.windowWidth >= 768 ? 300 : '100vw',
               backgroundColor: 'white',
