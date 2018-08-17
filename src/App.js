@@ -30,7 +30,6 @@ class App extends React.Component {
           <Route path="/states/:activeStateName" component={StateContainer} />
           <Route path="/about" component={AboutContainer} />
         </Switch>
-        <Footer />
       </div>
     );
   }

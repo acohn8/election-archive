@@ -1,10 +1,13 @@
 import React from 'react';
-import { Grid, Container, Header, Divider } from 'semantic-ui-react';
+import { Grid, Container, Segment, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import setActive from '../../redux/actions/navActions';
 import ResponsiveNav from '../Nav/ResponsiveNav';
 import FrequentlyAskedQuestions from './FrequentlyAskedQuestions';
+import AboutMe from './AboutMe';
+import ContactButtons from './ContactButtons';
+import OtherProjects from './OtherProjects';
 
 class AboutContainer extends React.Component {
   componentDidMount() {
@@ -14,18 +17,12 @@ class AboutContainer extends React.Component {
   render() {
     return (
       <ResponsiveNav>
-        <Divider hidden />
-        <Container>
-          <Grid columns={2} stackable>
-            <Grid.Column>
-              <FrequentlyAskedQuestions />
-            </Grid.Column>
-            <Grid.Column>
-              <Container text>
-                <Header size="large">About Me</Header>
-              </Container>
-            </Grid.Column>
-          </Grid>
+        <Container text>
+          <Divider hidden />
+          <AboutMe />
+          <OtherProjects />
+          <Divider />
+          <FrequentlyAskedQuestions />
         </Container>
       </ResponsiveNav>
     );

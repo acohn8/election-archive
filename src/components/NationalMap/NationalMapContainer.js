@@ -33,6 +33,7 @@ class NationalMapContainer extends React.Component {
   };
 
   render() {
+    console.log(this.state.windowWidth < 768);
     return (
       <ResponsiveNav>
         <div ref={divElement => (this.divElement = divElement)}>
