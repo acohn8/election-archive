@@ -9,36 +9,57 @@ import { fetchOfficesList } from '../../redux/actions/officeActions';
 import { resetActiveState } from '../../redux/actions/stateActions';
 
 class NationalMapContainer extends React.Component {
+  state = { windowWidth: '' };
+
+  componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+  }
+
   componentDidUpdate() {
     if (this.props.offices.offices.length !== 3) {
       this.props.fetchOfficesList();
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions = () => {
+    this.setState({ windowWidth: this.divElement.clientWidth });
+  };
+
   render() {
     return (
-      <div>
+      <div ref={divElement => (this.divElement = divElement)}>
         {!this.props.headerHid && (
           <div
             style={{
               position: 'absolute',
               zIndex: 1,
-              left: 30,
-              borderRadius: '25px',
-              top: 80,
-              width: 300,
+              left: this.state.windowWidth >= 768 ? 30 : 0,
+              borderRadius: this.state.windowWidth >= 768 ? '25px' : 0,
+              height: this.state.windowWidth <= 768 && '20vh',
+              top: this.state.windowWidth >= 768 ? 80 : 0,
+              marginTop: this.state.windowWidth >= 768 ? 0 : '80vh',
+              width: this.state.windowWidth >= 768 ? 300 : '100vw',
               backgroundColor: 'white',
               padding: '20px',
-              opacity: '0.8',
-              borderColor: 'gray',
-              borderStyle: 'solid',
-              borderWidth: '0.5px',
+              opacity: this.state.windowWidth >= 768 ? '0.8' : '1',
+              borderColor: this.state.windowWidth >= 768 && 'gray',
+              borderStyle: this.state.windowWidth >= 768 && 'solid',
+              borderWidth: this.state.windowWidth >= 768 && '0.5px',
             }}
           >
             {this.props.overlay.hoveredWinner.votes === '' &&
             this.props.offices.offices.length > 0 ? (
-              <Header size="huge">
-                <OfficeDropdown />
+              <Header size={this.state.windowWidth >= 768 ? 'huge' : 'large'}>
+                {
+                  this.props.offices.offices.find(
+                    office => office.id === this.props.offices.selectedOfficeId.toString(),
+                  ).attributes.name
+                }
                 <Header.Subheader>
                   Zoom in to see counties or out to see states. Click for details.
                 </Header.Subheader>
@@ -50,7 +71,9 @@ class NationalMapContainer extends React.Component {
             )}
           </div>
         )}
-        {this.props.offices.offices.length === 3 && <NationalMap />}
+        {this.props.offices.offices.length === 3 && (
+          <NationalMap windowWidth={this.state.windowWidth} />
+        )}
       </div>
     );
   }

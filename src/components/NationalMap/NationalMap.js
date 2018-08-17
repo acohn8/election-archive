@@ -57,8 +57,8 @@ class NationalMap extends React.Component {
       this.enableHover();
       this.map.addControl(new mapboxgl.FullscreenControl());
       this.map.addControl(new mapboxgl.NavigationControl());
-      this.map.on('movestart', () => this.props.hideHeader());
-      this.map.on('moveend', () => this.props.showHeader());
+      this.props.windowWidth >= 768 && this.map.on('movestart', () => this.props.hideHeader());
+      this.props.windowWidth >= 768 && this.map.on('moveend', () => this.props.showHeader());
     });
   };
 
@@ -250,7 +250,7 @@ class NationalMap extends React.Component {
       top: 0,
       bottom: 0,
       width: '100%',
-      minHeight: '90vh',
+      height: this.props.windowWidth >= 768 ? '90vh' : '72vh',
     };
     return (
       <ResponsiveNav>

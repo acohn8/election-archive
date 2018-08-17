@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Container, Menu, Responsive, Visibility, Segment, Image } from 'semantic-ui-react';
 
 import StateDropdown from '../StateDropdown';
+import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
 
 class DesktopNav extends Component {
   state = {};
@@ -56,6 +57,7 @@ class DesktopNav extends Component {
                         <Image
                           size="mini"
                           spaced
+                          verticalAlign="bottom"
                           src={images.find(image =>
                             image.includes(
                               this.props.states.states
@@ -68,6 +70,13 @@ class DesktopNav extends Component {
                       </Menu.Item>
                     </Menu.Menu>
                   )}
+                {this.props.activeItem === 'national map' && (
+                  <Menu.Menu position="right">
+                    <Menu.Item>
+                      <OfficeDropdown />
+                    </Menu.Item>
+                  </Menu.Menu>
+                )}
               </Container>
             </Menu>
           </Segment>

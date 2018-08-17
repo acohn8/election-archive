@@ -16,7 +16,8 @@ const OfficDropdown = (props) => {
 
   return (
     <Dropdown
-      inline
+      // inline
+      transparent="true"
       options={options}
       value={
         options.find(office => office.value === props.offices.selectedOfficeId.toString()).value

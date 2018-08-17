@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
-import { hideHeader, showHeader } from '../../redux/actions/mapActions';
 import { connect } from 'react-redux';
+
+import { hideHeader, showHeader } from '../../redux/actions/mapActions';
+import StateDropdown from '../StateDropdown';
+import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
 
 class MobileNav extends Component {
   state = {};
@@ -42,7 +45,12 @@ class MobileNav extends Component {
               to="/national-map"
               active={activeItem === 'national map'}
             />
-            <Menu.Item name="states" as={Link} to="/states" active={activeItem === 'states' || activeItem === 'statesShow'} />
+            <Menu.Item
+              name="states"
+              as={Link}
+              to="/states"
+              active={activeItem === 'states' || activeItem === 'statesShow'}
+            />
             {/* <Menu.Item as="a">About</Menu.Item> */}
           </Sidebar>
 
@@ -57,9 +65,9 @@ class MobileNav extends Component {
               basic
               inverted
               color="teal"
-              style={{ minHeight: '70px', margin: 0, padding: 0 }}
+              style={{ minHeight: '6vh', margin: 0, padding: 0 }}
             >
-              <Container textAlign="center" style={{ maxHeight: '8vh' }}>
+              <Container textAlign="center" style={{ maxHeight: '10vh' }}>
                 <Menu secondary size="large" inverted>
                   <Menu.Item onClick={this.handleToggle}>
                     <Icon name="sidebar" />
@@ -67,6 +75,21 @@ class MobileNav extends Component {
                       Election Archive
                     </Menu.Item>
                   </Menu.Item>
+                  {this.props.activeItem === 'statesShow' &&
+                    this.props.states.activeStateId !== null && (
+                      <Menu.Menu position="right">
+                        <Menu.Item>
+                          <StateDropdown />
+                        </Menu.Item>
+                      </Menu.Menu>
+                    )}
+                  {this.props.activeItem === 'national map' && (
+                    <Menu.Menu position="right">
+                      <Menu.Item>
+                        <OfficeDropdown />
+                      </Menu.Item>
+                    </Menu.Menu>
+                  )}
                 </Menu>
               </Container>
             </Segment>
@@ -85,6 +108,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
+  states: state.states,
 });
 
 export default connect(
