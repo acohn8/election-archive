@@ -28,7 +28,7 @@ class App extends React.Component {
           <Route exact path="/states" component={StateListContainer} />
           <Route path="/states/:activeStateName" component={StateContainer} />
         </Switch>
-        {/* <Footer /> */}
+        <Footer />
       </div>
     );
   }

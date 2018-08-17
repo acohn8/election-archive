@@ -1,12 +1,12 @@
 import React from 'react';
-import { Header } from 'semantic-ui-react';
+import { Header, Segment, Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';
-import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
 import { fetchOfficesList } from '../../redux/actions/officeActions';
 import { resetActiveState } from '../../redux/actions/stateActions';
+import ResponsiveNav from '../Nav/ResponsiveNav';
 
 class NationalMapContainer extends React.Component {
   state = { windowWidth: '' };
@@ -32,50 +32,73 @@ class NationalMapContainer extends React.Component {
 
   render() {
     return (
-      <div ref={divElement => (this.divElement = divElement)}>
-        {!this.props.headerHid && (
-          <div
-            style={{
-              position: 'absolute',
-              zIndex: 1,
-              left: this.state.windowWidth >= 768 ? 30 : 0,
-              borderRadius: this.state.windowWidth >= 768 ? '25px' : 0,
-              // height: this.state.windowWidth <= 768 ? '10vh' : '3vh',
-              top: this.state.windowWidth >= 768 ? 80 : 0,
-              bottom: this.state.windowWidth < 768 && 120,
-              marginTop: this.state.windowWidth >= 768 ? 0 : '75vh',
-              width: this.state.windowWidth >= 768 ? 300 : '100vw',
-              backgroundColor: 'white',
-              padding: this.state.windowWidth >= 768 ? '20px' : '5px',
-              opacity: this.state.windowWidth >= 768 ? '0.8' : '1',
-              borderColor: this.state.windowWidth >= 768 && 'gray',
-              borderStyle: this.state.windowWidth >= 768 && 'solid',
-              borderWidth: this.state.windowWidth >= 768 && '0.5px',
-            }}
-          >
-            {this.props.overlay.hoveredWinner.votes === '' &&
-            this.props.offices.offices.length > 0 ? (
-              <Header size={this.state.windowWidth >= 768 ? 'huge' : 'large'}>
-                {
-                  this.props.offices.offices.find(
-                    office => office.id === this.props.offices.selectedOfficeId.toString(),
-                  ).attributes.name
-                }
-                <Header.Subheader>
-                  Zoom in to see counties or out to see states. Click for details.
-                </Header.Subheader>
-              </Header>
-            ) : (
-              <div>
-                <MapInfo />
+      <ResponsiveNav>
+        <div ref={divElement => (this.divElement = divElement)}>
+          {this.props.offices.offices.length === 3 && (
+            <NationalMap windowWidth={this.state.windowWidth} />
+          )}
+          {!this.props.headerHid &&
+            this.state.windowWidth >= 768 && (
+              <div
+                style={{
+                  position: 'absolute',
+                  zIndex: 1,
+                  left: 30,
+                  borderRadius: '25px',
+                  top: 80,
+                  width: 300,
+                  backgroundColor: 'white',
+                  padding: '20px',
+                  opacity: '0.8',
+                  borderColor: 'gray',
+                  borderStyle: 'solid',
+                  borderWidth: '0.5px',
+                }}
+              >
+                {this.props.overlay.hoveredWinner.votes === '' &&
+                this.props.offices.offices.length > 0 ? (
+                  <Header size="huge">
+                    {
+                      this.props.offices.offices.find(
+                        office => office.id === this.props.offices.selectedOfficeId.toString(),
+                      ).attributes.name
+                    }
+                    <Header.Subheader>
+                      Zoom in to see counties or out to see states. Click for details.
+                    </Header.Subheader>
+                  </Header>
+                ) : (
+                  <div>
+                    <MapInfo />
+                  </div>
+                )}
               </div>
             )}
-          </div>
-        )}
-        {this.props.offices.offices.length === 3 && (
-          <NationalMap windowWidth={this.state.windowWidth} />
-        )}
-      </div>
+          {this.state.windowWidth < 768 && (
+            <Container>
+              <Segment vertical padded>
+                {this.props.overlay.hoveredWinner.votes === '' &&
+                this.props.offices.offices.length > 0 ? (
+                  <Header size="huge">
+                    {
+                      this.props.offices.offices.find(
+                        office => office.id === this.props.offices.selectedOfficeId.toString(),
+                      ).attributes.name
+                    }
+                    <Header.Subheader>
+                      Zoom in to see counties or out to see states. Click for details.
+                    </Header.Subheader>
+                  </Header>
+                ) : (
+                  <div>
+                    <MapInfo />
+                  </div>
+                )}
+              </Segment>
+            </Container>
+          )}
+        </div>
+      </ResponsiveNav>
     );
   }
 }

@@ -8,7 +8,6 @@ import setActive from '../../redux/actions/navActions';
 import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
 import { fetchOfficesList } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
-import ResponsiveNav from '../Nav/ResponsiveNav';
 import { StateColorScale, CountyColorScale } from '../../functions/ColorScale';
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -250,13 +249,9 @@ class NationalMap extends React.Component {
       top: 0,
       bottom: 0,
       width: '100%',
-      height: this.props.windowWidth >= 768 ? '90vh' : '62vh',
+      height: this.props.windowWidth >= 768 ? '90vh' : '75vh',
     };
-    return (
-      <ResponsiveNav>
-        <div style={style} ref={el => (this.mapContainer = el)} />
-      </ResponsiveNav>
-    );
+    return <div style={style} ref={el => (this.mapContainer = el)} />;
   }
 }
 
