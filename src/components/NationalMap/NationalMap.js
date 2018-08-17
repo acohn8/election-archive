@@ -4,7 +4,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 
 import { setActiveState } from '../../redux/actions/stateActions';
-import setActive from '../../redux/actions/navActions';
 import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
 import { fetchOfficesList } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
@@ -15,7 +14,6 @@ mapboxgl.accessToken =
 class NationalMap extends React.Component {
   componentDidMount() {
     this.props.showHeader();
-    this.props.setActive('national map');
     this.props.states.activeStateId === null && this.createMap();
   }
 
@@ -287,7 +285,6 @@ const mapDispatchToProps = dispatch => ({
   fetchStateData: id => dispatch(fetchStateData(id)),
   hideHeader: () => dispatch(hideHeader()),
   showHeader: () => dispatch(showHeader()),
-  setActive: name => dispatch(setActive(name)),
   fetchOfficesList: () => dispatch(fetchOfficesList()),
 });
 

@@ -51,7 +51,7 @@ class MobileNav extends Component {
               to="/states"
               active={activeItem === 'states' || activeItem === 'statesShow'}
             />
-            {/* <Menu.Item as="a">About</Menu.Item> */}
+            <Menu.Item name="about" as={Link} to="/about" active={activeItem === 'about'} />
           </Sidebar>
 
           <Sidebar.Pusher
@@ -83,13 +83,14 @@ class MobileNav extends Component {
                         </Menu.Item>
                       </Menu.Menu>
                     )}
-                  {this.props.activeItem === 'national map' && (
-                    <Menu.Menu position="right">
-                      <Menu.Item>
-                        <OfficeDropdown />
-                      </Menu.Item>
-                    </Menu.Menu>
-                  )}
+                  {this.props.activeItem === 'national map' &&
+                    this.props.offices.offices.length === 3 && (
+                      <Menu.Menu position="right">
+                        <Menu.Item>
+                          <OfficeDropdown />
+                        </Menu.Item>
+                      </Menu.Menu>
+                    )}
                 </Menu>
               </Container>
             </Segment>
@@ -109,6 +110,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
   states: state.states,
+  offices: state.offices,
 });
 
 export default connect(

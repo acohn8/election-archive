@@ -49,7 +49,13 @@ class DesktopNav extends Component {
                   color="teal"
                   active={activeItem === 'states' || activeItem === 'statesShow'}
                 />
-                {/* <Menu.Item as="a">About</Menu.Item> */}
+                <Menu.Item
+                  name="about"
+                  as={Link}
+                  to="/about"
+                  color="teal"
+                  active={activeItem === 'about'}
+                />
                 {this.props.activeItem === 'statesShow' &&
                   this.props.states.activeStateId !== null && (
                     <Menu.Menu position="right">
@@ -70,13 +76,14 @@ class DesktopNav extends Component {
                       </Menu.Item>
                     </Menu.Menu>
                   )}
-                {this.props.activeItem === 'national map' && (
-                  <Menu.Menu position="right">
-                    <Menu.Item>
-                      <OfficeDropdown />
-                    </Menu.Item>
-                  </Menu.Menu>
-                )}
+                {this.props.activeItem === 'national map' &&
+                  this.props.offices.offices.length === 3 && (
+                    <Menu.Menu position="right">
+                      <Menu.Item>
+                        <OfficeDropdown />
+                      </Menu.Item>
+                    </Menu.Menu>
+                  )}
               </Container>
             </Menu>
           </Segment>
@@ -90,6 +97,7 @@ class DesktopNav extends Component {
 const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
   states: state.states,
+  offices: state.offices,
 });
 
 export default connect(mapStateToProps)(DesktopNav);

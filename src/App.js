@@ -12,6 +12,7 @@ import NationalMapContainer from './components/NationalMap/NationalMapContainer'
 import './App.css';
 import Footer from './components/Footer';
 import StateListContainer from './components/StateList/StateListContainer';
+import AboutContainer from './components/About/AboutContainer';
 
 class App extends React.Component {
   componentDidMount() {
@@ -27,6 +28,7 @@ class App extends React.Component {
           <Route exact path="/national-map" component={NationalMapContainer} />
           <Route exact path="/states" component={StateListContainer} />
           <Route path="/states/:activeStateName" component={StateContainer} />
+          <Route path="/about" component={AboutContainer} />
         </Switch>
         <Footer />
       </div>

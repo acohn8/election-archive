@@ -6,6 +6,7 @@ import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';
 import { fetchOfficesList } from '../../redux/actions/officeActions';
 import { resetActiveState } from '../../redux/actions/stateActions';
+import setActive from '../../redux/actions/navActions';
 import ResponsiveNav from '../Nav/ResponsiveNav';
 
 class NationalMapContainer extends React.Component {
@@ -13,6 +14,7 @@ class NationalMapContainer extends React.Component {
 
   componentDidMount() {
     this.updateWindowDimensions();
+    this.props.setActive('national map');
     window.addEventListener('resize', this.updateWindowDimensions);
   }
 
@@ -105,6 +107,7 @@ class NationalMapContainer extends React.Component {
 const mapDispatchToProps = dispatch => ({
   fetchOfficesList: () => dispatch(fetchOfficesList()),
   resetActiveState: () => dispatch(resetActiveState()),
+  setActive: name => dispatch(setActive(name)),
 });
 
 const mapStateToProps = state => ({
