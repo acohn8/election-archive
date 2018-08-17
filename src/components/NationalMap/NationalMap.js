@@ -247,7 +247,7 @@ class NationalMap extends React.Component {
       top: 0,
       bottom: 0,
       width: '100%',
-      height: this.props.windowWidth >= 768 ? '90vh' : '65vh',
+      height: this.props.windowWidth >= 768 ? '94vh' : '65vh',
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }
