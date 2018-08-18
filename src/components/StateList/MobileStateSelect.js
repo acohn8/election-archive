@@ -15,7 +15,7 @@ const MobileStateSelector = props => (
               .join('-')
               .toLowerCase()}`}
           >
-            <List.Icon name="location arrow" size="large" verticalAlign="middle" color="teal" />
+            <List.Icon name="right triangle" size="large" verticalAlign="middle" color="teal" />
             <List.Content>
               <List.Header>{state.attributes.name}</List.Header>
             </List.Content>
