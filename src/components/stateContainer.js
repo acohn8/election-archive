@@ -15,6 +15,7 @@ import {
 } from '../redux/actions/officeActions';
 import { setActive } from '../redux/actions/navActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
+import MobileStateSelector from './StateList/MobileStateSelect';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -51,9 +52,15 @@ class StateContainer extends React.Component {
                 <Grid columns={2} verticalAlign="middle" stackable>
                   <Grid.Column>
                     <Header size="huge">
-                      {
+                      {this.props.nav.windowWidth >= 768 ? (
                         this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
-                      }
+                      ) : (
+                        <MobileStateSelector
+                          state={
+                            this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
+                          }
+                        />
+                      )}
                       <Header.Subheader>
                         Results for{' '}
                         <span style={{ color: '#00B5AD' }}>
