@@ -20,7 +20,12 @@ class ResponsiveNav extends React.Component {
 
   render() {
     return (
-      <div ref={divElement => (this.divElement = divElement)}>
+      <div
+        ref={divElement => (this.divElement = divElement)}
+        style={{
+          paddingBottom: 'env(safe-area-inset-bottom)',
+        }}
+      >
         {this.props.windowWidth >= 768 ? (
           <DesktopNav>{this.props.children}</DesktopNav>
         ) : (
