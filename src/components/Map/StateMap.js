@@ -106,7 +106,7 @@ class Map extends React.Component {
       url:
         this.props.geography.result.state !== 17
           ? `mapbox://adamcohn.${
-              this.props.offices.offices.find(
+              this.props.offices.stateOffices.find(
                 office => office.id === this.props.offices.selectedOfficeId.toString(),
               ).attributes['county-map']
             }`

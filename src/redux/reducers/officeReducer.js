@@ -1,5 +1,6 @@
 const initialStatesState = {
-  offices: [],
+  allOffices: [],
+  stateOffices: [],
   selectedOfficeId: 308,
 };
 
@@ -8,7 +9,12 @@ const officesReducer = (previousState = initialStatesState, action) => {
     case 'SET_OFFICES':
       return {
         ...previousState,
-        offices: action.offices,
+        allOffices: action.allOffices,
+      };
+    case 'SET_STATE_OFFICES':
+      return {
+        ...previousState,
+        stateOffices: action.stateOffices,
       };
     case 'SET_ACTIVE_OFFICE':
       return {

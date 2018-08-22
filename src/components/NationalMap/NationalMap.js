@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 import { setActiveState } from '../../redux/actions/stateActions';
 import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
-import { fetchOfficesList } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
 import { StateColorScale, CountyColorScale } from '../../functions/ColorScale';
 mapboxgl.accessToken =
@@ -128,7 +127,7 @@ class NationalMap extends React.Component {
     const zoomThreshold = 4.2;
     this.map.addSource('countyResults', {
       url: `mapbox://adamcohn.${
-        this.props.offices.offices.find(
+        this.props.offices.allOffices.find(
           office => office.id === this.props.offices.selectedOfficeId.toString(),
         ).attributes['county-map']
       }`,
@@ -137,7 +136,7 @@ class NationalMap extends React.Component {
 
     this.map.addSource('statewideResults', {
       url: `mapbox://adamcohn.${
-        this.props.offices.offices.find(
+        this.props.offices.allOffices.find(
           office => office.id === this.props.offices.selectedOfficeId.toString(),
         ).attributes['state-map']
       }`,
@@ -285,7 +284,6 @@ const mapDispatchToProps = dispatch => ({
   fetchStateData: id => dispatch(fetchStateData(id)),
   hideHeader: () => dispatch(hideHeader()),
   showHeader: () => dispatch(showHeader()),
-  fetchOfficesList: () => dispatch(fetchOfficesList()),
 });
 
 const mapStateToProps = state => ({

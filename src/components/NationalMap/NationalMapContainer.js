@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';
-import { fetchOfficesList } from '../../redux/actions/officeActions';
 import { resetActiveState } from '../../redux/actions/stateActions';
 import { setActive } from '../../redux/actions/navActions';
 
@@ -15,16 +14,10 @@ class NationalMapContainer extends React.Component {
     this.props.setActive('national map');
   }
 
-  componentDidUpdate() {
-    if (this.props.offices.offices.length !== 4) {
-      this.props.fetchOfficesList();
-    }
-  }
-
   render() {
     return (
       <div ref={divElement => (this.divElement = divElement)}>
-        {this.props.offices.offices.length === 4 && (
+        {this.props.offices.allOffices.length !== undefined && (
           <NationalMap windowWidth={this.props.windowWidth} />
         )}
         {!this.props.headerHid &&
@@ -46,10 +39,10 @@ class NationalMapContainer extends React.Component {
               }}
             >
               {this.props.overlay.hoveredWinner.votes === '' &&
-              this.props.offices.offices.length > 0 ? (
+              this.props.offices.allOffices.length > 0 ? (
                 <Header size="huge">
                   {
-                    this.props.offices.offices.find(
+                    this.props.offices.allOffices.find(
                       office => office.id === this.props.offices.selectedOfficeId.toString(),
                     ).attributes.name
                   }
@@ -68,10 +61,10 @@ class NationalMapContainer extends React.Component {
           <Container>
             <Segment vertical padded>
               {this.props.overlay.hoveredWinner.votes === '' &&
-              this.props.offices.offices.length > 0 ? (
+              this.props.offices.allOffices.length > 0 ? (
                 <Header size="huge">
                   {
-                    this.props.offices.offices.find(
+                    this.props.offices.allOffices.find(
                       office => office.id === this.props.offices.selectedOfficeId.toString(),
                     ).attributes.name
                   }
@@ -92,7 +85,6 @@ class NationalMapContainer extends React.Component {
   }
 }
 const mapDispatchToProps = dispatch => ({
-  fetchOfficesList: () => dispatch(fetchOfficesList()),
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
 });

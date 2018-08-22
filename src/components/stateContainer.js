@@ -7,12 +7,7 @@ import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
 import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
-import {
-  fetchStateOffices,
-  setActiveOffice,
-  resetOffice,
-  fetchOfficesList,
-} from '../redux/actions/officeActions';
+import { fetchStateOffices, setActiveOffice, resetOffice } from '../redux/actions/officeActions';
 import { setActive } from '../redux/actions/navActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from './StateList/MobileStateSelect';
@@ -46,7 +41,7 @@ class StateContainer extends React.Component {
         <Container>
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&
-            this.props.offices.offices.length > 0 &&
+            this.props.offices.stateOffices.length > 0 &&
             this.props.states.activeStateId !== null && (
               <div>
                 <Grid columns={2} verticalAlign="middle" stackable>
@@ -103,7 +98,6 @@ const mapDispatchToProps = dispatch => ({
   fetchStateOffices: () => dispatch(fetchStateOffices()),
   setActiveOffice: officeId => dispatch(setActiveOffice(officeId)),
   resetOffice: () => dispatch(resetOffice()),
-  fetchOfficesList: () => dispatch(fetchOfficesList()),
 });
 
 export default connect(

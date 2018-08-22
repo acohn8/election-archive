@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import HomepageHeading from './HomepageHeadeading';
 import { setActive } from '../../redux/actions/navActions';
 import { resetActiveState } from '../../redux/actions/stateActions';
-import { fetchOfficesList } from '../../redux/actions/officeActions';
 
 class HomeContainer extends React.Component {
   componentDidMount() {
@@ -12,9 +11,7 @@ class HomeContainer extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.offices.offices.length !== 4) {
-      this.props.fetchOfficesList();
-    } else if (this.props.states !== null) {
+    if (this.props.states !== null) {
       this.props.resetActiveState();
     }
   }
@@ -26,7 +23,6 @@ class HomeContainer extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   setActive: name => dispatch(setActive(name)),
-  fetchOfficesList: () => dispatch(fetchOfficesList()),
   resetActiveState: () => dispatch(resetActiveState()),
 });
 

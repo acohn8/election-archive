@@ -49,7 +49,7 @@ class CountyMap extends React.Component {
     }
     this.map.addSource('countyResults', {
       url: `mapbox://adamcohn.${
-        this.props.offices.offices.find(
+        this.props.offices.stateOffices.find(
           office => office.id === this.props.offices.selectedOfficeId.toString(),
         ).attributes['county-map']
       }`,

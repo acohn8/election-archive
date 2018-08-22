@@ -5,7 +5,6 @@ const ContactButtons = () => (
   <div>
     <Button
       circular
-      color="github"
       as="a"
       href="https://github.com/acohn8"
       target="_blank"

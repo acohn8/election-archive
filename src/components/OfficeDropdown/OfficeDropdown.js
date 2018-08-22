@@ -4,8 +4,12 @@ import { connect } from 'react-redux';
 
 import { setActiveOffice } from '../../redux/actions/officeActions';
 
-const OfficDropdown = (props) => {
-  const options = props.offices.offices
+const OfficeDropdown = (props) => {
+  let filterOptions;
+  props.activeItem === 'national map'
+    ? (filterOptions = props.offices.allOffices)
+    : (filterOptions = props.offices.stateOffices);
+  const options = filterOptions
     .map(office => ({
       key: office.id,
       value: office.id,
@@ -32,10 +36,11 @@ const mapDespatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   offices: state.offices,
+  activeItem: state.nav.activePage,
   activeStateId: state.states.activeStateId,
 });
 
 export default connect(
   mapStateToProps,
   mapDespatchToProps,
-)(OfficDropdown);
+)(OfficeDropdown);
