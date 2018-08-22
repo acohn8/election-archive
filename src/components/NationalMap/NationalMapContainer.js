@@ -16,7 +16,7 @@ class NationalMapContainer extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.offices.offices.length !== 3) {
+    if (this.props.offices.offices.length !== 4) {
       this.props.fetchOfficesList();
     }
   }
@@ -24,7 +24,7 @@ class NationalMapContainer extends React.Component {
   render() {
     return (
       <div ref={divElement => (this.divElement = divElement)}>
-        {this.props.offices.offices.length === 3 && (
+        {this.props.offices.offices.length === 4 && (
           <NationalMap windowWidth={this.props.windowWidth} />
         )}
         {!this.props.headerHid &&

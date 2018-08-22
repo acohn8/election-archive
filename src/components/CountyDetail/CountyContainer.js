@@ -27,11 +27,15 @@ class CountyContainer extends React.Component {
       .filter(candidate => candidate.candidate !== undefined)
       .sort((a, b) => b.votes - a.votes);
     //removes the last candidate from the results list if they got less than 5% of the statewide vote
-    return this.props.stateResults[formattedData[2].candidate.id] /
-      Object.values(this.props.stateResults).reduce((sum, num) => sum + num) <=
-      0.05
-      ? formattedData.slice(0, 2)
-      : formattedData;
+    if (formattedData.length > 2) {
+      return this.props.stateResults[formattedData[2].candidate.id] /
+        Object.values(this.props.stateResults).reduce((sum, num) => sum + num) <=
+        0.05
+        ? formattedData.slice(0, 2)
+        : formattedData;
+    } else {
+      return formattedData;
+    }
   };
 
   render() {

@@ -12,7 +12,7 @@ class HomeContainer extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.offices.offices.length !== 3) {
+    if (this.props.offices.offices.length !== 4) {
       this.props.fetchOfficesList();
     } else if (this.props.states !== null) {
       this.props.resetActiveState();
