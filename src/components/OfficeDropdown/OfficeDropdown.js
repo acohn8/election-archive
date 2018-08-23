@@ -5,27 +5,31 @@ import { connect } from 'react-redux';
 import { setActiveOffice } from '../../redux/actions/officeActions';
 
 const OfficeDropdown = (props) => {
-  let filterOptions;
-  props.activeItem === 'national map'
-    ? (filterOptions = props.offices.allOffices)
-    : (filterOptions = props.offices.stateOffices);
-  const options = filterOptions
-    .map(office => ({
-      key: office.id,
-      value: office.id,
-      text: office.attributes.name,
-      onClick: () => props.setActiveOffice(office.id),
-    }))
-    .sort((a, b) => b.text - a.text);
+  const createOptions = () => {
+    if (props.activeItem === 'national map') {
+      return props.offices.allOffices
+        .map(office => ({
+          key: office.id,
+          value: office.id,
+          text: office.attributes.name,
+          onClick: () => props.setActiveOffice(office.id),
+        }))
+        .sort((a, b) => b.text - a.text);
+    } else if (props.activeItem === 'statesShow') {
+      return props.offices.stateOffices.map(office => ({
+        key: office.id,
+        value: office.id,
+        text: office.name,
+        onClick: () => props.setActiveOffice(office.id),
+      }));
+    }
+  };
 
   return (
     <Dropdown
-      // inline
       transparent="true"
-      options={options}
-      value={
-        options.find(office => office.value === props.offices.selectedOfficeId.toString()).value
-      }
+      options={createOptions()}
+      value={createOptions().find(office => office.value === props.offices.selectedOfficeId).value}
     />
   );
 };

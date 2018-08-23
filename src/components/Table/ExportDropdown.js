@@ -8,8 +8,8 @@ const ExportDropdown = (props) => {
   ].short_name.toLowerCase();
 
   const officeName = props.offices.stateOffices
-    .find(office => office.id === props.offices.selectedOfficeId.toString())
-    .attributes.name.toLowerCase()
+    .find(office => office.id === props.offices.selectedOfficeId)
+    .name.toLowerCase()
     .split(' ')
     .join('_');
 

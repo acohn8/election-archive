@@ -11,6 +11,8 @@ const fetchStateData = stateId => async (dispatch, getState) => {
     axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/candidates`),
     axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/county`),
     axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/state`),
+    axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/state`),
+    axios.get(`${url}/states/${getState().states.activeStateId}/offices`),
   ]);
 
   const geography = normalize(response[0].data, stateCounties);

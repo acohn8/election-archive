@@ -7,13 +7,13 @@ const fetchOfficesList = () => async (dispatch) => {
   dispatch({ type: 'SET_OFFICES', allOffices: response.data.data });
 };
 
-const fetchStateOffices = () => async (dispatch, getState) => {
-  const response = await axios.get(`http://localhost:3000/api/v1/states/${getState().states.activeStateId}/offices`);
-  dispatch({ type: 'SET_STATE_OFFICES', stateOffices: response.data.data });
+const fetchStateOffices = stateId => async (dispatch) => {
+  const response = await axios.get(`http://localhost:3000/api/v1/states/${stateId}/offices`);
+  dispatch({ type: 'SET_STATE_OFFICES', stateOffices: response.data });
 };
 
 const setActiveOffice = (officeId = '308') => async (dispatch, getState) => {
-  dispatch({ type: 'SET_ACTIVE_OFFICE', officeId });
+  dispatch({ type: 'SET_ACTIVE_OFFICE', officeId: officeId.toString() });
   getState().states.activeStateId !== null &&
     dispatch(setActiveState(getState().states.activeStateId, true));
 };

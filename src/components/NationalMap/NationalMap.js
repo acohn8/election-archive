@@ -128,7 +128,7 @@ class NationalMap extends React.Component {
     this.map.addSource('countyResults', {
       url: `mapbox://adamcohn.${
         this.props.offices.allOffices.find(
-          office => office.id === this.props.offices.selectedOfficeId.toString(),
+          office => office.id === this.props.offices.selectedOfficeId,
         ).attributes['county-map']
       }`,
       type: 'vector',
@@ -137,7 +137,7 @@ class NationalMap extends React.Component {
     this.map.addSource('statewideResults', {
       url: `mapbox://adamcohn.${
         this.props.offices.allOffices.find(
-          office => office.id === this.props.offices.selectedOfficeId.toString(),
+          office => office.id === this.props.offices.selectedOfficeId,
         ).attributes['state-map']
       }`,
       type: 'vector',

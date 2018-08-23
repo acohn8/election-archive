@@ -57,7 +57,7 @@ class ResultsTable extends React.Component {
               },
               id: 'county',
               minWidth: 1.5,
-              accessor: d => this.props.geography.entities.counties[d].name,
+              accessor: d => this.props.countyResults.entities.results[d].name,
               filterMethod: (filter, row) =>
                 this.state.filtered.length > 0 &&
                 row.county.toLowerCase().includes(this.state.filtered[0].value.toLowerCase()),

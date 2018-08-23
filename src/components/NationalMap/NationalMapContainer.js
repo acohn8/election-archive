@@ -43,7 +43,7 @@ class NationalMapContainer extends React.Component {
                 <Header size="huge">
                   {
                     this.props.offices.allOffices.find(
-                      office => office.id === this.props.offices.selectedOfficeId.toString(),
+                      office => office.id === this.props.offices.selectedOfficeId,
                     ).attributes.name
                   }
                   <Header.Subheader>
@@ -65,7 +65,7 @@ class NationalMapContainer extends React.Component {
                 <Header size="huge">
                   {
                     this.props.offices.allOffices.find(
-                      office => office.id === this.props.offices.selectedOfficeId.toString(),
+                      office => office.id === this.props.offices.selectedOfficeId,
                     ).attributes.name
                   }
                   <Header.Subheader>
