@@ -69,7 +69,7 @@ class StateContainer extends React.Component {
                       <ToplinesContainer />
                     </Grid.Column>
                     <Grid.Column>
-                      <MapContainer />
+                      {!this.props.offices.selectedDistrictId && <MapContainer />}
                     </Grid.Column>
                   </Grid.Row>
                   <Divider />

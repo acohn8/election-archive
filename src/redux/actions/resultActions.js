@@ -3,16 +3,31 @@ import { normalize } from 'normalizr';
 
 import { stateCounties, candidateListSchema, resultListSchema } from './schema';
 
-const fetchStateData = stateId => async (dispatch, getState) => {
+const fetchStateData = (stateId, districtId = null) => async (dispatch, getState) => {
   const url = 'http://localhost:3000/api/v1';
   dispatch({ type: 'START_FETCH' });
+  console.log('fetching');
+  let officeTotal;
+  let subgeography;
+  if (!districtId) {
+    officeTotal = `states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/state`;
+    subgeography = `states/${stateId}/offices/${
+      getState().offices.selectedOfficeId
+    }/results/county`;
+  }
+  if (districtId) {
+    officeTotal = `states/${stateId}/offices/${
+      getState().offices.selectedOfficeId
+    }/results/district/${districtId}`;
+    subgeography = `states/${stateId}/offices/${
+      getState().offices.selectedOfficeId
+    }/results/district/${districtId}/county`;
+  }
   const response = await Promise.all([
     axios.get(`${url}/states/${stateId}/counties`),
     axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/candidates`),
-    axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/county`),
-    axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/state`),
-    axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/state`),
-    axios.get(`${url}/states/${getState().states.activeStateId}/offices`),
+    axios.get(`${url}/${subgeography}`),
+    axios.get(`${url}/${officeTotal}`),
   ]);
 
   const geography = normalize(response[0].data, stateCounties);

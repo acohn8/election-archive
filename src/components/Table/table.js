@@ -183,10 +183,10 @@ class ResultsTable extends React.Component {
 
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
-  geography: state.results.geography,
   countyResults: state.results.countyResults,
   stateResults: state.results.stateResults,
   windowWidth: state.nav.windowWidth,
+  offices: state.offices,
 });
 
 export default connect(mapStateToProps)(ResultsTable);
