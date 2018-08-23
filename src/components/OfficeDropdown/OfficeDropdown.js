@@ -17,7 +17,7 @@ const OfficeDropdown = (props) => {
           .attributes.name
       }
       pointing
-      // className="link item"
+      className={props.activeItem !== 'national map' && 'link item'}
     >
       <Dropdown.Menu>
         <Dropdown.Header>Offices</Dropdown.Header>
