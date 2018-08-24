@@ -17,7 +17,6 @@ const OfficeDropdown = (props) => {
           .attributes.name
       }
       pointing
-      className={props.activeItem !== 'national map' && 'link item'}
     >
       <Dropdown.Menu>
         <Dropdown.Header>Offices</Dropdown.Header>
@@ -64,6 +63,7 @@ const mapStateToProps = state => ({
   offices: state.offices,
   activeItem: state.nav.activePage,
   activeStateId: state.states.activeStateId,
+  resultsOfficeName: state.results.name,
 });
 
 export default connect(

@@ -27,6 +27,7 @@ const officesReducer = (previousState = initialStatesState, action) => {
       return {
         ...previousState,
         selectedOfficeId: '308',
+        selectedDistrictId: null,
       };
     default:
       return previousState;

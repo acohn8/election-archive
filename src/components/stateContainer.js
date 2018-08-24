@@ -59,7 +59,7 @@ class StateContainer extends React.Component {
                       <Header.Subheader>
                         Results for{' '}
                         <span style={{ color: '#00B5AD' }}>
-                          <OfficeDropdown />
+                          <OfficeDropdown className="link item" />
                         </span>
                       </Header.Subheader>
                     </Header>
@@ -89,6 +89,7 @@ const mapStateToProps = state => ({
   states: state.states,
   offices: state.offices,
   nav: state.nav,
+  resultsOfficeName: state.results.name,
 });
 
 const mapDispatchToProps = dispatch => ({

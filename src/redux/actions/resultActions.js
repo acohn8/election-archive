@@ -35,11 +35,12 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
   const geography = normalize(response[0].data, stateCounties);
   const countyResults = normalize(response[2].data.results, resultListSchema);
   const stateResults = response[3].data.results;
+  const name = response[3].data.name;
   const candidates = normalize(response[1].data.data, candidateListSchema);
-
   dispatch({
     type: 'SET_STATE_DATA',
     geography,
+    name,
     candidates,
     countyResults,
     stateResults,

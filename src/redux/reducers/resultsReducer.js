@@ -1,5 +1,6 @@
 const initialResultsState = {
   loading: false,
+  name: 'US President',
   geography: {},
   candidates: [],
   stateResults: {},
@@ -13,6 +14,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
       return {
         ...previousState,
         loading: true,
+        name: 'US President',
         geography: {},
         candidates: [],
         stateResults: {},
@@ -23,6 +25,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
       return {
         ...previousState,
         loading: false,
+        name: action.name,
         geography: action.geography,
         candidates: action.candidates,
         stateResults: action.stateResults,
@@ -41,6 +44,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
     case 'RESET_RESULTS':
       return {
         loading: false,
+        name: 'US President',
         geography: {},
         candidates: [],
         stateResults: {},
