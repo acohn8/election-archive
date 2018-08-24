@@ -3,31 +3,27 @@ import { Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import ToplinesCard from './toplinesCard';
-import fetchCampaignFinanceData from '../../redux/actions/campaignFinanceActions';
+import { fetchCampaignFinanceData } from '../../redux/actions/campaignFinanceActions';
 
 const ToplinesContainer = (props) => {
   const sortedCandidates = Object.keys(props.stateResults)
     .filter(id => id !== 'other')
     .map(id => parseInt(id, 10))
-    .sort((a, b) => props.stateResults[b] - props.stateResults[a]);
+    .sort((a, b) => props.stateResults[b] - props.stateResults[a])
+    .slice(0, 2);
 
   const total = Object.values(props.stateResults).reduce((sum, num) => sum + num);
 
-  const candidatesToDisplay =
-    props.stateResults[sortedCandidates[2]] / total <= 0.05
-      ? sortedCandidates.slice(0, 2)
-      : sortedCandidates;
-
-  props.fetchCampaignFinanceData(candidatesToDisplay);
+  props.fetchCampaignFinanceData(sortedCandidates);
 
   return (
-    <Card.Group itemsPerRow={candidatesToDisplay.length}>
-      {candidatesToDisplay.map(candidateId => (
+    <Card.Group itemsPerRow={sortedCandidates.length}>
+      {sortedCandidates.map(candidateId => (
         <ToplinesCard
           candidate={props.candidates.entities.candidates[candidateId]}
           key={candidateId}
           votes={props.stateResults[candidateId]}
-          winner={candidatesToDisplay[0]}
+          winner={sortedCandidates[0]}
           total={total}
         />
       ))}

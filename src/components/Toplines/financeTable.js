@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 const CampaignFinanceTable = props => (
   <div>
-    <Table basic="very" celled collapsing>
+    <Table basic="very" celled stackable>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell colSpan="2">Campaign Finance</Table.HeaderCell>
@@ -13,7 +13,7 @@ const CampaignFinanceTable = props => (
       <Table.Body>
         <Table.Row disabled={props.disabled}>
           <Table.Cell collapsing>Receipts</Table.Cell>
-          <Table.Cell>
+          <Table.Cell textAlign="center">
             {props.campaignFinance[props.candidateId] === undefined
               ? 'Not available'
               : `$${Math.round(props.campaignFinance[props.candidateId].total_receipts).toLocaleString()}`}
@@ -21,7 +21,7 @@ const CampaignFinanceTable = props => (
         </Table.Row>
         <Table.Row disabled={props.disabled}>
           <Table.Cell>Disbursements</Table.Cell>
-          <Table.Cell>
+          <Table.Cell textAlign="center">
             {props.campaignFinance[props.candidateId] === undefined
               ? 'Not available'
               : `$${Math.round(props.campaignFinance[props.candidateId].total_disbursements).toLocaleString()}`}
@@ -29,7 +29,7 @@ const CampaignFinanceTable = props => (
         </Table.Row>
         <Table.Row disabled={props.disabled}>
           <Table.Cell>Ending Cash</Table.Cell>
-          <Table.Cell>
+          <Table.Cell textAlign="center">
             {props.campaignFinance[props.candidateId] === undefined
               ? 'Not available'
               : `$${Math.round(props.campaignFinance[props.candidateId].end_cash).toLocaleString()}`}
@@ -37,7 +37,7 @@ const CampaignFinanceTable = props => (
         </Table.Row>
         <Table.Row disabled={props.disabled}>
           <Table.Cell>Debts</Table.Cell>
-          <Table.Cell>
+          <Table.Cell textAlign="center">
             {props.campaignFinance[props.candidateId] === undefined
               ? 'Not available'
               : `$${Math.round(props.campaignFinance[props.candidateId].debts_owed).toLocaleString()}`}

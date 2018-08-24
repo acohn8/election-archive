@@ -9,6 +9,7 @@ import ContentLoader from './Loader';
 import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
 import { fetchStateOffices, setActiveOffice, resetOffice } from '../redux/actions/officeActions';
 import { setActive } from '../redux/actions/navActions';
+import { resetCampaignFinanceData } from '../redux/actions/campaignFinanceActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from './StateList/MobileStateSelect';
 
@@ -25,6 +26,7 @@ class StateContainer extends React.Component {
         .toLowerCase() === this.props.match.params.activeStateName.toLowerCase());
     if (state !== undefined && state.id !== this.props.states.activeStateId) {
       this.props.resetOffice();
+      // this.props.resetCampaignFinanceData();
       this.props.setActiveState(state.id);
     }
   }
@@ -32,6 +34,7 @@ class StateContainer extends React.Component {
   componentWillUnmount() {
     this.props.resetOffice();
     this.props.resetActiveState();
+    // this.props.resetCampaignFinanceData();
   }
 
   render() {
@@ -99,6 +102,7 @@ const mapDispatchToProps = dispatch => ({
   fetchStateOffices: () => dispatch(fetchStateOffices()),
   setActiveOffice: officeId => dispatch(setActiveOffice(officeId)),
   resetOffice: () => dispatch(resetOffice()),
+  resetCampaignFinanceData: () => dispatch(resetCampaignFinanceData()),
 });
 
 export default connect(

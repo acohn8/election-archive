@@ -11,6 +11,11 @@ const campaignFinanceReducer = (previousState = initialFinanceState, action) => 
         financeData: action.financeData,
         loadingComplete: true,
       };
+    case 'RESET_FINANCE_DATA':
+      return {
+        ...previousState,
+        loadingComplete: false,
+      };
     default:
       return previousState;
   }
