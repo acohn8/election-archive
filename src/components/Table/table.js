@@ -130,7 +130,6 @@ class ResultsTable extends React.Component {
                 }))
               : majorCandidates.map(candidateId => ({
                   id: candidateId,
-                  // maxWidth: this.props.windowWidth * 0.175,
                   minWidth: 1,
                   Header: (
                     <span style={{ fontSize: '0.8em' }}>
@@ -163,18 +162,22 @@ class ResultsTable extends React.Component {
           filterable
           filtered={this.state.filtered}
           expanded={this.state.expanded}
+          defaultPageSize={
+            this.props.countyResults.result.length < 20
+              ? this.props.countyResults.result.length
+              : 20
+          }
+          showPagination={this.props.countyResults.result.length > 20}
           onExpandedChange={(newExpanded, index, event) => {
             this.handleRowExpanded(index);
           }}
           onFilteredChange={filtered => this.setState({ filtered })}
           className="-highlight"
-          SubComponent={row => {
-            return (
-              <div style={{ padding: '20px' }}>
-                <CountyContainer row={row} />
-              </div>
-            );
-          }}
+          SubComponent={row => (
+            <div style={{ padding: '20px' }}>
+              <CountyContainer row={row} />
+            </div>
+          )}
         />
       </div>
     );

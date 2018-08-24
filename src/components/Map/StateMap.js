@@ -90,12 +90,12 @@ class Map extends React.Component {
     let zoomThreshold;
     if (
       precinctStates.includes(this.props.geography.result.state) &&
-      this.props.offices.selectedOfficeId === 308
+      this.props.offices.selectedOfficeId === '308'
     ) {
       zoomThreshold = 8;
     } else if (
       this.props.geography.result.state === pa &&
-      this.props.offices.selectedOfficeId === 308
+      this.props.offices.selectedOfficeId === '308'
     ) {
       zoomThreshold = 9;
     } else {
@@ -245,7 +245,7 @@ class Map extends React.Component {
       },
     });
 
-    if (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 4) {
+    if (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 4) {
       this.map.addSource('precinct', {
         url: 'mapbox://adamcohn.adwhne7t',
         type: 'vector',
@@ -291,10 +291,10 @@ class Map extends React.Component {
     }
 
     if (
-      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 45) ||
-      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 11) ||
-      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 14) ||
-      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 3)
+      (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 45) ||
+      (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 11) ||
+      (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 14) ||
+      (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 3)
     ) {
       const links = {
         3: 'adamcohn.3sna8yq5',
