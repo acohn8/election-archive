@@ -1,5 +1,8 @@
 import React from 'react';
-import { Card, Image } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Card, Image, Statistic } from 'semantic-ui-react';
+
+import CampaignFinanceTable from './financeTable';
 
 const colors = {
   democratic: 'blue',
@@ -10,30 +13,43 @@ const colors = {
 };
 
 const ToplinesCard = ({
-  candidate, votes, total, winner,
+  candidate, votes, total, winner, financeLoad,
 }) => (
   <Card color={colors[candidate.attributes.party]}>
-    {parseInt(candidate.id, 10) === winner ? (
-      <Image
-        fluid
-        label={{
-          color: colors[candidate.attributes.party],
-          icon: 'winner',
-          corner: 'left',
-        }}
-        src={candidate.attributes.image}
-      />
-    ) : (
-      <Image src={candidate.attributes.image} disabled fluid />
-    )}
     <Card.Content>
+      {parseInt(candidate.id, 10) === winner ? (
+        <Image floated="right" size="mini" src={candidate.attributes.image} />
+      ) : (
+        <Image src={candidate.attributes.image} floated="right" size="mini" disabled />
+      )}
       <Card.Header>{candidate.attributes.name}</Card.Header>
       <Card.Meta>{candidate.attributes.party}</Card.Meta>
-      <Card.Description>
-        {`${votes.toLocaleString()} (${Math.round((votes / total) * 100)}%)`}
+      <Card.Description style={{ textAlign: 'center' }}>
+        <Statistic size="tiny" color={colors[candidate.attributes.party]}>
+          <Statistic.Value>{votes.toLocaleString()}</Statistic.Value>
+          <Statistic.Label>Votes</Statistic.Label>
+        </Statistic>
+        <Statistic size="tiny" color={colors[candidate.attributes.party]}>
+          <Statistic.Value>{Math.round((votes / total) * 100)}</Statistic.Value>
+          <Statistic.Label>Percent</Statistic.Label>
+        </Statistic>
       </Card.Description>
     </Card.Content>
+
+    {financeLoad && (
+      <Card.Content>
+        {candidate.attributes['fec-id'] !== null ? (
+          <CampaignFinanceTable candidateId={candidate.id} disabled={false} />
+        ) : (
+          <CampaignFinanceTable candidateId={candidate.id} disabled />
+        )}
+      </Card.Content>
+    )}
   </Card>
 );
 
-export default ToplinesCard;
+const mapStateToProps = state => ({
+  financeLoad: state.campaignFinance.loadingComplete,
+});
+
+export default connect(mapStateToProps)(ToplinesCard);

@@ -3,6 +3,7 @@ import { Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import ToplinesCard from './toplinesCard';
+import fetchCampaignFinanceData from '../../redux/actions/campaignFinanceActions';
 
 const ToplinesContainer = (props) => {
   const sortedCandidates = Object.keys(props.stateResults)
@@ -16,6 +17,8 @@ const ToplinesContainer = (props) => {
     props.stateResults[sortedCandidates[2]] / total <= 0.05
       ? sortedCandidates.slice(0, 2)
       : sortedCandidates;
+
+  props.fetchCampaignFinanceData(candidatesToDisplay);
 
   return (
     <Card.Group itemsPerRow={candidatesToDisplay.length}>
@@ -32,6 +35,10 @@ const ToplinesContainer = (props) => {
   );
 };
 
+const mapDispatchToProps = dispatch => ({
+  fetchCampaignFinanceData: candidateIds => dispatch(fetchCampaignFinanceData(candidateIds)),
+});
+
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
   geography: state.results.geography,
@@ -39,4 +46,7 @@ const mapStateToProps = state => ({
   stateResults: state.results.stateResults,
 });
 
-export default connect(mapStateToProps)(ToplinesContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ToplinesContainer);
