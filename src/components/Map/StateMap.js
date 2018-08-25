@@ -106,9 +106,8 @@ class Map extends React.Component {
       url:
         this.props.geography.result.state !== 17
           ? `mapbox://adamcohn.${
-              this.props.offices.stateOffices.find(
-                office => office.id === this.props.offices.selectedOfficeId,
-              ).county_map
+              this.props.offices.stateOffices.entities.offices[this.props.offices.selectedOfficeId]
+                .county_map
             }`
           : 'mapbox://adamcohn.2hweullr',
       type: 'vector',

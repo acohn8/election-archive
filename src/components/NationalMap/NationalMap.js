@@ -127,18 +127,16 @@ class NationalMap extends React.Component {
     const zoomThreshold = 4.2;
     this.map.addSource('countyResults', {
       url: `mapbox://adamcohn.${
-        this.props.offices.allOffices.find(
-          office => office.id === this.props.offices.selectedOfficeId,
-        ).attributes['county-map']
+        this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
+          .attributes['county-map']
       }`,
       type: 'vector',
     });
 
     this.map.addSource('statewideResults', {
       url: `mapbox://adamcohn.${
-        this.props.offices.allOffices.find(
-          office => office.id === this.props.offices.selectedOfficeId,
-        ).attributes['state-map']
+        this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
+          .attributes['state-map']
       }`,
       type: 'vector',
     });
@@ -290,6 +288,7 @@ const mapStateToProps = state => ({
   states: state.states,
   geography: state.results.geography,
   offices: state.offices,
+  shortName: state.results.shortName,
 });
 
 export default connect(

@@ -49,9 +49,8 @@ class CountyMap extends React.Component {
     }
     this.map.addSource('countyResults', {
       url: `mapbox://adamcohn.${
-        this.props.offices.stateOffices.find(
-          office => office.id === this.props.offices.selectedOfficeId,
-        ).county_map
+        this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
+          .attributes['county-map']
       }`,
       type: 'vector',
     });

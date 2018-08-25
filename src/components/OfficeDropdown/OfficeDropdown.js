@@ -13,30 +13,32 @@ const OfficeDropdown = (props) => {
   return (
     <Dropdown
       text={
-        props.offices.allOffices.find(office => office.id === props.offices.selectedOfficeId)
-          .attributes.name
+        props.offices.allOffices.entities.offices[props.offices.selectedOfficeId].attributes.name
       }
       pointing
     >
       <Dropdown.Menu>
         <Dropdown.Header>Offices</Dropdown.Header>
         {/* undefined office districts allows the component to work on the national map as allOffices doesn't include districts */}
-        {filteredOffices.map(office =>
-            (office.districts === undefined || office.districts.length <= 1 ? (
-              <Dropdown.Item key={office.id} onClick={() => props.setActiveOffice(office.id)}>
-                {props.activeItem === 'national map' ? office.attributes.name : office.name}
+        {filteredOffices.result.map(office =>
+            (filteredOffices.entities.offices[office].districts === undefined ||
+            filteredOffices.entities.offices[office].districts.length <= 1 ? (
+              <Dropdown.Item key={office} onClick={() => props.setActiveOffice(office)}>
+                {props.activeItem === 'national map'
+                  ? filteredOffices.entities.offices[office].attributes.name
+                  : filteredOffices.entities.offices[office].name}
               </Dropdown.Item>
             ) : (
-              <Dropdown.Item key={office.id}>
-                <Dropdown text={office.name}>
+              <Dropdown.Item key={office}>
+                <Dropdown text={filteredOffices.entities.offices[office].name}>
                   <Dropdown.Menu>
                     <Dropdown.Header>Districts</Dropdown.Header>
-                    {office.districts
+                    {filteredOffices.entities.offices[office].districts
                       .sort((a, b) => a.name.split('-')[1] - b.name.split('-')[1])
                       .map(district => (
                         <Dropdown.Item
                           key={district.id}
-                          onClick={() => props.setActiveOffice(office.id, district.id)}
+                          onClick={() => props.setActiveOffice(office, district.id)}
                         >
                           {district.name}
                         </Dropdown.Item>

@@ -84,7 +84,7 @@ class DesktopNav extends Component {
                     </Menu.Menu>
                   )}
                 {this.props.activeItem === 'national map' &&
-                  this.props.offices.allOffices.length === 4 && (
+                  this.props.offices.allOffices.result !== undefined && (
                     <Menu.Menu position="right">
                       <Menu.Item>
                         <OfficeDropdown />

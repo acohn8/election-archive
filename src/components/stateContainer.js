@@ -41,7 +41,7 @@ class StateContainer extends React.Component {
         <Container>
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&
-            this.props.offices.stateOffices.length > 0 &&
+            this.props.offices.stateOffices.result !== undefined &&
             this.props.states.activeStateId !== null && (
               <div>
                 <Grid columns={2} verticalAlign="middle" stackable>

@@ -17,7 +17,7 @@ class NationalMapContainer extends React.Component {
   render() {
     return (
       <div ref={divElement => (this.divElement = divElement)}>
-        {this.props.offices.allOffices.length !== undefined && (
+        {this.props.offices.allOffices.result !== undefined && (
           <NationalMap windowWidth={this.props.windowWidth} />
         )}
         {!this.props.headerHid &&
@@ -39,12 +39,12 @@ class NationalMapContainer extends React.Component {
               }}
             >
               {this.props.overlay.hoveredWinner.votes === '' &&
-              this.props.offices.allOffices.length > 0 ? (
+              this.props.offices.allOffices.result !== undefined ? (
                 <Header size="huge">
                   {
-                    this.props.offices.allOffices.find(
-                      office => office.id === this.props.offices.selectedOfficeId,
-                    ).attributes.name
+                    this.props.offices.allOffices.entities.offices[
+                      this.props.offices.selectedOfficeId
+                    ].attributes.name
                   }
                   <Header.Subheader>
                     Zoom in to see counties or out to see states. Click for details.
@@ -61,12 +61,12 @@ class NationalMapContainer extends React.Component {
           <Container>
             <Segment vertical padded>
               {this.props.overlay.hoveredWinner.votes === '' &&
-              this.props.offices.allOffices.length > 0 ? (
+              this.props.offices.allOffices.result !== undefined ? (
                 <Header size="huge">
                   {
-                    this.props.offices.allOffices.find(
-                      office => office.id === this.props.offices.selectedOfficeId,
-                    ).attributes.name
+                    this.props.offices.allOffices.entities.offices[
+                      this.props.offices.selectedOfficeId
+                    ].attributes.name
                   }
                   <Header.Subheader>
                     Zoom in to see counties or out to see states. Click for details.

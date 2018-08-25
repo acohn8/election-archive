@@ -6,18 +6,16 @@ import { officeListSchema } from './schema';
 
 const fetchOfficesList = () => async (dispatch) => {
   const response = await axios.get('http://localhost:3000/api/v1/offices');
-  console.log(normalize(response.data.data, officeListSchema));
-  dispatch({ type: 'SET_OFFICES', allOffices: response.data.data });
+  dispatch({ type: 'SET_OFFICES', allOffices: normalize(response.data.data, officeListSchema) });
 };
 
 const fetchStateOffices = stateId => async (dispatch) => {
   const response = await axios.get(`http://localhost:3000/api/v1/states/${stateId}/offices`);
-  console.log(normalize(response.data, officeListSchema));
-  dispatch({ type: 'SET_STATE_OFFICES', stateOffices: response.data });
+  dispatch({ type: 'SET_STATE_OFFICES', stateOffices: normalize(response.data, officeListSchema) });
 };
 
-const setActiveOffice = (officeId = '308', districtId = null) => async (dispatch, getState) => {
-  dispatch({ type: 'SET_ACTIVE_OFFICE', officeId: officeId.toString(), districtId });
+const setActiveOffice = (officeId = 308, districtId = null) => async (dispatch, getState) => {
+  dispatch({ type: 'SET_ACTIVE_OFFICE', officeId, districtId });
   if (getState().states.activeStateId && districtId) {
     dispatch(fetchStateData(getState().states.activeStateId, districtId));
   } else if (getState().states.activeStateId) {

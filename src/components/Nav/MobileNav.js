@@ -76,7 +76,7 @@ class MobileNav extends Component {
                     </Menu.Item>
                   </Menu.Item>
                   {this.props.activeItem === 'national map' &&
-                    this.props.offices.allOffices.length === 4 && (
+                    this.props.offices.allOffices.result !== undefined && (
                       <Menu.Menu position="right">
                         <Menu.Item>
                           <OfficeDropdown />
