@@ -32,16 +32,16 @@ class CountyMap extends React.Component {
 
   addResultsLayer = () => {
     let zoomThreshold;
-    const precinctStates = [4, 11, 45, 14];
+    const precinctStates = ['4', '11', '45', '14'];
     const pa = 3;
     if (
-      precinctStates.includes(this.props.geography.result.state) &&
-      this.props.offices.selectedOfficeId === 308
+      precinctStates.includes(this.props.states.activeStateId) &&
+      this.props.offices.selectedOfficeId === '308'
     ) {
       zoomThreshold = 8;
     } else if (
-      this.props.geography.result.state === pa &&
-      this.props.offices.selectedOfficeId === 308
+      this.props.states.activeStateId === pa &&
+      this.props.offices.selectedOfficeId === '308'
     ) {
       zoomThreshold = 9;
     } else {
@@ -118,7 +118,7 @@ class CountyMap extends React.Component {
       },
     });
 
-    if (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 4) {
+    if (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '4') {
       this.map.addSource('wi-precinct', {
         url: 'mapbox://adamcohn.adwhne7t',
         type: 'vector',
@@ -171,10 +171,10 @@ class CountyMap extends React.Component {
     }
 
     if (
-      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 45) ||
-      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 11) ||
-      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 14) ||
-      (this.props.offices.selectedOfficeId === 308 && this.props.geography.result.state === 3)
+      (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '45') ||
+      (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '11') ||
+      (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '14') ||
+      (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '3')
     ) {
       const links = {
         3: 'adamcohn.3sna8yq5',
@@ -190,7 +190,7 @@ class CountyMap extends React.Component {
       };
 
       this.map.addSource('precinct', {
-        url: `mapbox://${links[this.props.geography.result.state]}`,
+        url: `mapbox://${links[this.props.states.activeStateId]}`,
         type: 'vector',
       });
 
@@ -200,11 +200,11 @@ class CountyMap extends React.Component {
           type: 'fill',
           minzoom: zoomThreshold,
           source: 'precinct',
-          'source-layer': layers[this.props.geography.result.state],
+          'source-layer': layers[this.props.states.activeStateId],
           filter: [
             '==',
             ['get', 'GEOID'],
-            this.props.geography.result.state === 11 || this.props.geography.result.state === 14
+            this.props.states.activeStateId === '11' || this.props.states.activeStateId === '14'
               ? this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
               : this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
                   .toString()

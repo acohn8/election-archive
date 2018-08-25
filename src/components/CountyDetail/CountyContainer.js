@@ -60,7 +60,7 @@ class CountyContainer extends React.Component {
                 {this.props.geography.entities.counties[this.props.precinctResults.county_id].name}
               </Header>
               {/* no AK map */}
-              {this.props.geography.result.state !== 17 && <CountyMap />}
+              {this.props.states.activeStateId !== '17' && <CountyMap />}
             </Grid.Column>
           </Grid>
         ) : (
@@ -73,6 +73,7 @@ class CountyContainer extends React.Component {
 
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
+  states: state.states,
   geography: state.results.geography,
   precinctResults: state.results.precinctResults,
   countyResults: state.results.countyResults,

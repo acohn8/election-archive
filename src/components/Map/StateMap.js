@@ -44,12 +44,12 @@ class Map extends React.Component {
       zoom: 3,
       //grabs the lat long from the first county in the state to ensure the counties layer is loading the right geos
       //if it's Alaska, it just jumps to the middle of the state
-      center: this.props.geography.result.state !== 17 ? this.getCoords() : [-149.4937, 64.2008],
+      center: this.props.states.activeStateId !== '17' ? this.getCoords() : [-149.4937, 64.2008],
     });
 
     this.map.on('load', () => {
       this.addResultsLayer();
-      this.props.geography.result.state !== 17 && this.enableHover();
+      this.props.states.activeStateId !== '17' && this.enableHover();
       this.map.addControl(new mapboxgl.FullscreenControl());
       this.map.addControl(new mapboxgl.NavigationControl());
     });
@@ -85,16 +85,16 @@ class Map extends React.Component {
 
   addResultsLayer = () => {
     //adds the precinct zoom threshold for precinct states
-    const precinctStates = [4, 11, 45, 14];
+    const precinctStates = ['4', '11', '45', '14'];
     const pa = 3;
     let zoomThreshold;
     if (
-      precinctStates.includes(this.props.geography.result.state) &&
+      precinctStates.includes(this.props.states.activeStateId) &&
       this.props.offices.selectedOfficeId === '308'
     ) {
       zoomThreshold = 8;
     } else if (
-      this.props.geography.result.state === pa &&
+      this.props.states.activeStateId === pa &&
       this.props.offices.selectedOfficeId === '308'
     ) {
       zoomThreshold = 9;
@@ -104,7 +104,7 @@ class Map extends React.Component {
     this.map.addSource('countyResults', {
       //loads the AK state leg map if it's Alaska
       url:
-        this.props.geography.result.state !== 17
+        this.props.states.activeStateId !== '17'
           ? `mapbox://adamcohn.${
               this.props.offices.stateOffices.entities.offices[this.props.offices.selectedOfficeId]
                 .county_map
@@ -113,7 +113,7 @@ class Map extends React.Component {
       type: 'vector',
     });
 
-    if (this.props.geography.result.state !== 17) {
+    if (this.props.states.activeStateId !== '17') {
       this.map.addLayer(
         {
           id: 'dem-margin',
@@ -160,7 +160,7 @@ class Map extends React.Component {
         },
         'waterway-label',
       );
-    } else if (this.props.geography.result.state === 17) {
+    } else if (this.props.states.activeStateId === '17') {
       this.map.addLayer(
         {
           id: 'dem-margin',
@@ -226,7 +226,7 @@ class Map extends React.Component {
       },
     });
 
-    if (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 4) {
+    if (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '4') {
       this.map.addSource('precinct', {
         url: 'mapbox://adamcohn.adwhne7t',
         type: 'vector',
@@ -272,10 +272,10 @@ class Map extends React.Component {
     }
 
     if (
-      (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 45) ||
-      (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 11) ||
-      (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 14) ||
-      (this.props.offices.selectedOfficeId === '308' && this.props.geography.result.state === 3)
+      (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '45') ||
+      (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '11') ||
+      (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '14') ||
+      (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '3')
     ) {
       const links = {
         3: 'adamcohn.3sna8yq5',
@@ -291,7 +291,7 @@ class Map extends React.Component {
       };
 
       this.map.addSource('precinct', {
-        url: `mapbox://${links[this.props.geography.result.state]}`,
+        url: `mapbox://${links[this.props.states.activeStateId]}`,
         type: 'vector',
       });
 
@@ -301,7 +301,7 @@ class Map extends React.Component {
           type: 'fill',
           minzoom: zoomThreshold,
           source: 'precinct',
-          'source-layer': layers[this.props.geography.result.state],
+          'source-layer': layers[this.props.states.activeStateId],
           paint: {
             'fill-outline-color': '#696969',
             'fill-color': [
@@ -338,7 +338,7 @@ class Map extends React.Component {
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
     this.map.moveLayer('county-lines', 'poi-parks-scalerank2');
-    this.props.geography.result.state !== 17 &&
+    this.props.states.activeStateId !== '17' &&
       this.map.moveLayer('county-hover-line', 'poi-parks-scalerank2');
     const mapDetails = {
       center: this.map.getCenter(),
