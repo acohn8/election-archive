@@ -3,13 +3,10 @@ import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 const ExportDropdown = (props) => {
-  const stateName = props.geography.entities.state[
-    props.states.activeStateId
-  ].short_name.toLowerCase();
+  const stateName = props.shortName.toLowerCase();
 
-  const officeName = props.offices.stateOffices
-    .find(office => office.id === props.offices.selectedOfficeId)
-    .name.toLowerCase()
+  const formattedOfficeName = props.officeName
+    .toLowerCase()
     .split(' ')
     .join('_');
 
@@ -19,13 +16,13 @@ const ExportDropdown = (props) => {
         <Dropdown.Header icon="globe" content="Select a geography" />
         <Dropdown.Item
           as="a"
-          href={`https://s3.amazonaws.com/stateprecinctresults/statewideexports/${stateName}/${officeName}/counties/${stateName}_${officeName}_county_results.csv`}
+          href={`https://s3.amazonaws.com/stateprecinctresults/statewideexports/${stateName}/${formattedOfficeName}/counties/${stateName}_${formattedOfficeName}_county_results.csv`}
         >
           County
         </Dropdown.Item>
         <Dropdown.Item
           as="a"
-          href={`https://s3.amazonaws.com/stateprecinctresults/statewideexports/${stateName}/${officeName}/precincts/${stateName}_${officeName}_precinct_results.csv`}
+          href={`https://s3.amazonaws.com/stateprecinctresults/statewideexports/${stateName}/${formattedOfficeName}/precincts/${stateName}_${formattedOfficeName}_precinct_results.csv`}
         >
           Precinct
         </Dropdown.Item>
@@ -35,9 +32,8 @@ const ExportDropdown = (props) => {
 };
 
 const mapStateToProps = state => ({
-  states: state.states,
-  offices: state.offices,
-  geography: state.results.geography,
+  shortName: state.results.shortName,
+  officeName: state.results.officeName,
 });
 
 export default connect(mapStateToProps)(ExportDropdown);

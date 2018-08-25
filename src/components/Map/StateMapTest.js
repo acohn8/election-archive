@@ -158,6 +158,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   states: state.states,
   geography: state.results.geography,
+  stateFips: state.results.stateFips,
   countyResults: state.results.countyResults,
   candidates: state.results.candidates,
 });

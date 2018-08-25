@@ -1,14 +1,18 @@
 import axios from 'axios';
+import { normalize } from 'normalizr';
 
 import { fetchStateData } from './resultActions';
+import { officeListSchema } from './schema';
 
 const fetchOfficesList = () => async (dispatch) => {
   const response = await axios.get('http://localhost:3000/api/v1/offices');
+  console.log(normalize(response.data.data, officeListSchema));
   dispatch({ type: 'SET_OFFICES', allOffices: response.data.data });
 };
 
 const fetchStateOffices = stateId => async (dispatch) => {
   const response = await axios.get(`http://localhost:3000/api/v1/states/${stateId}/offices`);
+  console.log(normalize(response.data, officeListSchema));
   dispatch({ type: 'SET_STATE_OFFICES', stateOffices: response.data });
 };
 

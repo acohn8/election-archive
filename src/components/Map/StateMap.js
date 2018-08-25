@@ -122,13 +122,7 @@ class Map extends React.Component {
           source: 'countyResults',
           maxzoom: zoomThreshold,
           'source-layer': 'cb_2017_us_county_500k',
-          filter: [
-            '==',
-            ['get', 'STATEFP'],
-            this.props.geography.entities.state[this.props.geography.result.state].fips
-              .toString()
-              .padStart(2, '0'),
-          ],
+          filter: ['==', ['get', 'STATEFP'], this.props.stateFips],
           paint: CountyColorScale,
         },
         'waterway-label',
@@ -141,13 +135,7 @@ class Map extends React.Component {
           maxzoom: zoomThreshold,
           source: 'countyResults',
           'source-layer': 'cb_2017_us_county_500k',
-          filter: [
-            '==',
-            ['get', 'STATEFP'],
-            this.props.geography.entities.state[this.props.geography.result.state].fips
-              .toString()
-              .padStart(2, '0'),
-          ],
+          filter: ['==', ['get', 'STATEFP'], this.props.stateFips],
           paint: {
             'line-width': 0.3,
             'line-color': '#696969',
@@ -229,13 +217,7 @@ class Map extends React.Component {
       .querySourceFeatures('composite', {
         sourceLayer: 'cb_2017_us_county_500k-7qwbcn',
       })
-      .filter(
-        county =>
-          county.properties.STATEFP ===
-          this.props.geography.entities.state[this.props.geography.result.state].fips
-            .toString()
-            .padStart(2, '0'),
-      );
+      .filter(county => county.properties.STATEFP === this.props.stateFips);
 
     this.map.addSource('counties', {
       type: 'geojson',
@@ -411,6 +393,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   states: state.states,
+  stateFips: state.results.stateFips,
   geography: state.results.geography,
   candidates: state.results.candidates,
   offices: state.offices,
