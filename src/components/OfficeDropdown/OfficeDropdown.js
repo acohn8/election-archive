@@ -3,12 +3,20 @@ import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import { setActiveOffice } from '../../redux/actions/officeActions';
+import { fetchStateData } from '../../redux/actions/resultActions';
 
 const OfficeDropdown = (props) => {
   let filteredOffices;
   props.activeItem === 'national map'
     ? (filteredOffices = props.offices.allOffices)
     : (filteredOffices = props.offices.stateOffices);
+
+  const setAndFetchOfficeInfo = (officeId, stateId, districtId = null) => {
+    props.setActiveOffice(officeId, districtId);
+    if (props.activeItem !== 'national map') {
+      props.fetchStateData(stateId, districtId);
+    }
+  };
 
   return (
     <Dropdown
@@ -23,7 +31,10 @@ const OfficeDropdown = (props) => {
         {filteredOffices.result.map(office =>
             (filteredOffices.entities.offices[office].districts === undefined ||
             filteredOffices.entities.offices[office].districts.length <= 1 ? (
-              <Dropdown.Item key={office} onClick={() => props.setActiveOffice(office)}>
+              <Dropdown.Item
+                key={office}
+                onClick={() => setAndFetchOfficeInfo(office, props.activeStateId)}
+              >
                 {props.activeItem === 'national map'
                   ? filteredOffices.entities.offices[office].attributes.name
                   : filteredOffices.entities.offices[office].name}
@@ -38,7 +49,14 @@ const OfficeDropdown = (props) => {
                       .map(district => (
                         <Dropdown.Item
                           key={district.id}
-                          onClick={() => props.setActiveOffice(office, district.id)}
+                          onClick={
+                            () => {
+                              setAndFetchOfficeInfo(office, props.activeStateId, district.id);
+                            }
+                            // setAndFetchOfficeInfo(office, this.props.activeStateId, district.id)
+                            // props.setActiveOffice(office, this.props.activeStateId, district.id);
+                            // props.fetchStateData(this.props.activeStateId, district.id);
+                          }
                         >
                           {district.name}
                         </Dropdown.Item>
@@ -49,16 +67,12 @@ const OfficeDropdown = (props) => {
             )))}
       </Dropdown.Menu>
     </Dropdown>
-    // <Dropdown
-    //   transparent="true"
-    //   options={createOptions()}
-    //   value={createOptions().find(office => office.value === props.offices.selectedOfficeId).value}
-    // />
   );
 };
 
-const mapDespatchToProps = dispatch => ({
+const mapDispatchToProps = dispatch => ({
   setActiveOffice: (officeId, districtId) => dispatch(setActiveOffice(officeId, districtId)),
+  fetchStateData: (stateId, districtId) => dispatch(fetchStateData(stateId, districtId)),
 });
 
 const mapStateToProps = state => ({
@@ -70,5 +84,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  mapDespatchToProps,
+  mapDispatchToProps,
 )(OfficeDropdown);

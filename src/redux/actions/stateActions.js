@@ -10,21 +10,21 @@ const fetchStatesList = () => async (dispatch) => {
   dispatch({ type: 'SET_STATES', states: response.data.data });
 };
 
-const setActiveState = (stateId, fetch = true) => (dispatch, getState) => {
-  dispatch({ type: 'ACTIVE_STATE', stateId });
+const setActiveState = stateId => (dispatch) => {
+  dispatch(setStateId(stateId));
   dispatch(resetHover());
   dispatch(fetchStateOffices(stateId));
-  if (!fetch) {
-    dispatch(push(`/states/${getState()
-      .states.states.find(state => state.id === stateId)
-      .attributes.name.split(' ')
-      .join('-')
-      .toLowerCase()}`));
-  }
-  if (fetch) {
-    dispatch(fetchStateData(stateId));
-  }
+  dispatch(fetchStateData(stateId));
 };
+
+const setStateId = stateId => dispatch => dispatch({ type: 'ACTIVE_STATE', stateId });
+
+const pushToNewState = stateId => (dispatch, getState) =>
+  dispatch(push(`/states/${getState()
+    .states.states.find(state => state.id === stateId)
+    .attributes.name.split(' ')
+    .join('-')
+    .toLowerCase()}`));
 
 const resetActiveState = () => (dispatch) => {
   dispatch({ type: 'RESET_ACTIVE_STATE' });
@@ -32,4 +32,4 @@ const resetActiveState = () => (dispatch) => {
   dispatch(resetHover());
 };
 
-export { fetchStatesList, setActiveState, resetActiveState };
+export { fetchStatesList, setActiveState, resetActiveState, pushToNewState, setStateId };

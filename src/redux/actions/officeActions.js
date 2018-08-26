@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { normalize } from 'normalizr';
 
-import { fetchStateData } from './resultActions';
 import { officeListSchema } from './schema';
 
 const fetchOfficesList = () => async (dispatch) => {
@@ -14,23 +13,8 @@ const fetchStateOffices = stateId => async (dispatch) => {
   dispatch({ type: 'SET_STATE_OFFICES', stateOffices: normalize(response.data, officeListSchema) });
 };
 
-const setActiveOffice = (officeId = 308, districtId = null, stateId = null) => async (
-  dispatch,
-  getState,
-) => {
+const setActiveOffice = (officeId, districtId) => dispatch =>
   dispatch({ type: 'SET_ACTIVE_OFFICE', officeId, districtId });
-  let state;
-  if (stateId === null) {
-    state = getState().states.activeStateId;
-  } else {
-    state = stateId;
-  }
-  if (getState().states.activeStateId && districtId) {
-    dispatch(fetchStateData(state, districtId));
-  } else if (getState().states.activeStateId) {
-    dispatch(fetchStateData(state));
-  }
-};
 
 const resetOffice = () => dispatch => dispatch({ type: 'RESET_OFFICE' });
 

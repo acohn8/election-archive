@@ -8,7 +8,6 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
   dispatch({ type: 'START_FETCH' });
   let officeTotal;
   let subgeography;
-
   if (!districtId) {
     officeTotal = `states/${stateId}/offices/${getState().offices.selectedOfficeId}/results/state`;
     subgeography = `states/${stateId}/offices/${

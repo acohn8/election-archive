@@ -3,9 +3,11 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
 
-import { setActiveState } from '../../redux/actions/stateActions';
+import { pushToNewState } from '../../redux/actions/stateActions';
 import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
+import { setActiveOffice, fetchStateOffices } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
+import { setStateId } from '../../redux/actions/stateActions';
 import { StateColorScale, CountyColorScale } from '../../functions/ColorScale';
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -107,28 +109,46 @@ class NationalMap extends React.Component {
   stateSelection = () => {
     this.map.on('click', e => {
       const features = this.map.queryRenderedFeatures(e.point, {
-        layers: ['dem-statewide-margin'],
+        layers:
+          this.props.offices.selectedOfficeId !== '322'
+            ? ['dem-statewide-margin']
+            : ['dem-county-margin'],
       });
       if (features.length) {
         const coords = e.lngLat;
-        const state = this.props.states.states.find(
-          state =>
-            state.attributes['short-name'].toLowerCase() ===
-            features[0].properties.STUSPS.toLowerCase(),
-        );
+        console.log(features);
+        const state = this.getStateName(features[0]);
         this.setStateOnClick(state, coords);
       }
     });
   };
 
+  getStateName = feature => {
+    if (this.props.offices.selectedOfficeId === '322') {
+      return this.props.states.states.find(
+        state =>
+          state.attributes['short-name'].toLowerCase() ===
+          feature.properties.NAME.split('-')[0].toLowerCase(),
+      );
+    } else {
+      return this.props.states.states.find(
+        state =>
+          state.attributes['short-name'].toLowerCase() === feature.properties.STUSPS.toLowerCase(),
+      );
+    }
+  };
+
   setStateOnClick = (state, coords) => {
+    this.props.setStateId(state.id);
+    this.props.fetchStateOffices(state.id);
+    this.props.setActiveOffice(this.props.offices.selectedOfficeId);
     this.props.fetchStateData(state.id);
     this.map.flyTo({
       center: coords,
       zoom: 6,
       speed: 0.75,
     });
-    this.map.on('moveend', () => this.props.setActiveState(state.id, false));
+    this.map.on('moveend', () => this.props.pushToNewState(state.id));
   };
 
   addResultsLayer = () => {
@@ -311,7 +331,6 @@ class NationalMap extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setActiveState: (id, fetch) => dispatch(setActiveState(id, fetch)),
   getHoverInfo: (
     geographyName,
     winnerName,
@@ -342,6 +361,10 @@ const mapDispatchToProps = dispatch => ({
   fetchStateData: id => dispatch(fetchStateData(id)),
   hideHeader: () => dispatch(hideHeader()),
   showHeader: () => dispatch(showHeader()),
+  pushToNewState: stateId => dispatch(pushToNewState(stateId)),
+  setActiveOffice: (officeId, districtId) => dispatch(setActiveOffice(officeId, districtId)),
+  setStateId: stateId => dispatch(setStateId(stateId)),
+  fetchStateOffices: stateId => dispatch(fetchStateOffices(stateId)),
 });
 
 const mapStateToProps = state => ({
