@@ -26,14 +26,14 @@ class Map extends React.Component {
   }
 
   getCoords = () => {
-    const foundCounty = this.props.geography.result.counties.find(
+    const foundCounty = this.props.counties.result.find(
       countyId =>
-        this.props.geography.entities.counties[countyId].latitude &&
-        this.props.geography.entities.counties[countyId].longitude !== false,
+        this.props.counties.entities.counties[countyId].attributes.latitude &&
+        this.props.counties.entities.counties[countyId].attributes.longitude !== false,
     );
     return [
-      this.props.geography.entities.counties[foundCounty].longitude,
-      this.props.geography.entities.counties[foundCounty].latitude,
+      this.props.counties.entities.counties[foundCounty].attributes.longitude,
+      this.props.counties.entities.counties[foundCounty].attributes.latitude,
     ];
   };
 
@@ -393,7 +393,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   states: state.states,
   stateFips: state.results.stateFips,
-  geography: state.results.geography,
+  counties: state.results.counties,
   candidates: state.results.candidates,
   offices: state.offices,
 });

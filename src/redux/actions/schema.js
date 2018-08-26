@@ -14,6 +14,4 @@ export const officeListSchema = [officeSchema];
 const financeSchema = new schema.Entity('finance');
 export const financeListSchema = [financeSchema];
 
-export const stateCounties = {
-  counties: [countySchema],
-};
+export const stateCounties = [countySchema];

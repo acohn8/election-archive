@@ -65,7 +65,9 @@ class CountyMap extends React.Component {
         filter: [
           '==',
           ['get', 'GEOID'],
-          this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
+          this.props.counties.entities.counties[
+            this.props.precinctResults.county_id
+          ].attributes.fips
             .toString()
             .padStart(5, '0'),
         ],
@@ -85,7 +87,9 @@ class CountyMap extends React.Component {
         filter: [
           '==',
           ['get', 'GEOID'],
-          this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
+          this.props.counties.entities.counties[
+            this.props.precinctResults.county_id
+          ].attributes.fips
             .toString()
             .padStart(5, '0'),
         ],
@@ -105,7 +109,9 @@ class CountyMap extends React.Component {
       .filter(
         county =>
           county.properties.GEOID ===
-          this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
+          this.props.counties.entities.counties[
+            this.props.precinctResults.county_id
+          ].attributes.fips
             .toString()
             .padStart(5, '0'),
       );
@@ -134,7 +140,9 @@ class CountyMap extends React.Component {
           filter: [
             '==',
             ['get', 'CNTY_FIPS'],
-            this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
+            this.props.counties.entities.counties[
+              this.props.precinctResults.county_id
+            ].attributes.fips
               .toString()
               .padStart(5, '0'),
           ],
@@ -205,8 +213,11 @@ class CountyMap extends React.Component {
             '==',
             ['get', 'GEOID'],
             this.props.states.activeStateId === '11' || this.props.states.activeStateId === '14'
-              ? this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
-              : this.props.geography.entities.counties[this.props.precinctResults.county_id].fips
+              ? this.props.counties.entities.counties[this.props.precinctResults.county_id]
+                  .attributes.fips
+              : this.props.counties.entities.counties[
+                  this.props.precinctResults.county_id
+                ].attributes.fips
                   .toString()
                   .padStart(5, '0'),
           ],
@@ -260,7 +271,7 @@ class CountyMap extends React.Component {
 
 const mapStateToProps = state => ({
   states: state.states,
-  geography: state.results.geography,
+  counties: state.results.counties,
   candidates: state.results.candidates,
   precinctResults: state.results.precinctResults,
   mapDetails: state.maps.mapDetails,

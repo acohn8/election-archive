@@ -86,7 +86,6 @@ class PrecinctResultsTable extends React.Component {
 
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
-  geography: state.results.geography,
   countyResults: state.results.countyResults,
   precinctResults: state.results.precinctResults,
   windowWidth: state.nav.windowWidth,

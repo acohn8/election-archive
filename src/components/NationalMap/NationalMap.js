@@ -21,15 +21,17 @@ class NationalMap extends React.Component {
       this.props.offices.selectedOfficeId !== prevProps.offices.selectedOfficeId &&
       this.map !== undefined
     ) {
-      this.map.removeLayer('dem-statewide-margin');
+      prevProps.offices.selectedOfficeId !== '322' && this.map.removeLayer('dem-statewide-margin');
+      prevProps.offices.selectedOfficeId !== '322' && this.map.removeLayer('state-lines');
+      prevProps.offices.selectedOfficeId !== '322' && this.map.removeLayer('state-hover-line');
+      prevProps.offices.selectedOfficeId !== '322' && this.map.removeSource('statewideResults');
       this.map.removeLayer('dem-county-margin');
-      this.map.removeLayer('state-lines');
       this.map.removeLayer('county-lines');
       this.map.removeLayer('county-hover-line');
-      this.map.removeLayer('state-hover-line');
       this.map.removeSource('countyResults');
-      this.map.removeSource('statewideResults');
-      this.addResultsLayer();
+      this.props.offices.selectedOfficeId === '322'
+        ? this.addCongressionalLayers()
+        : this.addResultsLayer();
     } else if (this.map === undefined) {
       this.createMap();
     }
@@ -48,7 +50,9 @@ class NationalMap extends React.Component {
     });
 
     this.map.on('load', () => {
-      this.addResultsLayer();
+      this.props.offices.selectedOfficeId === '322'
+        ? this.addCongressionalLayers()
+        : this.addResultsLayer();
       this.stateSelection();
       this.enableHover();
       this.map.addControl(new mapboxgl.FullscreenControl());
@@ -61,7 +65,10 @@ class NationalMap extends React.Component {
   enableHover = () => {
     this.map.on('mousemove', e => {
       const features = this.map.queryRenderedFeatures(e.point, {
-        layers: ['dem-county-margin', 'dem-statewide-margin'],
+        layers:
+          this.props.offices.selectedOfficeId === '322'
+            ? ['dem-county-margin']
+            : ['dem-county-margin', 'dem-statewide-margin'],
       });
       if (features.length > 0) {
         const feature = features[0];
@@ -89,7 +96,8 @@ class NationalMap extends React.Component {
         }
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
-        this.map.setFilter('state-hover-line', ['==', 'STATEFP', '']);
+        this.props.offices.selectedOfficeId !== '322' &&
+          this.map.setFilter('state-hover-line', ['==', 'STATEFP', '']);
         this.map.setFilter('county-hover-line', ['==', 'GEOID', '']);
         this.props.resetHover();
       }
@@ -99,7 +107,10 @@ class NationalMap extends React.Component {
   stateSelection = () => {
     this.map.on('click', e => {
       const features = this.map.queryRenderedFeatures(e.point, {
-        layers: ['dem-statewide-margin'],
+        layers:
+          this.props.offices.selectedOfficeId === '322'
+            ? ['dem-county-margin']
+            : ['dem-county-margin', 'dem-statewide-margin'],
       });
       if (features.length) {
         const coords = e.lngLat;
@@ -238,6 +249,58 @@ class NationalMap extends React.Component {
     this.map.moveLayer('county-lines', 'state-lines');
   };
 
+  addCongressionalLayers = () => {
+    this.map.addSource('countyResults', {
+      url: 'mapbox://adamcohn.8xftngc2',
+      type: 'vector',
+    });
+
+    this.map.addLayer(
+      {
+        id: 'county-lines',
+        type: 'line',
+        source: 'countyResults',
+        'source-layer': 'cb_2017_us_cd115_500k',
+        paint: {
+          'line-width': 0.3,
+          'line-color': '#696969',
+          'line-opacity': 0.6,
+        },
+      },
+      'waterway-label',
+    );
+
+    this.map.addLayer(
+      {
+        id: 'county-hover-line',
+        type: 'line',
+        source: 'countyResults',
+        'source-layer': 'cb_2017_us_cd115_500k',
+        filter: ['==', 'GEOID', ''],
+        paint: {
+          'line-width': 2,
+          'line-color': '#696969',
+          'line-opacity': 1,
+        },
+      },
+      'waterway-label',
+    );
+
+    this.map.addLayer(
+      {
+        id: 'dem-county-margin',
+        type: 'fill',
+        source: 'countyResults',
+        'source-layer': 'cb_2017_us_cd115_500k',
+        paint: CountyColorScale,
+      },
+      'waterway-label',
+    );
+    this.map.moveLayer('dem-county-margin', 'poi-parks-scalerank2');
+    this.map.moveLayer('county-hover-line', 'poi-parks-scalerank2');
+    this.map.moveLayer('county-lines', 'poi-parks-scalerank2');
+  };
+
   render() {
     const style = {
       position: 'relative',
@@ -286,7 +349,6 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   states: state.states,
-  geography: state.results.geography,
   offices: state.offices,
   shortName: state.results.shortName,
 });

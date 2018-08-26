@@ -85,7 +85,6 @@ class StateContainer extends React.Component {
 
 const mapStateToProps = state => ({
   loading: state.results.loading,
-  geography: state.results.geography,
   states: state.states,
   offices: state.offices,
   nav: state.nav,

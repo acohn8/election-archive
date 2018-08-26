@@ -14,12 +14,21 @@ const fetchStateOffices = stateId => async (dispatch) => {
   dispatch({ type: 'SET_STATE_OFFICES', stateOffices: normalize(response.data, officeListSchema) });
 };
 
-const setActiveOffice = (officeId = 308, districtId = null) => async (dispatch, getState) => {
+const setActiveOffice = (officeId = 308, districtId = null, stateId = null) => async (
+  dispatch,
+  getState,
+) => {
   dispatch({ type: 'SET_ACTIVE_OFFICE', officeId, districtId });
+  let state;
+  if (stateId === null) {
+    state = getState().states.activeStateId;
+  } else {
+    state = stateId;
+  }
   if (getState().states.activeStateId && districtId) {
-    dispatch(fetchStateData(getState().states.activeStateId, districtId));
+    dispatch(fetchStateData(state, districtId));
   } else if (getState().states.activeStateId) {
-    dispatch(fetchStateData(getState().states.activeStateId));
+    dispatch(fetchStateData(state));
   }
 };
 
