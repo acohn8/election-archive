@@ -40,7 +40,6 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
   const stateFips = response[3].data.fips;
   const shortName = response[3].data.short_name;
   const candidates = normalize(response[1].data.data, candidateListSchema);
-  console.log(counties);
   dispatch({
     type: 'SET_STATE_DATA',
     shortName,

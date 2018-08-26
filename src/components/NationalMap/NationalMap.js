@@ -107,10 +107,7 @@ class NationalMap extends React.Component {
   stateSelection = () => {
     this.map.on('click', e => {
       const features = this.map.queryRenderedFeatures(e.point, {
-        layers:
-          this.props.offices.selectedOfficeId === '322'
-            ? ['dem-county-margin']
-            : ['dem-county-margin', 'dem-statewide-margin'],
+        layers: ['dem-statewide-margin'],
       });
       if (features.length) {
         const coords = e.lngLat;
