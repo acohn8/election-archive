@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Header } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 const CampaignFinanceTable = props => (
