@@ -2,6 +2,7 @@ import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'react-redux';
+import bbox from '@turf/bbox';
 
 import { StateColorScale, CountyColorScale } from '../../functions/ColorScale';
 
@@ -34,6 +35,7 @@ class NewMap extends React.Component {
         this.addHoverLayer('county', 'GEOID');
         this.setFilter(['countyFill', 'countyLines'], 'STATEFP', '12');
         this.enableHover('county', 'GEOID');
+        this.bindToMap('county', 'STATEFP', '12');
       });
     }
   }
@@ -115,6 +117,22 @@ class NewMap extends React.Component {
       },
       'waterway-label',
     );
+  };
+
+  bindToMap = (geography, property, value) => {
+    this.map.addSource(`${geography}-bounds`, {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: this.map
+          .queryRenderedFeatures(() => {
+            `${geography}Fill}`;
+          })
+          .filter(geo => geo.properties[property] === value),
+      },
+    });
+    const boundingBox = bbox(this.map.getSource(`${geography}-bounds`)._data);
+    this.map.fitBounds(boundingBox, { padding: 20, animate: false });
   };
 
   render() {
