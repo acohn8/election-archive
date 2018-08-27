@@ -13,7 +13,7 @@ const colors = {
 };
 
 const ToplinesCard = ({
-  candidate, votes, total, winner, financeLoad,
+  candidate, votes, total, winner, financeData,
 }) => (
   <Card color={colors[candidate.attributes.party]}>
     <Card.Content>
@@ -36,7 +36,7 @@ const ToplinesCard = ({
       </Card.Description>
     </Card.Content>
 
-    {financeLoad && (
+    {Object.keys(financeData) && (
       <Card.Content>
         {candidate.attributes['fec-id'] !== null ? (
           <CampaignFinanceTable candidateId={candidate.id} disabled={false} />
@@ -49,7 +49,7 @@ const ToplinesCard = ({
 );
 
 const mapStateToProps = state => ({
-  financeLoad: state.campaignFinance.loadingComplete,
+  financeData: state.campaignFinance.financeData,
 });
 
 export default connect(mapStateToProps)(ToplinesCard);

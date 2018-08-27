@@ -1,7 +1,8 @@
 import React from 'react';
-import { Grid, Header, Container, Divider } from 'semantic-ui-react';
+import { Grid, Header, Container, Divider, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
+import ExportDropdown from './Table/ExportDropdown';
 import TableContainer from './Table/tableContainer';
 import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
@@ -50,36 +51,48 @@ class StateContainer extends React.Component {
             this.props.states.activeStateId !== null && (
               <div>
                 <Grid columns={2} verticalAlign="middle" stackable>
-                  <Grid.Column>
-                    <Header size="huge">
-                      {this.props.nav.windowWidth >= 768 ? (
-                        this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
-                      ) : (
-                        <MobileStateSelector
-                          state={
-                            this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
-                          }
-                        />
-                      )}
-                      <Header.Subheader>
-                        Results for{' '}
-                        <span style={{ color: '#00B5AD' }}>
-                          <OfficeDropdown className="link item" />
-                        </span>
-                      </Header.Subheader>
-                    </Header>
-                  </Grid.Column>
+                  <Grid.Row columns={3}>
+                    <Grid.Column>
+                      <Header size="huge">
+                        {this.props.nav.windowWidth >= 768 ? (
+                          this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
+                        ) : (
+                          <MobileStateSelector
+                            state={
+                              this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
+                            }
+                          />
+                        )}
+                        <Header.Subheader>
+                          Results for{' '}
+                          <span style={{ color: '#00B5AD' }}>
+                            <OfficeDropdown className="link item" />
+                          </span>
+                        </Header.Subheader>
+                      </Header>
+                    </Grid.Column>
+                    <Grid.Column floated="right" textAlign="right">
+                      {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
+                    </Grid.Column>
+                  </Grid.Row>
                   <Grid.Row>
                     <Grid.Column>
                       <ToplinesContainer />
                     </Grid.Column>
                     <Grid.Column>
-                      {!this.props.offices.selectedDistrictId && <MapContainer />}
+                      <Segment>
+                        <MapContainer />
+                      </Segment>
                     </Grid.Column>
                   </Grid.Row>
-                  <Divider />
+                  <Grid.Row columns={1}>
+                    <Grid.Column>
+                      <Segment>
+                        <TableContainer />
+                      </Segment>
+                    </Grid.Column>
+                  </Grid.Row>
                 </Grid>
-                <TableContainer />
               </div>
             )}
         </Container>

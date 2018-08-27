@@ -263,7 +263,7 @@ class CountyMap extends React.Component {
       position: 'relative',
       top: 0,
       bottom: 0,
-      minHeight: 400,
+      minHeight: 398,
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }

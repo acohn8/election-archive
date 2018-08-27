@@ -3,11 +3,10 @@ import { List, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 const colors = {
-  democratic: 'blue',
-  republican: 'red',
-  libertarian: 'yellow',
-  green: 'green',
-  'working families': 'purple',
+  democratic: '#2085D0',
+  republican: '#DB2828',
+  libertarian: '#FBBD09',
+  other: '#6435C9',
 };
 
 const MapInfo = props => (

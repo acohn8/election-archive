@@ -48,7 +48,9 @@ class Map extends React.Component {
     });
 
     this.map.on('load', () => {
-      this.addResultsLayer();
+      this.props.offices.selectedOfficeId === '322'
+        ? this.addCongressionalLayers()
+        : this.addResultsLayer();
       this.props.states.activeStateId !== '17' && this.enableHover();
       this.map.addControl(new mapboxgl.FullscreenControl());
       this.map.addControl(new mapboxgl.NavigationControl());
@@ -335,7 +337,7 @@ class Map extends React.Component {
     }
 
     const boundingBox = bbox(this.map.getSource('counties')._data);
-    this.map.fitBounds(boundingBox, { padding: 20, animate: false });
+    this.zoomToArea(boundingBox);
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
     this.map.moveLayer('county-lines', 'poi-parks-scalerank2');
     this.props.states.activeStateId !== '17' &&
@@ -348,13 +350,87 @@ class Map extends React.Component {
     this.props.setMapDetails(mapDetails);
   };
 
+  zoomToArea = bbox => {
+    this.map.fitBounds(bbox, { padding: 20, animate: false });
+  };
+
+  addCongressionalLayers = () => {
+    this.map.addSource('countyResults', {
+      url: 'mapbox://adamcohn.8xftngc2',
+      type: 'vector',
+    });
+
+    this.map.addLayer(
+      {
+        id: 'county-lines',
+        type: 'line',
+        source: 'countyResults',
+        'source-layer': 'cb_2017_us_cd115_500k',
+        filter: ['==', ['get', 'id'], this.props.offices.selectedDistrictId],
+        paint: {
+          'line-width': 0.3,
+          'line-color': '#696969',
+          'line-opacity': 0.6,
+        },
+      },
+      'waterway-label',
+    );
+
+    this.map.addLayer(
+      {
+        id: 'county-hover-line',
+        type: 'line',
+        source: 'countyResults',
+        'source-layer': 'cb_2017_us_cd115_500k',
+        filter: ['==', 'GEOID', ''],
+        paint: {
+          'line-width': 2,
+          'line-color': '#696969',
+          'line-opacity': 1,
+        },
+      },
+      'waterway-label',
+    );
+
+    this.map.addLayer(
+      {
+        id: 'dem-margin',
+        type: 'fill',
+        source: 'countyResults',
+        'source-layer': 'cb_2017_us_cd115_500k',
+        filter: ['==', ['get', 'id'], this.props.offices.selectedDistrictId],
+        paint: CountyColorScale,
+      },
+      'waterway-label',
+    );
+
+    this.map.addSource('district', {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: this.map
+          .queryRenderedFeatures(() => {
+            'dem-margin';
+          })
+          .filter(district => district.properties.id === this.props.offices.selectedDistrictId),
+      },
+    });
+
+    const boundingBox = bbox(this.map.getSource('district')._data);
+    this.zoomToArea(boundingBox);
+
+    this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
+    this.map.moveLayer('county-hover-line', 'poi-parks-scalerank2');
+    this.map.moveLayer('county-lines', 'poi-parks-scalerank2');
+  };
+
   render() {
     const style = {
       position: 'relative',
       top: 0,
       bottom: 0,
       width: '100%',
-      minHeight: 400,
+      minHeight: 348,
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }

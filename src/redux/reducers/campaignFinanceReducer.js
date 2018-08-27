@@ -1,6 +1,5 @@
 const initialFinanceState = {
   financeData: {},
-  loadingComplete: false,
 };
 
 const campaignFinanceReducer = (previousState = initialFinanceState, action) => {
@@ -9,12 +8,11 @@ const campaignFinanceReducer = (previousState = initialFinanceState, action) => 
       return {
         ...previousState,
         financeData: action.financeData,
-        loadingComplete: true,
       };
     case 'RESET_FINANCE_DATA':
       return {
         ...previousState,
-        loadingComplete: false,
+        financeData: {},
       };
     default:
       return previousState;

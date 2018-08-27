@@ -116,11 +116,19 @@ class NationalMap extends React.Component {
       });
       if (features.length) {
         const coords = e.lngLat;
-        console.log(features);
         const state = this.getStateName(features[0]);
-        this.setStateOnClick(state, coords);
+        const district = this.getDistrictId(features[0]);
+        this.setStateOnClick(state, coords, district);
       }
     });
+  };
+
+  getDistrictId = feature => {
+    if (this.props.offices.selectedOfficeId === '322') {
+      return feature.properties.id;
+    } else {
+      return null;
+    }
   };
 
   getStateName = feature => {
@@ -138,11 +146,11 @@ class NationalMap extends React.Component {
     }
   };
 
-  setStateOnClick = (state, coords) => {
+  setStateOnClick = (state, coords, districtId) => {
     this.props.setStateId(state.id);
     this.props.fetchStateOffices(state.id);
-    this.props.setActiveOffice(this.props.offices.selectedOfficeId);
-    this.props.fetchStateData(state.id);
+    this.props.setActiveOffice(this.props.offices.selectedOfficeId, districtId);
+    this.props.fetchStateData(state.id, districtId);
     this.map.flyTo({
       center: coords,
       zoom: 6,
@@ -268,7 +276,7 @@ class NationalMap extends React.Component {
 
   addCongressionalLayers = () => {
     this.map.addSource('countyResults', {
-      url: 'mapbox://adamcohn.8xftngc2',
+      url: 'mapbox://adamcohn.7yh82025',
       type: 'vector',
     });
 
@@ -309,7 +317,7 @@ class NationalMap extends React.Component {
         type: 'fill',
         source: 'countyResults',
         'source-layer': 'cb_2017_us_cd115_500k',
-        paint: CountyColorScale,
+        paint: StateColorScale,
       },
       'waterway-label',
     );
@@ -358,7 +366,7 @@ const mapDispatchToProps = dispatch => ({
       ),
     ),
   resetHover: () => dispatch(resetHover()),
-  fetchStateData: id => dispatch(fetchStateData(id)),
+  fetchStateData: (stateId, districtId) => dispatch(fetchStateData(stateId, districtId)),
   hideHeader: () => dispatch(hideHeader()),
   showHeader: () => dispatch(showHeader()),
   pushToNewState: stateId => dispatch(pushToNewState(stateId)),

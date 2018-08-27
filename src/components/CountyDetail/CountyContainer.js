@@ -43,7 +43,6 @@ class CountyContainer extends React.Component {
       <Segment raised padded>
         {this.props.precinctResults.precincts !== undefined ? (
           <Grid centered stackable columns={2}>
-            <Grid.Row />
             <Grid.Row>
               <List horizontal size="big">
                 {this.formatCountyToplines().map(candidate => (
@@ -55,13 +54,19 @@ class CountyContainer extends React.Component {
               <Header as="h3">Precinct Results</Header>
               <PrecinctResultsTable />
             </Grid.Column>
-            <Grid.Column>
-              <Header as="h3">
-                {this.props.counties.entities.counties[this.props.precinctResults.county_id].name}
-              </Header>
-              {/* no AK map */}
-              {this.props.states.activeStateId !== '17' && <CountyMap />}
-            </Grid.Column>
+            {this.props.states.activeStateId !== '17' &&
+              this.props.selectedOfficeId !== '322' && (
+                <Grid.Column>
+                  <Header as="h3">
+                    {
+                      this.props.counties.entities.counties[
+                        this.props.precinctResults.county_id.toString()
+                      ].attributes.name
+                    }
+                  </Header>
+                  <CountyMap />
+                </Grid.Column>
+              )}
           </Grid>
         ) : (
           <Loader />
@@ -78,6 +83,7 @@ const mapStateToProps = state => ({
   precinctResults: state.results.precinctResults,
   countyResults: state.results.countyResults,
   stateResults: state.results.stateResults,
+  selectedOfficeId: state.offices.selectedOfficeId,
 });
 
 const mapDispatchToProps = dispatch => ({
