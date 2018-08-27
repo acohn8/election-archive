@@ -118,7 +118,9 @@ class NationalMap extends React.Component {
         const coords = e.lngLat;
         const state = this.getStateName(features[0]);
         const district = this.getDistrictId(features[0]);
-        this.setStateOnClick(state, coords, district);
+        if (district !== 0) {
+          this.setStateOnClick(state, coords, district);
+        }
       }
     });
   };
@@ -276,7 +278,7 @@ class NationalMap extends React.Component {
 
   addCongressionalLayers = () => {
     this.map.addSource('countyResults', {
-      url: 'mapbox://adamcohn.7yh82025',
+      url: 'mapbox://adamcohn.4c51e3au',
       type: 'vector',
     });
 
