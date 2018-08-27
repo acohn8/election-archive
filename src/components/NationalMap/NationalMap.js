@@ -95,6 +95,8 @@ class NationalMap extends React.Component {
         }
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
+        this.map.setFilter('county-hover-line', ['==', 'GEOID', '']);
+        this.map.setFilter('state-hover-line', ['==', 'STATEFP', '']);
         this.props.resetHover();
       }
     });
