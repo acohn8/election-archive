@@ -14,7 +14,7 @@ const fetchStateOffices = stateId => async (dispatch) => {
 };
 
 const setActiveOffice = (officeId, districtId) => dispatch =>
-  dispatch({ type: 'SET_ACTIVE_OFFICE', officeId, districtId });
+  dispatch({ type: 'SET_ACTIVE_OFFICE', officeId: officeId.toString(), districtId });
 
 const resetOffice = () => dispatch => dispatch({ type: 'RESET_OFFICE' });
 

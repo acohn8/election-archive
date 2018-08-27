@@ -1,7 +1,7 @@
 const initialStatesState = {
   allOffices: [],
   stateOffices: [],
-  selectedOfficeId: 308,
+  selectedOfficeId: '308',
   selectedDistrictId: null,
 };
 
