@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Image, Statistic } from 'semantic-ui-react';
+import { Card, Image, Statistic, Label, Header } from 'semantic-ui-react';
 
 import CampaignFinanceTable from './financeTable';
 
@@ -15,29 +15,42 @@ const colors = {
 const ToplinesCard = ({
   candidate, votes, total, winner, financeData,
 }) => (
-  <Card color={colors[candidate.attributes.party]}>
+  <Card
+    color={colors[candidate.attributes.party]}
+    style={{
+      minHeight: 375,
+    }}
+  >
     <Card.Content>
-      {parseInt(candidate.id, 10) === winner ? (
-        <Image floated="right" size="mini" src={candidate.attributes.image} />
-      ) : (
-        <Image src={candidate.attributes.image} floated="right" size="mini" disabled />
+      {parseInt(candidate.id, 10) === winner && (
+        <Label color={colors[candidate.attributes.party]} corner="right" icon="check" />
       )}
-      <Card.Header>{candidate.attributes.name}</Card.Header>
-      <Card.Meta>{candidate.attributes.party}</Card.Meta>
-      <Card.Description style={{ textAlign: 'center' }}>
-        <Statistic size="tiny" color={colors[candidate.attributes.party]}>
-          <Statistic.Value>{votes.toLocaleString()}</Statistic.Value>
-          <Statistic.Label>Votes</Statistic.Label>
-        </Statistic>
-        <Statistic size="tiny" color={colors[candidate.attributes.party]}>
-          <Statistic.Value>{Math.round((votes / total) * 100)}</Statistic.Value>
-          <Statistic.Label>Percent</Statistic.Label>
-        </Statistic>
+      <Card.Header as="h4">
+        {candidate.attributes.image !== null && (
+          <Image rounded size="mini" src={candidate.attributes.image} spaced="right" />
+        )}
+        {candidate.attributes.name}
+      </Card.Header>
+    </Card.Content>
+    <Card.Content>
+      {/* <Card.Meta>{candidate.attributes.party}</Card.Meta> */}
+      <Card.Description>
+        <Header as="h4">Results</Header>
+        <Statistic.Group size="mini" widths="two">
+          <Statistic color={colors[candidate.attributes.party]}>
+            <Statistic.Value>{Math.round((votes / total) * 100)}</Statistic.Value>
+            <Statistic.Label>Percent</Statistic.Label>
+          </Statistic>
+          <Statistic color={colors[candidate.attributes.party]}>
+            <Statistic.Value>{votes.toLocaleString()}</Statistic.Value>
+            <Statistic.Label>Votes</Statistic.Label>
+          </Statistic>
+        </Statistic.Group>
       </Card.Description>
     </Card.Content>
-
-    {Object.keys(financeData) && (
+    {financeData && (
       <Card.Content>
+        <Header as="h4">Finance</Header>
         {candidate.attributes['fec-id'] !== null ? (
           <CampaignFinanceTable candidateId={candidate.id} disabled={false} />
         ) : (

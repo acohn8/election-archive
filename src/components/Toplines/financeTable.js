@@ -1,15 +1,10 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import { Table, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 const CampaignFinanceTable = props => (
   <div>
     <Table basic="very" celled stackable>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell colSpan="2">Campaign Finance</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
       <Table.Body>
         <Table.Row disabled={props.disabled}>
           <Table.Cell collapsing>Receipts</Table.Cell>

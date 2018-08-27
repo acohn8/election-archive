@@ -41,7 +41,7 @@ const OfficeDropdown = (props) => {
               </Dropdown.Item>
             ) : (
               <Dropdown.Item key={office}>
-                <Dropdown text={filteredOffices.entities.offices[office].name}>
+                <Dropdown text={filteredOffices.entities.offices[office].name} scrolling>
                   <Dropdown.Menu>
                     <Dropdown.Header>Districts</Dropdown.Header>
                     {filteredOffices.entities.offices[office].districts
