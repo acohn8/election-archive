@@ -40,6 +40,7 @@ class NationalMap extends React.Component {
   }
 
   componentWillUnmount() {
+    this.props.resetHover();
     this.map.remove();
   }
 
@@ -75,6 +76,7 @@ class NationalMap extends React.Component {
       if (features.length > 0) {
         const feature = features[0];
         this.map.getCanvas().style.cursor = 'pointer';
+        console.log(feature);
         if (
           feature.layer.id === 'dem-county-margin' ||
           feature.layer.id === 'dem-statewide-margin'
@@ -98,9 +100,6 @@ class NationalMap extends React.Component {
         }
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
-        this.props.offices.selectedOfficeId !== '322' &&
-          this.map.setFilter('state-hover-line', ['==', 'STATEFP', '']);
-        this.map.setFilter('county-hover-line', ['==', 'GEOID', '']);
         this.props.resetHover();
       }
     });
