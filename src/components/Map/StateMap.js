@@ -88,7 +88,7 @@ class Map extends React.Component {
   addResultsLayer = () => {
     //adds the precinct zoom threshold for precinct states
     const precinctStates = ['4', '11', '45', '14'];
-    const pa = 3;
+    const pa = '3';
     let zoomThreshold;
     if (
       precinctStates.includes(this.props.states.activeStateId) &&
@@ -151,7 +151,7 @@ class Map extends React.Component {
           id: 'county-hover-line',
           type: 'line',
           source: 'countyResults',
-          minzoom: zoomThreshold,
+          maxzoom: zoomThreshold,
           'source-layer': 'cb_2017_us_county_500k',
           filter: ['==', 'GEOID', ''],
           paint: {
