@@ -46,7 +46,7 @@ class NationalMap extends React.Component {
   createMap = () => {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
+      style: 'mapbox://styles/adamcohn/cjlbpna8q30602rmcwbmtz9zv',
       zoom: 3.5,
       center: [-98.585522, 39.8333333],
     });

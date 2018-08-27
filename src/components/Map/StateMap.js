@@ -40,7 +40,7 @@ class Map extends React.Component {
   createMap = () => {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: 'mapbox://styles/adamcohn/cjjyfk3es0nfj2rqpf9j53505',
+      style: 'mapbox://styles/adamcohn/cjlbpna8q30602rmcwbmtz9zv',
       zoom: 3,
       //grabs the lat long from the first county in the state to ensure the counties layer is loading the right geos
       //if it's Alaska, it just jumps to the middle of the state
@@ -356,7 +356,7 @@ class Map extends React.Component {
 
   addCongressionalLayers = () => {
     this.map.addSource('countyResults', {
-      url: 'mapbox://adamcohn.8xftngc2',
+      url: 'mapbox://adamcohn.4c51e3au',
       type: 'vector',
     });
 
@@ -418,7 +418,6 @@ class Map extends React.Component {
 
     const boundingBox = bbox(this.map.getSource('district')._data);
     this.zoomToArea(boundingBox);
-
     this.map.moveLayer('dem-margin', 'poi-parks-scalerank2');
     this.map.moveLayer('county-hover-line', 'poi-parks-scalerank2');
     this.map.moveLayer('county-lines', 'poi-parks-scalerank2');
