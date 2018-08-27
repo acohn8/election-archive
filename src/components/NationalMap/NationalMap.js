@@ -76,27 +76,22 @@ class NationalMap extends React.Component {
       if (features.length > 0) {
         const feature = features[0];
         this.map.getCanvas().style.cursor = 'pointer';
-        console.log(feature);
-        if (
-          feature.layer.id === 'dem-county-margin' ||
-          feature.layer.id === 'dem-statewide-margin'
-        ) {
-          this.map.setFilter(
-            feature.layer.id === 'dem-county-margin' ? 'county-hover-line' : 'state-hover-line',
-            ['==', 'GEOID', feature.properties.GEOID],
-          );
-          this.props.getHoverInfo(
-            feature.properties.NAME,
-            feature.properties.winner_name,
-            feature.properties.winner_party,
-            feature.properties.winner_margin,
-            feature.properties.winner_votes,
-            feature.properties.second_name,
-            feature.properties.second_party,
-            feature.properties.second_margin,
-            feature.properties.second_votes,
-            true,
-          );
+        this.props.getHoverInfo(
+          feature.properties.NAME,
+          feature.properties.winner_name,
+          feature.properties.winner_party,
+          feature.properties.winner_margin,
+          feature.properties.winner_votes,
+          feature.properties.second_name,
+          feature.properties.second_party,
+          feature.properties.second_margin,
+          feature.properties.second_votes,
+          true,
+        );
+        if (feature.layer.id === 'dem-county-margin') {
+          this.map.setFilter('county-hover-line', ['==', 'GEOID', feature.properties.GEOID]);
+        } else if (feature.layer.id === 'dem-statewide-margin') {
+          this.map.setFilter('state-hover-line', ['==', 'STATEFP', feature.properties.STATEFP]);
         }
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
