@@ -230,7 +230,7 @@ class Map extends React.Component {
 
     if (this.props.offices.selectedOfficeId === '308' && this.props.states.activeStateId === '4') {
       this.map.addSource('precinct', {
-        url: 'mapbox://adamcohn.4c51e3au',
+        url: 'mapbox://adamcohn.adwhne7t',
         type: 'vector',
       });
 
