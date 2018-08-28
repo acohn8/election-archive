@@ -6,6 +6,7 @@ import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';
 import { resetActiveState } from '../../redux/actions/stateActions';
 import { setActive } from '../../redux/actions/navActions';
+import NewMapComponent from '../Map/NewMapComponent';
 
 class NationalMapContainer extends React.Component {
   state = { windowWidth: '' };
@@ -18,7 +19,11 @@ class NationalMapContainer extends React.Component {
     return (
       <div ref={divElement => (this.divElement = divElement)}>
         {this.props.offices.allOffices.result !== undefined && (
-          <NationalMap windowWidth={this.props.windowWidth} />
+          <NewMapComponent
+            position={'relative'}
+            height={this.props.windowWidth >= 768 ? '94vh' : '65vh'}
+            zoomThreshold={4.2}
+          />
         )}
         {!this.props.headerHid &&
           this.props.windowWidth >= 768 && (
