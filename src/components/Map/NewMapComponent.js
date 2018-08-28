@@ -51,8 +51,8 @@ class NewMap extends React.Component {
         this.addSources(layers);
         this.addFillLayers(layers, 4.2);
         this.addLineLayers(layers, 4.2);
-        this.addHoverLayers(layers);
-        this.setFilter(['stateFill', 'countyFill', 'stateLine', 'countyLine'], 'STATEFP', '12');
+        this.addHoverLayers(layers, 4.2);
+        // this.setFilter(['stateFill', 'countyFill', 'stateLine', 'countyLine'], 'STATEFP', '12');
         this.enableHover(layers);
         this.bindToMap('STATEFP', '12');
         // this.stateSelection();
@@ -70,7 +70,6 @@ class NewMap extends React.Component {
         const features = this.map.queryRenderedFeatures(e.point, {
           layers: geographies.map(geo => `${geo.name}Fill`),
         });
-        console.log(features);
         if (features.length > 0) {
           const feature = features[0];
           if (features !== undefined && feature.layer.id === 'stateFill') {
@@ -99,6 +98,8 @@ class NewMap extends React.Component {
   };
 
   filterSubGeographyHover = (geography, feature) => {
+    const dataFeature = feature;
+    console.log(dataFeature);
     const sourceFeatures = this.map.querySourceFeatures('composite', {
       sourceLayer: geography.sourceLayer,
       filter: ['==', geography.filter, feature.properties[geography.filter]],
@@ -109,14 +110,12 @@ class NewMap extends React.Component {
         feature = union(feature, sourceFeatures[i]);
       }
     }
-    console.log(feature);
-
     if (sourceFeatures.length > 0) {
       this.map.getSource(`${geography.name}Hover`).setData({
         type: 'FeatureCollection',
         features: [feature],
       });
-      // this.addGeographyInfoToOverlay(feature);
+      this.addGeographyInfoToOverlay(dataFeature);
     }
   };
 
@@ -245,13 +244,15 @@ class NewMap extends React.Component {
     layers.forEach(layer => this.map.setFilter(layer, ['==', property, value]));
   }
 
-  addHoverLayers = geographies => {
+  addHoverLayers = (geographies, zoomThreshold = 0) => {
     geographies.forEach(geography => {
       if (geography.sourceLayer === 'cb_2017_us_state_500k') {
         this.map.addLayer(
           {
             id: `${geography.name}Hover`,
             type: 'line',
+            minzoom: geographies.indexOf(geography) === 0 ? zoomThreshold : 0,
+            maxzoom: geographies.indexOf(geography) === 1 ? zoomThreshold : 0,
             source: geography.name,
             'source-layer': geography.sourceLayer,
             filter: ['==', 'STATEFP', ''],
@@ -275,6 +276,8 @@ class NewMap extends React.Component {
         this.map.addLayer({
           id: `${geography.name}Hover`,
           source: `${geography.name}Hover`,
+          minzoom: geographies.indexOf(geography) === 0 ? zoomThreshold : 0,
+          maxzoom: geographies.indexOf(geography) === 1 ? zoomThreshold : 0,
           type: 'line',
           paint: {
             'line-width': 2,
