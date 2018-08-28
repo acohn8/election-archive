@@ -52,9 +52,9 @@ class NewMap extends React.Component {
         this.addFillLayers(layers, 4.2);
         this.addLineLayers(layers, 4.2);
         this.addHoverLayers(layers);
-        // this.setFilter(['stateFill', 'countyFill', 'stateLine', 'countyLine'], 'STATEFP', '12');
+        this.setFilter(['stateFill', 'countyFill', 'stateLine', 'countyLine'], 'STATEFP', '12');
         this.enableHover(layers);
-        // this.bindToMap();
+        this.bindToMap('STATEFP', '12');
         // this.stateSelection();
       });
     }
@@ -66,47 +66,72 @@ class NewMap extends React.Component {
 
   enableHover = geographies => {
     geographies.forEach(geography =>
-      this.map.on('mousemove', `${geography.name}Fill`, e => {
-        if (e.features) {
-          const feature = e.features[0];
-          console.log(this.map.getSource('composite').vectorLayerIds);
-          const sourceFeatures = this.map.querySourceFeatures('composite', {
-            sourceLayer: geography.sourceLayer,
-            filter: ['==', geography.filter, feature.properties[geography.filter]],
-          });
-          // const joinedFeatures = union.apply(this, sourceFeatures);
-          // console.log(joinedFeatures);
-          // const layer = sourceFeatures.map(sourceFeature => {
-          //   const areaFeature = sourceFeature[0];
-          //   union(sourceFeature, areaFeature);
-          // });
-          this.map.getSource(`${geography.name}Hover`).setData({
-            type: 'FeatureCollection',
-            features: sourceFeatures,
-          });
-          this.map.getCanvas().style.cursor = 'pointer';
-
-          this.props.getHoverInfo(
-            feature.properties.NAME,
-            feature.properties.winner_name,
-            feature.properties.winner_party,
-            feature.properties.winner_margin,
-            feature.properties.winner_votes,
-            feature.properties.second_name,
-            feature.properties.second_party,
-            feature.properties.second_margin,
-            feature.properties.second_votes,
-            true,
-          );
-        } else if (!e.features) {
+      this.map.on('mousemove', e => {
+        const features = this.map.queryRenderedFeatures(e.point, {
+          layers: geographies.map(geo => `${geo.name}Fill`),
+        });
+        console.log(features);
+        if (features.length > 0) {
+          const feature = features[0];
+          if (features !== undefined && feature.layer.id === 'stateFill') {
+            this.map.getCanvas().style.cursor = 'pointer';
+            this.filterStateHover(feature);
+          } else if (features !== undefined && feature.layer.id !== 'stateFill') {
+            this.map.getCanvas().style.cursor = 'pointer';
+            this.filterSubGeographyHover(geography, feature);
+          }
+        } else if (features.length === 0) {
           this.map.getCanvas().style.cursor = '';
-          this.map.getSource(`${geography.name}Hover`).setData({
-            type: 'FeatureCollection',
-            features: [],
-          });
-          return;
+          geography.name === 'state'
+            ? this.map.setFilter('stateHover', ['==', 'STATEFP', ''])
+            : this.map.getSource(`${geography.name}Hover`).setData({
+                type: 'FeatureCollection',
+                features: [],
+              });
         }
       }),
+    );
+  };
+
+  filterStateHover = feature => {
+    this.map.setFilter('stateHover', ['==', 'STATEFP', feature.properties.STATEFP]);
+    this.addGeographyInfoToOverlay(feature);
+  };
+
+  filterSubGeographyHover = (geography, feature) => {
+    const sourceFeatures = this.map.querySourceFeatures('composite', {
+      sourceLayer: geography.sourceLayer,
+      filter: ['==', geography.filter, feature.properties[geography.filter]],
+    });
+    if (sourceFeatures.length > 1) {
+      feature = sourceFeatures[0];
+      for (let i = 1; i < sourceFeatures.length; i++) {
+        feature = union(feature, sourceFeatures[i]);
+      }
+    }
+    console.log(feature);
+
+    if (sourceFeatures.length > 0) {
+      this.map.getSource(`${geography.name}Hover`).setData({
+        type: 'FeatureCollection',
+        features: [feature],
+      });
+      // this.addGeographyInfoToOverlay(feature);
+    }
+  };
+
+  addGeographyInfoToOverlay = feature => {
+    this.props.getHoverInfo(
+      feature.properties.NAME,
+      feature.properties.winner_name,
+      feature.properties.winner_party,
+      feature.properties.winner_margin,
+      feature.properties.winner_votes,
+      feature.properties.second_name,
+      feature.properties.second_party,
+      feature.properties.second_margin,
+      feature.properties.second_votes,
+      true,
     );
   };
 
@@ -221,33 +246,49 @@ class NewMap extends React.Component {
   }
 
   addHoverLayers = geographies => {
-    geographies.forEach(geography =>
-      this.map.addSource(`${geography.name}Hover`, {
-        type: 'geojson',
-        data: {
-          type: 'FeatureCollection',
-          features: [],
-        },
-      }),
-    );
+    geographies.forEach(geography => {
+      if (geography.sourceLayer === 'cb_2017_us_state_500k') {
+        this.map.addLayer(
+          {
+            id: `${geography.name}Hover`,
+            type: 'line',
+            source: geography.name,
+            'source-layer': geography.sourceLayer,
+            filter: ['==', 'STATEFP', ''],
+            paint: {
+              'line-width': 2,
+              'line-color': '#696969',
+              'line-opacity': 1,
+            },
+          },
+          'waterway-label',
+        );
+      } else {
+        this.map.addSource(`${geography.name}Hover`, {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [],
+          },
+        });
 
-    geographies.forEach(geography =>
-      this.map.addLayer({
-        id: `${geography.name}Hover`,
-        source: `${geography.name}Hover`,
-        type: 'line',
-        paint: {
-          'line-width': 2,
-          'line-color': '#696969',
-          'line-opacity': 1,
-        },
-      }),
-    );
+        this.map.addLayer({
+          id: `${geography.name}Hover`,
+          source: `${geography.name}Hover`,
+          type: 'line',
+          paint: {
+            'line-width': 2,
+            'line-color': '#696969',
+            'line-opacity': 1,
+          },
+        });
+      }
+    });
   };
 
   filterGeojson = (property = null, value = null) => {
     const layer = this.map.querySourceFeatures('composite', {
-      sourceLayer: '2016_county_results-5wvgz3',
+      sourceLayer: 'cb_2017_us_county_500k',
     });
     if (property === null && value === null) {
       return layer.filter(
@@ -266,6 +307,7 @@ class NewMap extends React.Component {
         features: this.filterGeojson(property, value),
       },
     });
+    console.log(this.filterGeojson(property, value));
     const boundingBox = bbox(this.map.getSource('bounds')._data);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
   };
