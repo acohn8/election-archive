@@ -7,10 +7,12 @@ import CountyMap from '../Map/countyMap';
 import ResultsList from './ResultsList';
 import PrecinctResultsTable from './PrecinctResultsTable';
 import { fetchPrecinctData } from '../../redux/actions/precinctActions';
+import NewMapComponent from '../Map/NewMapComponent';
 
 class CountyContainer extends React.Component {
   componentDidMount() {
     this.props.fetchPrecinctData(this.props.row.original);
+    this.props.setActive('countyShow');
   }
 
   formatCountyToplines = () => {
@@ -64,7 +66,7 @@ class CountyContainer extends React.Component {
                       ].attributes.name
                     }
                   </Header>
-                  <CountyMap />
+                  {/* <NewMapComponent minHeight={398}/> */}
                 </Grid.Column>
               )}
           </Grid>

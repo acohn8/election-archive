@@ -33,8 +33,9 @@ const hideHeader = () => ({ type: 'HIDE_HEADER' });
 
 const setMapDetails = details => ({ type: 'SET_MAP_DETAILS', details });
 const resetMapDetails = () => ({ type: 'RESET_MAP_DETAILS' });
-const showingPrecincts = () => dispatch => ({ type: 'SHOWING_PRECINCTS' });
-const resetPrecincts = () => dispatch => ({ type: 'SHOWING_PRECINCTS' });
+
+const showingPrecincts = () => dispatch => dispatch({ type: 'SHOWING_PRECINCTS' });
+const resetPrecincts = () => dispatch => dispatch({ type: 'RESET_PRECINCTS' });
 
 const addLayer = layer => dispatch => dispatch({ type: 'ADD_LAYER', layer });
 const removeLayer = layer => (dispatch, getState) =>

@@ -12,6 +12,7 @@ import { fetchStateOffices, resetOffice } from '../redux/actions/officeActions';
 import { setActive } from '../redux/actions/navActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from './StateList/MobileStateSelect';
+import NewMapComponent from './Map/NewMapComponent';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -81,6 +82,7 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Segment>
+                        <NewMapComponent minHeight={368} zoomThreshold={0} />
                         <MapContainer />
                       </Segment>
                     </Grid.Column>

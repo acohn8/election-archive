@@ -18,6 +18,8 @@ import {
   resetHover,
   hideHeader,
   showHeader,
+  resetPrecincts,
+  showingPrecincts,
 } from '../../redux/actions/mapActions';
 import { setActiveOffice, fetchStateOffices } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
@@ -84,34 +86,36 @@ class NewMap extends React.Component {
       this.setFilter(this.props.layers, 'STATEFP', this.props.stateFips);
     }
     if (
-      this.props.activeItem === 'statesShow' &&
       precinctStates.includes(this.props.states.activeStateId) &&
       this.props.offices.selectedOfficeId === '308'
     ) {
+      this.props.showingPrecincts();
+      this.getPrecinctZoomThreshold();
       this.addPrecinctLayers();
     }
   };
 
   removeLayers = () => {
     this.props.layers.forEach(layer => {
+      this.props.removeLayer(layer);
       if (this.map.getLayer(layer)) {
         this.map.removeLayer(layer);
-        this.props.removeLayer(layer);
       }
     });
   };
 
   removeSources = () => {
     this.props.sources.forEach(source => {
+      this.props.removeSource(source);
       if (this.map.getSource(source)) {
         this.map.removeSource(source);
-        this.props.removeSource(source);
       }
     });
+    this.props.resetPrecincts();
   };
 
   getLayers = officeId => {
-    if (this.props.activePage === 'stateShow' && officeId !== '322') {
+    if (this.props.activeItem === 'statesShow' && officeId !== '322') {
       return [
         {
           name: 'county',
@@ -152,6 +156,14 @@ class NewMap extends React.Component {
           order: 2,
         },
       ];
+    }
+  };
+
+  getPrecinctZoomThreshold = () => {
+    if (this.props.states.activeStateId === '3') {
+      return 9;
+    } else {
+      return 8;
     }
   };
 
@@ -317,13 +329,36 @@ class NewMap extends React.Component {
     });
   };
 
+  determineLayerZoomThreshold(geographies, geography) {
+    if (geographies.length === 1) {
+      return {
+        minzoom: 0,
+        maxzoom: !this.props.renderPrecincts
+          ? this.props.zoomThreshold
+          : this.getPrecinctZoomThreshold(),
+      };
+    } else if (geographies.length > 1) {
+      return {
+        minzoom:
+          geographies.sort((a, b) => a.order - b.order).indexOf(geography) === 0
+            ? this.props.zoomThreshold
+            : 0,
+        maxzoom:
+          geographies.sort((a, b) => a.order - b.order).indexOf(geography) === 1
+            ? this.props.zoomThreshold
+            : 0,
+      };
+    }
+  }
+
   addFillLayers = (geographies, zoomThreshold = 0) => {
     geographies.forEach(geography => {
+      console.log(this.determineLayerZoomThreshold(geographies, geography).minzoom);
       this.map.addLayer(
         {
           id: `${geography.name}Fill`,
-          minzoom: geographies.indexOf(geography) === 0 ? zoomThreshold : 0,
-          maxzoom: geographies.indexOf(geography) === 1 ? zoomThreshold : 0,
+          minzoom: this.determineLayerZoomThreshold(geographies, geography).minzoom,
+          maxzoom: this.determineLayerZoomThreshold(geographies, geography).maxzoom,
           type: 'fill',
           source: geography.name,
           'source-layer': geography.sourceLayer,
@@ -341,10 +376,8 @@ class NewMap extends React.Component {
       this.map.addLayer(
         {
           id: `${geography.name}Line`,
-          minzoom:
-            geographies.indexOf(geography) === 0 && geography.name !== 'state' ? zoomThreshold : 0,
-          maxzoom:
-            geographies.indexOf(geography) === 1 && geography.name !== 'state' ? zoomThreshold : 0,
+          minzoom: this.determineLayerZoomThreshold(geographies, geography).minzoom,
+          maxzoom: this.determineLayerZoomThreshold(geographies, geography).maxzoom,
           type: 'line',
           source: geography.name,
           'source-layer': geography.sourceLayer,
@@ -359,14 +392,6 @@ class NewMap extends React.Component {
       this.props.addLayer(`${geography.name}Line`);
       this.map.moveLayer(`${geography.name}Line`, 'poi-parks-scalerank2');
     });
-  };
-
-  getPrecinctZoomThreshold = state => {
-    if (state === '3') {
-      return 9;
-    } else {
-      return 8;
-    }
   };
 
   addPrecinctLayers = () => {
@@ -390,15 +415,17 @@ class NewMap extends React.Component {
 
     this.map.addLayer(
       {
-        id: 'precinct',
+        id: 'precinctFill',
         type: 'fill',
-        minzoom: this.getPrecinctZoomThreshold(this.props.states.activeStateId),
+        minzoom: this.getPrecinctZoomThreshold(),
         source: 'precinct',
         'source-layer': layers[this.props.states.activeStateId],
         paint: PrecinctColorScale,
       },
       'waterway-label',
     );
+    this.props.addLayer('precinctFill');
+    this.map.moveLayer('precinctFill', 'poi-parks-scalerank2');
   };
 
   setFilter(layers, property, value) {
@@ -441,8 +468,8 @@ class NewMap extends React.Component {
         this.map.addLayer({
           id: `${geography.name}Hover`,
           source: `${geography.name}Hover`,
-          minzoom: geographies.indexOf(geography) === 0 ? zoomThreshold : 0,
-          maxzoom: geographies.indexOf(geography) === 1 ? zoomThreshold : 0,
+          minzoom: this.determineLayerZoomThreshold(geographies, geography).minzoom,
+          maxzoom: this.determineLayerZoomThreshold(geographies, geography).maxzoom,
           type: 'line',
           paint: {
             'line-width': 2,
@@ -535,6 +562,8 @@ const mapDispatchToProps = dispatch => ({
   removeLayer: layer => dispatch(removeLayer(layer)),
   removeSource: source => dispatch(removeSource(source)),
   resetMapData: () => dispatch(resetMapData()),
+  showingPrecincts: () => dispatch(showingPrecincts()),
+  resetPrecincts: () => dispatch(resetPrecincts()),
 });
 
 const mapStateToProps = state => ({
@@ -544,6 +573,7 @@ const mapStateToProps = state => ({
   windowWidth: state.nav.windowWidth,
   activeItem: state.nav.activePage,
   layers: state.maps.layers,
+  renderPrecincts: state.maps.showingPrecincts,
   sources: state.maps.sources,
   stateFips: state.results.stateFips,
 });

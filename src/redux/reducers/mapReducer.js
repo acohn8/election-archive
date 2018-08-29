@@ -26,7 +26,6 @@ const initialMapState = {
 const mapsReducer = (previousState = initialMapState, action) => {
   switch (action.type) {
     case 'SET_HOVER':
-      console.log(action);
       return {
         ...previousState,
         overlay: {

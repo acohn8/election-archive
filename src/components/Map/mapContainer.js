@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import MapInfo from './mapInfo';
-import StateMap from './StateMap';
-import NewMapComponent from './NewMapComponent';
 
 const MapContainer = props => (
   <div>
@@ -26,7 +24,6 @@ const MapContainer = props => (
         <MapInfo />
       </div>
     )}
-    <NewMapComponent minHeight={368} zoomThreshold={2} />
   </div>
 );
 
