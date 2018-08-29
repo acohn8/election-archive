@@ -27,7 +27,6 @@ mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
 
 class NewMap extends React.Component {
-  state = { loadingStatePage: false };
   componentDidMount() {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -37,20 +36,23 @@ class NewMap extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    //by checking layers, we're making sure the previous map exists (otherwise it's created)
     if (
       this.props.offices.selectedOfficeId !== prevProps.offices.selectedOfficeId &&
-      this.state.loadingStatePage === false
+      prevProps.layers.length > 0
     ) {
-      console.log('ud');
       this.removeLayers();
       this.removeSources();
       this.addLayers();
-    } else if (this.map === undefined) {
+    }
+    if (this.map === undefined) {
       this.createMap();
     }
   }
 
   componentWillUnmount() {
+    this.removeLayers();
+    this.removeSources();
     this.props.resetHover();
     this.map.remove();
   }
@@ -79,6 +81,7 @@ class NewMap extends React.Component {
     this.map.on('mousemove', e => this.enableHover(e));
     if (this.props.activeItem === 'national map') {
       this.map.on('click', e => this.stateSelection(e));
+      this.map.off('click', e => this.stateSelection(e));
     }
   };
 
@@ -226,19 +229,24 @@ class NewMap extends React.Component {
     }
   };
 
-  stateSelection = e => {
-    const clickLayer = this.getClickLayer();
-    const features = this.map.queryRenderedFeatures(e.point, {
-      layers: [`${clickLayer.name}Fill`],
+  getRenderedFeatures(layer, point) {
+    return this.map.queryRenderedFeatures(point, {
+      layers: [`${layer.name}Fill`],
     });
+  }
+
+  stateSelection = e => {
+    if (!this.map.loaded()) {
+      return;
+    }
+    const clickLayer = this.getClickLayer();
+    const features = this.getRenderedFeatures(clickLayer, e.point);
     if (features.length) {
       const coords = e.lngLat;
       const state = this.getStateName(features[0]);
       const district = this.getDistrictId(features[0]);
       if (district !== 0) {
-        this.setState({ loadingStatePage: true }, () =>
-          this.setStateOnClick(state, coords, district),
-        );
+        this.setStateOnClick(state, coords, district);
       }
     }
   };
@@ -267,7 +275,6 @@ class NewMap extends React.Component {
   };
 
   setStateOnClick = (state, coords, districtId) => {
-    console.log(this.state);
     this.map.flyTo({
       center: coords,
       zoom: 6,
@@ -277,7 +284,7 @@ class NewMap extends React.Component {
     this.props.fetchStateOffices(state.id);
     this.props.setActiveOffice(this.props.offices.selectedOfficeId, districtId);
     this.props.fetchStateData(state.id, districtId);
-    this.map.on('moveend', () => this.props.pushToNewState(state.id));
+    this.map.on('zoomend', () => this.props.pushToNewState(state.id));
   };
 
   addSources = geographies => {

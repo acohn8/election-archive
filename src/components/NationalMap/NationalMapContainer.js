@@ -2,6 +2,7 @@ import React from 'react';
 import { Header, Segment, Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
+import NationalMap from './NationalMap';
 import MapInfo from '../Map/mapInfo';
 import { resetActiveState } from '../../redux/actions/stateActions';
 import { setActive } from '../../redux/actions/navActions';
