@@ -1,6 +1,7 @@
 const initialMapState = {
   overlay: {
     geographyName: '',
+    layer: '',
     hoveredWinner: {
       name: '',
       party: '',
@@ -19,15 +20,18 @@ const initialMapState = {
   layers: [],
   sources: [],
   mapDetails: {},
+  showingPrecincts: false,
 };
 
 const mapsReducer = (previousState = initialMapState, action) => {
   switch (action.type) {
     case 'SET_HOVER':
+      console.log(action);
       return {
         ...previousState,
         overlay: {
           hoveredGeography: action.geographyName,
+          layer: action.layer,
           hoveredWinner: {
             name: action.winnerName,
             party: action.winnerParty,
@@ -74,6 +78,16 @@ const mapsReducer = (previousState = initialMapState, action) => {
       return {
         ...previousState,
         mapDetails: {},
+      };
+    case 'SHOWING_PRECINCTS':
+      return {
+        ...previousState,
+        showingPrecincts: true,
+      };
+    case 'RESET_PRECINCTS':
+      return {
+        ...previousState,
+        showingPrecincts: false,
       };
     case 'RESET_HOVER':
       return {

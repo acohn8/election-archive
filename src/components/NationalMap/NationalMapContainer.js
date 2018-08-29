@@ -20,8 +20,7 @@ class NationalMapContainer extends React.Component {
       <div ref={divElement => (this.divElement = divElement)}>
         {this.props.offices.allOffices.result !== undefined && (
           <NewMapComponent
-            position={'relative'}
-            height={this.props.windowWidth >= 768 ? '94vh' : '65vh'}
+            minHeight={this.props.windowWidth >= 768 ? '94vh' : '65vh'}
             zoomThreshold={this.props.offices.selectedOfficeId === '322' ? 0 : 4.2}
           />
         )}

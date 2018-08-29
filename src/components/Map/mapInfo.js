@@ -13,7 +13,8 @@ const MapInfo = props => (
   <div>
     <Header as={props.overlay.isNational === true ? 'h2' : 'h4'}>
       {props.overlay.hoveredGeography}
-      {props.overlay.isNational === true && <Header.Subheader>Click for details</Header.Subheader>}
+      {props.overlay.isNational === true &&
+        props.overlay.layer === 'state' && <Header.Subheader>Click for details</Header.Subheader>}
     </Header>
     <List divided relaxed>
       <List.Item>
@@ -64,6 +65,7 @@ const MapInfo = props => (
 
 const mapStateToProps = state => ({
   overlay: state.maps.overlay,
+  activeItem: state.nav.activePage,
 });
 
 export default connect(mapStateToProps)(MapInfo);
