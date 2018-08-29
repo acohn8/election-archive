@@ -419,7 +419,7 @@ class NewMap extends React.Component {
       {
         id: 'precinctFill',
         type: 'fill',
-        minzoom: this.getPrecinctZoomThreshold(),
+        maxzoom: this.getPrecinctZoomThreshold(),
         source: 'precinct',
         'source-layer': layers[this.props.states.activeStateId],
         paint: PrecinctColorScale,
