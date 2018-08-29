@@ -61,6 +61,8 @@ class NewMap extends React.Component {
   createMap = () => {
     this.map.on('load', () => {
       this.addLayers();
+      this.map.addControl(new mapboxgl.FullscreenControl());
+      this.map.addControl(new mapboxgl.NavigationControl());
       this.bindToMap('STATEFP', this.props.stateFips);
       if (this.props.activeItem === 'national map') {
         this.props.windowWidth >= 768 && this.map.on('movestart', () => this.props.hideHeader());
