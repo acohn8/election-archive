@@ -45,8 +45,24 @@ const mapsReducer = (previousState = initialMapState, action) => {
       };
     case 'ADD_LAYER':
       return { ...previousState, layers: [...previousState.layers, action.layer] };
+    case 'REMOVE_LAYER':
+      return {
+        ...previousState,
+        layers: [
+          ...previousState.layers.slice(0, action.layer),
+          ...previousState.layers.slice(action.layer + 1),
+        ],
+      };
     case 'ADD_SOURCE':
       return { ...previousState, sources: [...previousState.sources, action.source] };
+    case 'REMOVE_SOURCE':
+      return {
+        ...previousState,
+        sources: [
+          ...previousState.sources.slice(0, action.source),
+          ...previousState.sources.slice(action.source + 1),
+        ],
+      };
     case 'RESET_MAP_DATA':
       return { ...previousState, layers: [], sources: [] };
     case 'SET_MAP_DETAILS':
