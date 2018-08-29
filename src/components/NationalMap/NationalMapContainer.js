@@ -22,7 +22,7 @@ class NationalMapContainer extends React.Component {
           <NewMapComponent
             position={'relative'}
             height={this.props.windowWidth >= 768 ? '94vh' : '65vh'}
-            zoomThreshold={4.2}
+            zoomThreshold={this.props.offices.selectedOfficeId === '322' ? 0 : 4.2}
           />
         )}
         {!this.props.headerHid &&

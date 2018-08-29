@@ -16,6 +16,8 @@ const initialMapState = {
     isNational: false,
   },
   headerHid: false,
+  layers: [],
+  sources: [],
   mapDetails: {},
 };
 
@@ -41,6 +43,12 @@ const mapsReducer = (previousState = initialMapState, action) => {
           isNational: action.isNational,
         },
       };
+    case 'ADD_LAYER':
+      return { ...previousState, layers: [...previousState.layers, action.layer] };
+    case 'ADD_SOURCE':
+      return { ...previousState, sources: [...previousState.sources, action.source] };
+    case 'RESET_MAP_DATA':
+      return { ...previousState, layers: [], sources: [] };
     case 'SET_MAP_DETAILS':
       return {
         ...previousState,

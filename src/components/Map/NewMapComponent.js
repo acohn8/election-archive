@@ -8,7 +8,15 @@ import union from '@turf/union';
 import { StateColorScale, CountyColorScale } from '../../functions/ColorScale';
 
 import { pushToNewState } from '../../redux/actions/stateActions';
-import { getHoverInfo, resetHover, hideHeader, showHeader } from '../../redux/actions/mapActions';
+import {
+  addLayer,
+  addSource,
+  resetMapData,
+  getHoverInfo,
+  resetHover,
+  hideHeader,
+  showHeader,
+} from '../../redux/actions/mapActions';
 import { setActiveOffice, fetchStateOffices } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
 import { setStateId } from '../../redux/actions/stateActions';
@@ -24,22 +32,16 @@ class NewMap extends React.Component {
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjld3m3g66xlb2sl2ojc73n5v',
     });
+    this.createMap();
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.offices.allOffices.result !== undefined && this.props.states.states.length > 0) {
-      this.createMap();
-    }
     if (
       this.props.offices.selectedOfficeId !== prevProps.offices.selectedOfficeId &&
       this.map !== undefined
     ) {
-      console.log('update');
-      new Promise(function(resolve, rejct) {
-        this.state.layers.forEach(layer => this.map.removeLayer(layer))
-        this.state.sources.forEach(source => this.map.removeSource(source))
-        resolve(() => this.setState({ layers: [], sources: [] }, this.addLayers)))
-      }
+      this.removeLayers();
+      this.addLayers();
     } else if (this.map === undefined) {
       this.createMap();
     }
@@ -54,16 +56,14 @@ class NewMap extends React.Component {
     const layers = this.getLayers();
     this.map.on('load', () => {
       this.addLayers();
-      this.enableHover(layers);
       this.bindToMap('STATEFP');
       if (this.props.activeItem === 'national map') {
-        this.stateSelection(layers);
         this.props.windowWidth >= 768 && this.map.on('movestart', () => this.props.hideHeader());
         this.props.windowWidth >= 768 && this.map.on('moveend', () => this.props.showHeader());
       }
-      if (this.props.filter) {
-        this.setFilter(['stateFill', 'countyFill', 'stateLine', 'countyLine'], 'STATEFP', '12');
-      }
+      // if (this.props.filter) {
+      //   this.setFilter(['stateFill', 'countyFill', 'stateLine', 'countyLine'], 'STATEFP', '12');
+      // }
     });
   };
 
@@ -74,6 +74,24 @@ class NewMap extends React.Component {
     this.addFillLayers(layers, zoomThreshold);
     this.addLineLayers(layers, zoomThreshold);
     this.addHoverLayers(layers, zoomThreshold);
+    this.enableHover(layers);
+    if (this.props.activeItem === 'national map') {
+      this.stateSelection(layers);
+    }
+  };
+
+  removeLayers = () => {
+    this.props.layers.forEach(layer => {
+      if (this.map.getLayer(layer)) {
+        this.map.removeLayer(layer);
+      }
+    });
+    this.props.sources.forEach(source => {
+      if (this.map.getSource(source)) {
+        this.map.removeSource(source);
+      }
+    });
+    this.props.resetMapData();
   };
 
   getLayers = () => {
@@ -96,6 +114,17 @@ class NewMap extends React.Component {
           order: 2,
         },
       ];
+    } else if (this.props.offices.selectedOfficeId === '322') {
+      return [
+        {
+          name: 'district',
+          sourceLayer: 'cb_2017_us_cd115_500k',
+          colorScale: StateColorScale,
+          layer: 'state-map',
+          filter: 'GEOID',
+          order: 1,
+        },
+      ];
     }
   };
 
@@ -107,33 +136,50 @@ class NewMap extends React.Component {
         });
         if (features.length > 0) {
           const feature = features[0];
-          if (features !== undefined && feature.layer.id === 'stateFill') {
+          if (
+            (features !== undefined && feature.layer.id === 'stateFill') ||
+            (features !== undefined && feature.layer.id === 'districtFill')
+          ) {
             this.map.getCanvas().style.cursor = 'pointer';
-            this.filterStateHover(feature);
+            this.filterTopHover(geography, feature, geography.filter);
           } else if (features !== undefined && feature.layer.id !== 'stateFill') {
             this.map.getCanvas().style.cursor = 'pointer';
             this.filterSubGeographyHover(geography, feature);
           }
         } else if (features.length === 0) {
           this.map.getCanvas().style.cursor = '';
-          geography.name === 'state'
-            ? this.map.setFilter('stateHover', ['==', 'STATEFP', ''])
-            : this.map.getSource(`${geography.name}Hover`).setData({
-                type: 'FeatureCollection',
-                features: [],
-              });
+          geography.sourceLayer === 'cb_2017_us_state_500k' ||
+          geography.sourceLayer === 'cb_2017_us_cd115_500k'
+            ? this.resetTopFilter(geography)
+            : this.resetSubGeoFilter(geography);
         }
       }),
     );
   };
 
-  filterStateHover = feature => {
-    this.map.setFilter('stateHover', ['==', 'STATEFP', feature.properties.STATEFP]);
+  resetTopFilter = geography => {
+    console.log(geography);
+    this.map.setFilter(`${geography.name}Hover`, ['==', geography.filter, '']);
+  };
+
+  resetSubGeoFilter = geography => {
+    if (this.map.getSource(`${geography.name}Hover`)) {
+      this.map.getSource(`${geography.name}Hover`).setData({
+        type: 'FeatureCollection',
+        features: [],
+      });
+    }
+  };
+
+  filterTopHover = (geography, feature, filter) => {
+    console.log(feature, filter);
+    this.map.setFilter(`${geography.name}Hover`, ['==', filter, feature.properties[filter]]);
     this.addGeographyInfoToOverlay(feature);
   };
 
   filterSubGeographyHover = (geography, feature) => {
     const dataFeature = feature;
+    console.log(dataFeature, geography);
     const sourceFeatures = this.map.querySourceFeatures('composite', {
       sourceLayer: geography.sourceLayer,
       filter: ['==', geography.filter, feature.properties[geography.filter]],
@@ -169,7 +215,13 @@ class NewMap extends React.Component {
   };
 
   stateSelection = geographies => {
-    const clickLayer = geographies.sort((a, b) => a.order - b.order)[1];
+    let clickLayer;
+    if (geographies.length > 1) {
+      clickLayer = geographies.sort((a, b) => a.order - b.order)[1];
+    } else {
+      clickLayer = geographies[0];
+    }
+    console.log(clickLayer);
     this.map.on('click', e => {
       const features = this.map.queryRenderedFeatures(e.point, {
         layers: [`${clickLayer.name}Fill`],
@@ -223,14 +275,14 @@ class NewMap extends React.Component {
 
   addSources = geographies => {
     geographies.forEach(geography => {
-      this.map.addSource(`${geography.name}`, {
+      this.map.addSource(geography.name, {
         url: `mapbox://adamcohn.${
           this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
             .attributes[geography.layer]
         }`,
         type: 'vector',
       });
-      this.setState({ sources: [...this.state.sources, geography.name] });
+      this.props.addSource(geography.name);
     });
   };
 
@@ -248,7 +300,7 @@ class NewMap extends React.Component {
         },
         'waterway-label',
       ),
-        this.setState({ layers: [...this.state.layers, `${geography.name}Fill`] });
+        this.props.addLayer(`${geography.name}Fill`);
     });
   };
 
@@ -270,7 +322,7 @@ class NewMap extends React.Component {
         },
         'waterway-label',
       ),
-        this.setState({ layers: [...this.state.layers, `${geography.name}Line`] });
+        this.props.addLayer(`${geography.name}Line`);
     });
   };
 
@@ -280,7 +332,10 @@ class NewMap extends React.Component {
 
   addHoverLayers = (geographies, zoomThreshold = 0) => {
     geographies.forEach(geography => {
-      if (geography.sourceLayer === 'cb_2017_us_state_500k') {
+      if (
+        geography.sourceLayer === 'cb_2017_us_state_500k' ||
+        geography.sourceLayer === 'cb_2017_us_cd115_500k'
+      ) {
         this.map.addLayer(
           {
             id: `${geography.name}Hover`,
@@ -289,7 +344,7 @@ class NewMap extends React.Component {
             maxzoom: geographies.indexOf(geography) === 1 ? zoomThreshold : 0,
             source: geography.name,
             'source-layer': geography.sourceLayer,
-            filter: ['==', 'STATEFP', ''],
+            filter: ['==', geography.filter, ''],
             paint: {
               'line-width': 2,
               'line-color': '#696969',
@@ -298,7 +353,7 @@ class NewMap extends React.Component {
           },
           'waterway-label',
         );
-        this.setState({ layers: [...this.state.layers, `${geography.name}Hover`] });
+        this.props.addLayer(`${geography.name}Hover`);
       } else {
         this.map.addSource(`${geography.name}Hover`, {
           type: 'geojson',
@@ -307,7 +362,7 @@ class NewMap extends React.Component {
             features: [],
           },
         });
-        this.setState({ sources: [...this.state.sources, `${geography.name}Hover`] });
+        this.props.addSource(`${geography.name}Hover`);
 
         this.map.addLayer({
           id: `${geography.name}Hover`,
@@ -321,7 +376,7 @@ class NewMap extends React.Component {
             'line-opacity': 1,
           },
         });
-        this.setState({ layers: [...this.state.layers, `${geography.name}Hover`] });
+        this.props.addLayer(`${geography.name}Hover`);
       }
     });
   };
@@ -348,7 +403,6 @@ class NewMap extends React.Component {
       },
     });
     const boundingBox = bbox(this.map.getSource('bounds')._data);
-    console.log(boundingBox);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
   };
 
@@ -399,6 +453,9 @@ const mapDispatchToProps = dispatch => ({
   setActiveOffice: (officeId, districtId) => dispatch(setActiveOffice(officeId, districtId)),
   setStateId: stateId => dispatch(setStateId(stateId)),
   fetchStateOffices: stateId => dispatch(fetchStateOffices(stateId)),
+  addLayer: layer => dispatch(addLayer(layer)),
+  addSource: source => dispatch(addSource(source)),
+  resetMapData: () => dispatch(resetMapData()),
 });
 
 const mapStateToProps = state => ({
@@ -407,6 +464,8 @@ const mapStateToProps = state => ({
   shortName: state.results.shortName,
   windowWidth: state.nav.windowWidth,
   activeItem: state.nav.activePage,
+  layers: state.maps.layers,
+  sources: state.maps.sources,
 });
 
 export default connect(

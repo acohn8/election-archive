@@ -32,4 +32,18 @@ const hideHeader = () => ({ type: 'HIDE_HEADER' });
 const setMapDetails = details => ({ type: 'SET_MAP_DETAILS', details });
 const resetMapDetails = () => ({ type: 'RESET_MAP_DETAILS' });
 
-export { getHoverInfo, setMapDetails, resetHover, hideHeader, showHeader, resetMapDetails };
+const addLayer = layer => dispatch => dispatch({ type: 'ADD_LAYER', layer });
+const addSource = source => dispatch => dispatch({ type: 'ADD_SOURCE', source });
+const resetMapData = () => dispatch => dispatch({ type: 'RESET_MAP_DATA' });
+
+export {
+  addLayer,
+  addSource,
+  resetMapData,
+  getHoverInfo,
+  setMapDetails,
+  resetHover,
+  hideHeader,
+  showHeader,
+  resetMapDetails,
+};
