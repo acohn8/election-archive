@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 import union from '@turf/union';
 
-import { StateColorScale, CountyColorScale, PrecinctColorScale } from '../../functions/ColorScale';
-
 import { pushToNewState } from '../../redux/actions/stateActions';
 import {
   addLayer,
@@ -72,33 +70,30 @@ class NewMap extends React.Component {
   };
 
   addLayers = () => {
-    const zoomThreshold = this.props.zoomThreshold;
-    const layers = this.getLayers(this.props.offices.selectedOfficeId);
-    const precinctStates = ['3', '45', '11', '14'];
+    const layers = this.props.layers;
     this.addSources(layers);
-    this.addHoverLayers(layers, zoomThreshold);
-    this.addFillLayers(layers, zoomThreshold);
-    this.addLineLayers(layers, zoomThreshold);
+    this.addHoverLayers(layers);
+    this.addFillLayers(layers);
+    this.addLineLayers(layers);
     this.map.on('mousemove', e => this.enableHover(e));
     if (this.props.activeItem === 'national map') {
       this.map.on('click', e => this.stateSelection(e));
       this.map.off('click', e => this.stateSelection(e));
     }
     if (this.props.activeItem === 'statesShow') {
-      this.setFilter(this.props.layers, 'STATEFP', this.props.stateFips);
+      this.setFilter(this.props.savedLayers, 'STATEFP', this.props.stateFips);
     }
-    if (
-      precinctStates.includes(this.props.states.activeStateId) &&
-      this.props.offices.selectedOfficeId === '308'
-    ) {
-      this.props.showingPrecincts();
-      this.getPrecinctZoomThreshold();
-      this.addPrecinctLayers();
-    }
+    // if (
+    //   precinctStates.includes(this.props.states.activeStateId) &&
+    //   this.props.offices.selectedOfficeId === '308'
+    // ) {
+    //   this.props.showingPrecincts();
+    //   this.addPrecinctLayers();
+    // }
   };
 
   removeLayers = () => {
-    this.props.layers.forEach(layer => {
+    this.props.savedLayers.forEach(layer => {
       this.props.removeLayer(layer);
       if (this.map.getLayer(layer)) {
         this.map.removeLayer(layer);
@@ -107,66 +102,13 @@ class NewMap extends React.Component {
   };
 
   removeSources = () => {
-    this.props.sources.forEach(source => {
+    this.props.savedSources.forEach(source => {
       this.props.removeSource(source);
       if (this.map.getSource(source)) {
         this.map.removeSource(source);
       }
     });
     this.props.resetPrecincts();
-  };
-
-  getLayers = officeId => {
-    if (this.props.activeItem === 'statesShow' && officeId !== '322') {
-      return [
-        {
-          name: 'county',
-          sourceLayer: 'cb_2017_us_county_500k',
-          colorScale: CountyColorScale,
-          layer: 'county-map',
-          filter: 'GEOID',
-          order: 1,
-        },
-      ];
-    } else if (officeId === '322') {
-      return [
-        {
-          name: 'district',
-          sourceLayer: 'cb_2017_us_cd115_500k',
-          colorScale: StateColorScale,
-          layer: 'state-map',
-          filter: 'GEOID',
-          order: 1,
-        },
-      ];
-    } else {
-      return [
-        {
-          name: 'county',
-          sourceLayer: 'cb_2017_us_county_500k',
-          colorScale: CountyColorScale,
-          layer: 'county-map',
-          filter: 'GEOID',
-          order: 1,
-        },
-        {
-          name: 'state',
-          sourceLayer: 'cb_2017_us_state_500k',
-          colorScale: StateColorScale,
-          layer: 'state-map',
-          filter: 'GEOID',
-          order: 2,
-        },
-      ];
-    }
-  };
-
-  getPrecinctZoomThreshold = () => {
-    if (this.props.states.activeStateId === '3') {
-      return 9;
-    } else {
-      return 8;
-    }
   };
 
   getRenderedFeatures(layer, point) {
@@ -179,13 +121,13 @@ class NewMap extends React.Component {
     if (!this.map.loaded()) {
       return;
     }
-    this.getLayers(this.props.offices.selectedOfficeId).forEach(geography => {
+    this.props.layers.forEach(geography => {
       const features = this.getRenderedFeatures(`${geography.name}Fill`, e.point);
       if (features.length > 0) {
         const feature = features[0];
         if (
           (features !== undefined && feature.layer.source === 'state') ||
-          (features !== undefined && feature.layer.source === 'district')
+          (features !== undefined && feature.layer.source === 'congressionalDistrict')
         ) {
           this.map.getCanvas().style.cursor = 'pointer';
           this.filterTopHover(geography, feature, geography.filter);
@@ -258,7 +200,7 @@ class NewMap extends React.Component {
   };
 
   getClickLayer = () => {
-    const geographies = this.getLayers(this.props.offices.selectedOfficeId);
+    const geographies = this.props.layers;
     if (geographies.length > 1) {
       return geographies.sort((a, b) => a.order - b.order)[1];
     } else {
@@ -331,36 +273,13 @@ class NewMap extends React.Component {
     });
   };
 
-  determineLayerZoomThreshold(geographies, geography) {
-    if (geographies.length === 1) {
-      return {
-        minzoom: 0,
-        maxzoom: !this.props.renderPrecincts
-          ? this.props.zoomThreshold
-          : this.getPrecinctZoomThreshold(),
-      };
-    } else if (geographies.length > 1) {
-      return {
-        minzoom:
-          geographies.sort((a, b) => a.order - b.order).indexOf(geography) === 0
-            ? this.props.zoomThreshold
-            : 0,
-        maxzoom:
-          geographies.sort((a, b) => a.order - b.order).indexOf(geography) === 1
-            ? this.props.zoomThreshold
-            : 0,
-      };
-    }
-  }
-
-  addFillLayers = (geographies, zoomThreshold = 0) => {
+  addFillLayers = geographies => {
     geographies.forEach(geography => {
-      console.log(this.determineLayerZoomThreshold(geographies, geography).minzoom);
       this.map.addLayer(
         {
           id: `${geography.name}Fill`,
-          minzoom: this.determineLayerZoomThreshold(geographies, geography).minzoom,
-          maxzoom: this.determineLayerZoomThreshold(geographies, geography).maxzoom,
+          minzoom: geography.minzoom,
+          maxzoom: geography.maxzoom,
           type: 'fill',
           source: geography.name,
           'source-layer': geography.sourceLayer,
@@ -373,13 +292,13 @@ class NewMap extends React.Component {
     });
   };
 
-  addLineLayers = (geographies, zoomThreshold = 0) => {
+  addLineLayers = geographies => {
     geographies.sort((a, b) => a.order - b.order).forEach(geography => {
       this.map.addLayer(
         {
           id: `${geography.name}Line`,
-          minzoom: this.determineLayerZoomThreshold(geographies, geography).minzoom,
-          maxzoom: this.determineLayerZoomThreshold(geographies, geography).maxzoom,
+          minzoom: geography.minzoom,
+          maxzoom: geography.maxzoom,
           type: 'line',
           source: geography.name,
           'source-layer': geography.sourceLayer,
@@ -396,45 +315,46 @@ class NewMap extends React.Component {
     });
   };
 
-  addPrecinctLayers = () => {
-    const links = {
-      3: 'adamcohn.3sna8yq5',
-      45: 'adamcohn.9iseezid',
-      11: 'adamcohn.1g8o5usp',
-      14: 'adamcohn.8risplqr',
-    };
-    const layers = {
-      3: 'pa-2016-final-597cvl',
-      45: 'tx-2016-final-7ylsll',
-      11: 'ga-2016-final-9bvbyq',
-      14: 'mn-2016-final-53132s',
-    };
+  // addPrecinctLayers = () => {
+  //   const links = {
+  //     3: 'adamcohn.3sna8yq5',
+  //     45: 'adamcohn.9iseezid',
+  //     11: 'adamcohn.1g8o5usp',
+  //     14: 'adamcohn.8risplqr',
+  //   };
+  //   const layers = {
+  //     3: 'pa-2016-final-597cvl',
+  //     45: 'tx-2016-final-7ylsll',
+  //     11: 'ga-2016-final-9bvbyq',
+  //     14: 'mn-2016-final-53132s',
+  //   };
 
-    this.map.addSource('precinct', {
-      url: `mapbox://${links[this.props.states.activeStateId]}`,
-      type: 'vector',
-    });
+  //   this.map.addSource('precinct', {
+  //     url: `mapbox://${links[this.props.states.activeStateId]}`,
+  //     type: 'vector',
+  //   });
 
-    this.map.addLayer(
-      {
-        id: 'precinctFill',
-        type: 'fill',
-        maxzoom: this.getPrecinctZoomThreshold(),
-        source: 'precinct',
-        'source-layer': layers[this.props.states.activeStateId],
-        paint: PrecinctColorScale,
-      },
-      'waterway-label',
-    );
-    this.props.addLayer('precinctFill');
-    this.map.moveLayer('precinctFill', 'poi-parks-scalerank2');
-  };
+  //   this.map.addLayer(
+  //     {
+  //       id: 'precinctFill',
+  //       type: 'fill',
+  //       minzoom: geography.minzoom,
+  //       maxzoom: geography.maxzoom,
+  //       source: 'precinct',
+  //       'source-layer': layers[this.props.states.activeStateId],
+  //       paint: PrecinctColorScale,
+  //     },
+  //     'waterway-label',
+  //   );
+  //   this.props.addLayer('precinctFill');
+  //   this.map.moveLayer('precinctFill', 'poi-parks-scalerank2');
+  // };
 
   setFilter(layers, property, value) {
     layers.forEach(layer => this.map.setFilter(layer, ['==', property, value]));
   }
 
-  addHoverLayers = (geographies, zoomThreshold = 0) => {
+  addHoverLayers = geographies => {
     geographies.forEach(geography => {
       if (
         geography.sourceLayer === 'cb_2017_us_state_500k' ||
@@ -444,8 +364,8 @@ class NewMap extends React.Component {
           {
             id: `${geography.name}Hover`,
             type: 'line',
-            minzoom: geographies.indexOf(geography) === 0 ? zoomThreshold : 0,
-            maxzoom: geographies.indexOf(geography) === 1 ? zoomThreshold : 0,
+            minzoom: geography.minzoom,
+            maxzoom: geography.maxzoom,
             source: geography.name,
             'source-layer': geography.sourceLayer,
             filter: ['==', geography.filter, ''],
@@ -470,8 +390,8 @@ class NewMap extends React.Component {
         this.map.addLayer({
           id: `${geography.name}Hover`,
           source: `${geography.name}Hover`,
-          minzoom: this.determineLayerZoomThreshold(geographies, geography).minzoom,
-          maxzoom: this.determineLayerZoomThreshold(geographies, geography).maxzoom,
+          minzoom: geography.minzoom,
+          maxzoom: geography.maxzoom,
           type: 'line',
           paint: {
             'line-width': 2,
@@ -574,9 +494,9 @@ const mapStateToProps = state => ({
   shortName: state.results.shortName,
   windowWidth: state.nav.windowWidth,
   activeItem: state.nav.activePage,
-  layers: state.maps.layers,
+  savedLayers: state.maps.layers,
   renderPrecincts: state.maps.showingPrecincts,
-  sources: state.maps.sources,
+  savedSources: state.maps.sources,
   stateFips: state.results.stateFips,
 });
 

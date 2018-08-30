@@ -2,7 +2,7 @@ import React from 'react';
 import { Header, Segment, Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import NationalMap from './NationalMap';
+import MapLayers from '../../functions/MapLayers';
 import MapInfo from '../Map/mapInfo';
 import { resetActiveState } from '../../redux/actions/stateActions';
 import { setActive } from '../../redux/actions/navActions';
@@ -15,13 +15,30 @@ class NationalMapContainer extends React.Component {
     this.props.setActive('national map');
   }
 
+  getMapLayers = () => {
+    if (this.props.offices.selectedOfficeId !== '322') {
+      const countyLayer = MapLayers.county;
+      const stateLayer = MapLayers.state;
+      countyLayer.maxzoom = 0;
+      countyLayer.minzoom = 4.2;
+      stateLayer.maxzoom = 4.2;
+      stateLayer.minzoom = 0;
+      return [stateLayer, countyLayer];
+    } else {
+      const congressionalLayer = MapLayers.congressionalDistrict;
+      congressionalLayer.minzoom = 0;
+      congressionalLayer.maxzoom = 0;
+      return [congressionalLayer];
+    }
+  };
+
   render() {
     return (
       <div ref={divElement => (this.divElement = divElement)}>
         {this.props.offices.allOffices.result !== undefined && (
           <NewMapComponent
             minHeight={this.props.windowWidth >= 768 ? '94vh' : '65vh'}
-            zoomThreshold={this.props.offices.selectedOfficeId === '322' ? 0 : 4.2}
+            layers={this.getMapLayers()}
           />
         )}
         {!this.props.headerHid &&

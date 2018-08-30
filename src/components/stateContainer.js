@@ -13,6 +13,7 @@ import { setActive } from '../redux/actions/navActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from './StateList/MobileStateSelect';
 import NewMapComponent from './Map/NewMapComponent';
+import MapLayers from '../functions/MapLayers';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -20,11 +21,13 @@ class StateContainer extends React.Component {
   }
 
   componentDidUpdate() {
-    const state = this.props.states.states.find(state =>
-      state.attributes.name
-        .split(' ')
-        .join('-')
-        .toLowerCase() === this.props.match.params.activeStateName.toLowerCase());
+    const state = this.props.states.states.find(
+      state =>
+        state.attributes.name
+          .split(' ')
+          .join('-')
+          .toLowerCase() === this.props.match.params.activeStateName.toLowerCase(),
+    );
     if (this.props.states.states.length > 0 && this.props.states.activeStateId === null) {
       this.props.setActiveState(state.id);
     } else if (
@@ -41,6 +44,20 @@ class StateContainer extends React.Component {
     this.props.resetActiveState();
   }
 
+  getMapLayers = () => {
+    if (this.props.offices.selectedOfficeId !== '322') {
+      const countyLayer = MapLayers.county;
+      countyLayer.minzoom = 0;
+      countyLayer.maxzoom = 0;
+      return [countyLayer];
+    } else {
+      const congressionalLayer = MapLayers.congressionalDistrict;
+      congressionalLayer.minzoom = 0;
+      congressionalLayer.maxzoom = 0;
+      return [congressionalLayer];
+    }
+  };
+
   render() {
     return (
       <div>
@@ -56,11 +73,15 @@ class StateContainer extends React.Component {
                     <Grid.Column>
                       <Header size="huge">
                         {this.props.nav.windowWidth >= 768 ? (
-                          this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
+                          this.props.states.states.find(
+                            state => state.id === this.props.states.activeStateId,
+                          ).attributes.name
                         ) : (
                           <MobileStateSelector
                             state={
-                              this.props.states.states.find(state => state.id === this.props.states.activeStateId).attributes.name
+                              this.props.states.states.find(
+                                state => state.id === this.props.states.activeStateId,
+                              ).attributes.name
                             }
                           />
                         )}
@@ -82,7 +103,7 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Segment>
-                        <NewMapComponent minHeight={368} zoomThreshold={0} />
+                        <NewMapComponent minHeight={368} layers={this.getMapLayers()} />
                         <MapContainer />
                       </Segment>
                     </Grid.Column>
