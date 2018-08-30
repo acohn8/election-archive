@@ -58,6 +58,23 @@ class StateContainer extends React.Component {
     }
   };
 
+  getMapFilter = () => {
+    if (this.props.offices.selectedOfficeId !== '322') {
+      return { property: 'STATEFP', value: this.props.stateFips };
+    } else {
+      const congressionalDistricts = this.props.offices.stateOffices.entities.offices[
+        this.props.offices.selectedOfficeId
+      ].districts;
+      const districtNumber = congressionalDistricts
+        .find(district => district.id === this.props.offices.selectedDistrictId)
+        .name.split('-')[1];
+      return {
+        property: 'GEOID',
+        value: `${this.props.stateFips}${districtNumber}`,
+      };
+    }
+  };
+
   render() {
     return (
       <div>
@@ -103,7 +120,11 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Segment>
-                        <NewMapComponent minHeight={368} layers={this.getMapLayers()} />
+                        <NewMapComponent
+                          minHeight={368}
+                          layers={this.getMapLayers()}
+                          mapFilter={this.getMapFilter()}
+                        />
                         <MapContainer />
                       </Segment>
                     </Grid.Column>
@@ -129,6 +150,7 @@ const mapStateToProps = state => ({
   states: state.states,
   offices: state.offices,
   nav: state.nav,
+  stateFips: state.results.stateFips,
 });
 
 const mapDispatchToProps = dispatch => ({

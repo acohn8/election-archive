@@ -61,7 +61,6 @@ class NewMap extends React.Component {
       this.addLayers();
       this.map.addControl(new mapboxgl.FullscreenControl());
       this.map.addControl(new mapboxgl.NavigationControl());
-      this.bindToMap('STATEFP', this.props.stateFips);
       if (this.props.activeItem === 'national map') {
         this.props.windowWidth >= 768 && this.map.on('movestart', () => this.props.hideHeader());
         this.props.windowWidth >= 768 && this.map.on('moveend', () => this.props.showHeader());
@@ -80,16 +79,16 @@ class NewMap extends React.Component {
       this.map.on('click', e => this.stateSelection(e));
       this.map.off('click', e => this.stateSelection(e));
     }
-    if (this.props.activeItem === 'statesShow') {
-      this.setFilter(this.props.savedLayers, 'STATEFP', this.props.stateFips);
+    if (this.props.mapFilter) {
+      this.setFilter(
+        this.props.savedLayers,
+        this.props.mapFilter.property,
+        this.props.mapFilter.value,
+      );
+      this.bindToMap(layers[0], this.props.mapFilter.property, this.props.mapFilter.value);
+    } else {
+      this.bindToMap();
     }
-    // if (
-    //   precinctStates.includes(this.props.states.activeStateId) &&
-    //   this.props.offices.selectedOfficeId === '308'
-    // ) {
-    //   this.props.showingPrecincts();
-    //   this.addPrecinctLayers();
-    // }
   };
 
   removeLayers = () => {
@@ -405,20 +404,20 @@ class NewMap extends React.Component {
     });
   };
 
-  filterGeojson = (property, value = null) => {
-    const layer = this.map.querySourceFeatures('composite', {
-      sourceLayer: 'cb_2017_us_state_500k',
+  filterGeojson = (layer, property, value = null) => {
+    const boundsLayer = this.map.querySourceFeatures('composite', {
+      sourceLayer: layer.sourceLayer,
     });
     if (value === null) {
       const filterfips = ['02', '14', '60', '66', '78', '72', '15', '69', '68'];
-      return layer.filter(geo => !filterfips.includes(geo.properties[property]));
+      return boundsLayer.filter(geo => !filterfips.includes(geo.properties[property]));
     } else {
-      return layer.filter(geo => geo.properties[property] === value);
+      return boundsLayer.filter(geo => geo.properties[property] === value);
     }
   };
 
-  bindToMap = (property, value = null) => {
-    const features = this.filterGeojson(property, value);
+  bindToMap = (layer, property = 'STATEFP', value = null) => {
+    const features = this.filterGeojson(layer, property, value);
     this.map.addSource('bounds', {
       type: 'geojson',
       data: {
@@ -426,7 +425,9 @@ class NewMap extends React.Component {
         features: features,
       },
     });
+    this.props.addSource('bounds');
     const boundingBox = bbox(this.map.getSource('bounds')._data);
+    console.log(boundingBox);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
   };
 
