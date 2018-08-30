@@ -13,6 +13,7 @@ import { setActive } from '../redux/actions/navActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from './StateList/MobileStateSelect';
 import NewMapComponent from './Map/NewMapComponent';
+import { PrecinctColorScale } from '../functions/ColorScale';
 import MapLayers from '../functions/MapLayers';
 
 class StateContainer extends React.Component {
@@ -44,8 +45,32 @@ class StateContainer extends React.Component {
     this.props.resetActiveState();
   }
 
-  getMapLayers = () => {
-    if (this.props.offices.selectedOfficeId !== '322') {
+  getMapGeographies = () => {
+    if (
+      this.props.states.stateInfo.attributes['precinct-map'] !== null &&
+      this.props.offices.selectedOfficeId === '308'
+    ) {
+      const countyLayer = MapLayers.county;
+      //adapts to PA higher zoom threshold for precinct map
+      const precinctMinCountyMaxZoom = this.props.states.activeStateId === '3' ? 9 : 8;
+      countyLayer.order = 2;
+      countyLayer.minzoom = 0;
+      countyLayer.maxzoom = precinctMinCountyMaxZoom;
+      const precinctMinZoom =
+        this.props.states.activeStateId === '3' ? 9 : precinctMinCountyMaxZoom;
+      const precinctLayer = {
+        name: 'precinct',
+        url: this.props.states.stateInfo.attributes['precinct-map'],
+        sourceLayer: this.props.states.stateInfo.attributes['precinct-source'],
+        colorScale: PrecinctColorScale,
+        minzoom: precinctMinZoom,
+        maxzoom: 0,
+        layer: 'precinct-map',
+        filter: null,
+        order: 1,
+      };
+      return [precinctLayer, countyLayer];
+    } else if (this.props.offices.selectedOfficeId !== '322') {
       const countyLayer = MapLayers.county;
       countyLayer.minzoom = 0;
       countyLayer.maxzoom = 0;
@@ -83,7 +108,8 @@ class StateContainer extends React.Component {
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&
             this.props.offices.stateOffices.result !== undefined &&
-            this.props.states.activeStateId !== null && (
+            this.props.states.activeStateId !== null &&
+            this.props.states.stateInfo !== null && (
               <div>
                 <Grid columns={2} verticalAlign="middle" stackable>
                   <Grid.Row columns={3}>
@@ -122,7 +148,7 @@ class StateContainer extends React.Component {
                       <Segment>
                         <NewMapComponent
                           minHeight={368}
-                          layers={this.getMapLayers()}
+                          geographies={this.getMapGeographies()}
                           mapFilter={this.getMapFilter()}
                         />
                         <MapContainer />
@@ -154,7 +180,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setActiveState: (stateId, fetch) => dispatch(setActiveState(stateId, fetch)),
+  setActiveState: stateId => dispatch(setActiveState(stateId)),
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
   fetchStateOffices: () => dispatch(fetchStateOffices()),

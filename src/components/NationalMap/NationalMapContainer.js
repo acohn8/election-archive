@@ -15,7 +15,7 @@ class NationalMapContainer extends React.Component {
     this.props.setActive('national map');
   }
 
-  getMapLayers = () => {
+  getMapGeographies = () => {
     if (this.props.offices.selectedOfficeId !== '322') {
       const countyLayer = MapLayers.county;
       const stateLayer = MapLayers.state;
@@ -38,7 +38,7 @@ class NationalMapContainer extends React.Component {
         {this.props.offices.allOffices.result !== undefined && (
           <NewMapComponent
             minHeight={this.props.windowWidth >= 768 ? '94vh' : '65vh'}
-            layers={this.getMapLayers()}
+            geographies={this.getMapGeographies()}
           />
         )}
         {!this.props.headerHid &&
@@ -114,7 +114,6 @@ const mapStateToProps = state => ({
   headerHid: state.maps.headerHid,
   overlay: state.maps.overlay,
   offices: state.offices,
-  states: state.states.activeStateId,
   windowWidth: state.nav.windowWidth,
 });
 

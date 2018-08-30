@@ -11,7 +11,7 @@ class HomeContainer extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.states !== null) {
+    if (this.props.stateInfo !== null) {
       this.props.resetActiveState();
     }
   }
@@ -27,7 +27,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  states: state.states.activeStateId,
+  stateInfo: state.states.stateInfo,
   offices: state.offices,
 });
 

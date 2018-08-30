@@ -21,7 +21,7 @@ import {
 } from '../../redux/actions/mapActions';
 import { setActiveOffice, fetchStateOffices } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
-import { setStateId } from '../../redux/actions/stateActions';
+import { setStateId, getStateData } from '../../redux/actions/stateActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -69,25 +69,26 @@ class NewMap extends React.Component {
   };
 
   addLayers = () => {
-    const layers = this.props.layers;
-    this.addSources(layers);
-    this.addHoverLayers(layers);
-    this.addFillLayers(layers);
-    this.addLineLayers(layers);
+    const geographies = this.props.geographies;
+    const nonPrecinctGeographies = geographies.filter(geography => geography.name !== 'precinct');
+    this.addSources(geographies);
+    this.addHoverLayers(geographies);
+    this.addFillLayers(geographies);
+    this.addLineLayers(geographies);
     this.map.on('mousemove', e => this.enableHover(e));
     if (this.props.activeItem === 'national map') {
       this.map.on('click', e => this.stateSelection(e));
       this.map.off('click', e => this.stateSelection(e));
     }
     if (this.props.mapFilter) {
-      this.setFilter(
-        this.props.savedLayers,
+      this.setGeographyFilter(this.props.mapFilter.property, this.props.mapFilter.value);
+      this.bindToMap(
+        nonPrecinctGeographies[0],
         this.props.mapFilter.property,
         this.props.mapFilter.value,
       );
-      this.bindToMap(layers[0], this.props.mapFilter.property, this.props.mapFilter.value);
     } else {
-      this.bindToMap();
+      this.bindToMap(nonPrecinctGeographies[0]);
     }
   };
 
@@ -120,7 +121,7 @@ class NewMap extends React.Component {
     if (!this.map.loaded()) {
       return;
     }
-    this.props.layers.forEach(geography => {
+    this.props.geographies.forEach(geography => {
       const features = this.getRenderedFeatures(`${geography.name}Fill`, e.point);
       if (features.length > 0) {
         const feature = features[0];
@@ -128,14 +129,14 @@ class NewMap extends React.Component {
           (features !== undefined && feature.layer.source === 'state') ||
           (features !== undefined && feature.layer.source === 'congressionalDistrict')
         ) {
-          this.map.getCanvas().style.cursor = 'pointer';
           this.filterTopHover(geography, feature, geography.filter);
         } else if (features !== undefined && feature.layer.source === 'county') {
-          this.map.getCanvas().style.cursor = 'pointer';
           this.filterSubGeographyHover(geography, feature);
         }
+        this.map.getCanvas().style.cursor = 'pointer';
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
+        this.props.resetHover();
         geography.sourceLayer === 'cb_2017_us_state_500k' ||
         geography.sourceLayer === 'cb_2017_us_cd115_500k'
           ? this.resetTopFilter(geography)
@@ -175,6 +176,7 @@ class NewMap extends React.Component {
       for (let i = 1; i < sourceFeatures.length; i++) {
         feature = union(feature, sourceFeatures[i]);
       }
+      feature.properties = dataFeature.properties;
     }
     if (sourceFeatures.length > 0) {
       this.map.getSource(`${geography.name}Hover`).setData(feature);
@@ -199,7 +201,7 @@ class NewMap extends React.Component {
   };
 
   getClickLayer = () => {
-    const geographies = this.props.layers;
+    const geographies = this.props.geographies;
     if (geographies.length > 1) {
       return geographies.sort((a, b) => a.order - b.order)[1];
     } else {
@@ -253,19 +255,26 @@ class NewMap extends React.Component {
       speed: 0.75,
     });
     this.props.setStateId(state.id);
+    this.props.getStateData(state.id);
     this.props.fetchStateOffices(state.id);
     this.props.setActiveOffice(this.props.offices.selectedOfficeId, districtId);
     this.props.fetchStateData(state.id, districtId);
     this.map.on('zoomend', () => this.props.pushToNewState(state.id));
   };
 
+  getUrl = geography => {
+    if (geography.name === 'precinct') {
+      return geography.url;
+    } else {
+      return this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
+        .attributes[geography.layer];
+    }
+  };
+
   addSources = geographies => {
     geographies.forEach(geography => {
       this.map.addSource(geography.name, {
-        url: `mapbox://adamcohn.${
-          this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
-            .attributes[geography.layer]
-        }`,
+        url: `mapbox://adamcohn.${this.getUrl(geography)}`,
         type: 'vector',
       });
       this.props.addSource(geography.name);
@@ -314,43 +323,9 @@ class NewMap extends React.Component {
     });
   };
 
-  // addPrecinctLayers = () => {
-  //   const links = {
-  //     3: 'adamcohn.3sna8yq5',
-  //     45: 'adamcohn.9iseezid',
-  //     11: 'adamcohn.1g8o5usp',
-  //     14: 'adamcohn.8risplqr',
-  //   };
-  //   const layers = {
-  //     3: 'pa-2016-final-597cvl',
-  //     45: 'tx-2016-final-7ylsll',
-  //     11: 'ga-2016-final-9bvbyq',
-  //     14: 'mn-2016-final-53132s',
-  //   };
-
-  //   this.map.addSource('precinct', {
-  //     url: `mapbox://${links[this.props.states.activeStateId]}`,
-  //     type: 'vector',
-  //   });
-
-  //   this.map.addLayer(
-  //     {
-  //       id: 'precinctFill',
-  //       type: 'fill',
-  //       minzoom: geography.minzoom,
-  //       maxzoom: geography.maxzoom,
-  //       source: 'precinct',
-  //       'source-layer': layers[this.props.states.activeStateId],
-  //       paint: PrecinctColorScale,
-  //     },
-  //     'waterway-label',
-  //   );
-  //   this.props.addLayer('precinctFill');
-  //   this.map.moveLayer('precinctFill', 'poi-parks-scalerank2');
-  // };
-
-  setFilter(layers, property, value) {
-    layers.forEach(layer => this.map.setFilter(layer, ['==', property, value]));
+  setGeographyFilter(property, value) {
+    const nonPrecinctLayers = this.props.savedLayers.filter(layer => !layer.includes('precinct'));
+    nonPrecinctLayers.forEach(layer => this.map.setFilter(layer, ['==', property, value]));
   }
 
   addHoverLayers = geographies => {
@@ -427,7 +402,6 @@ class NewMap extends React.Component {
     });
     this.props.addSource('bounds');
     const boundingBox = bbox(this.map.getSource('bounds')._data);
-    console.log(boundingBox);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
   };
 
@@ -487,6 +461,7 @@ const mapDispatchToProps = dispatch => ({
   resetMapData: () => dispatch(resetMapData()),
   showingPrecincts: () => dispatch(showingPrecincts()),
   resetPrecincts: () => dispatch(resetPrecincts()),
+  getStateData: stateId => dispatch(getStateData(stateId)),
 });
 
 const mapStateToProps = state => ({

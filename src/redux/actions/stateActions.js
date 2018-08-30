@@ -6,18 +6,24 @@ import { fetchStateOffices } from './officeActions';
 import { resetHover } from './mapActions';
 
 const fetchStatesList = () => async (dispatch) => {
-  const response = await axios.get('https://election-data-2016.herokuapp.com/api/v1/states');
+  const response = await axios.get('http://localhost:3000/api/v1/states');
   dispatch({ type: 'SET_STATES', states: response.data.data });
 };
 
 const setActiveState = stateId => (dispatch) => {
   dispatch(setStateId(stateId));
+  dispatch(getStateData(stateId));
   dispatch(resetHover());
   dispatch(fetchStateOffices(stateId));
   dispatch(fetchStateData(stateId));
 };
 
 const setStateId = stateId => dispatch => dispatch({ type: 'ACTIVE_STATE', stateId });
+
+const getStateData = stateId => async (dispatch) => {
+  const response = await axios.get(`http://localhost:3000/api/v1/states/${stateId}`);
+  dispatch({ type: 'STATE_DATA', stateInfo: response.data.data });
+};
 
 const pushToNewState = stateId => (dispatch, getState) =>
   dispatch(push(`/states/${getState()
@@ -32,4 +38,11 @@ const resetActiveState = () => (dispatch) => {
   dispatch(resetHover());
 };
 
-export { fetchStatesList, setActiveState, resetActiveState, pushToNewState, setStateId };
+export {
+  fetchStatesList,
+  getStateData,
+  setActiveState,
+  resetActiveState,
+  pushToNewState,
+  setStateId,
+};

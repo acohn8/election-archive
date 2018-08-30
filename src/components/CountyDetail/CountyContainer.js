@@ -56,8 +56,8 @@ class CountyContainer extends React.Component {
               <Header as="h3">Precinct Results</Header>
               <PrecinctResultsTable />
             </Grid.Column>
-            {this.props.states.activeStateId !== '17' &&
-              this.props.selectedOfficeId !== '322' && (
+            {this.props.states.stateInfo.id !== '17' &&
+              this.props.states.stateInfo.id !== '322' && (
                 <Grid.Column>
                   <Header as="h3">
                     {
