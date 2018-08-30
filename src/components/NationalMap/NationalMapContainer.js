@@ -9,8 +9,6 @@ import { setActive } from '../../redux/actions/navActions';
 import NewMapComponent from '../Map/NewMapComponent';
 
 class NationalMapContainer extends React.Component {
-  state = { windowWidth: '' };
-
   componentDidMount() {
     this.props.setActive('national map');
   }
@@ -39,6 +37,7 @@ class NationalMapContainer extends React.Component {
           <NewMapComponent
             minHeight={this.props.windowWidth >= 768 ? '94vh' : '65vh'}
             geographies={this.getMapGeographies()}
+            clickToNavigate
           />
         )}
         {!this.props.headerHid &&

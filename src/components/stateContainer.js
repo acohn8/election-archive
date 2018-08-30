@@ -3,7 +3,7 @@ import { Grid, Header, Container, Divider, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import ExportDropdown from './Table/ExportDropdown';
-import TableContainer from './Table/tableContainer';
+import ResultsTable from './Table/table';
 import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
@@ -150,6 +150,7 @@ class StateContainer extends React.Component {
                           minHeight={368}
                           geographies={this.getMapGeographies()}
                           mapFilter={this.getMapFilter()}
+                          hideHeaderOnPrecincts
                         />
                         <MapContainer />
                       </Segment>
@@ -158,7 +159,9 @@ class StateContainer extends React.Component {
                   <Grid.Row columns={1}>
                     <Grid.Column>
                       <Segment>
-                        <TableContainer />
+                        <Container fluid>
+                          <ResultsTable geographies={this.getMapGeographies()} />
+                        </Container>
                       </Segment>
                     </Grid.Column>
                   </Grid.Row>

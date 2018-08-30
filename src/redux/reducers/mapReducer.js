@@ -20,7 +20,6 @@ const initialMapState = {
   layers: [],
   sources: [],
   mapDetails: {},
-  showingPrecincts: false,
 };
 
 const mapsReducer = (previousState = initialMapState, action) => {
@@ -77,16 +76,6 @@ const mapsReducer = (previousState = initialMapState, action) => {
       return {
         ...previousState,
         mapDetails: {},
-      };
-    case 'SHOWING_PRECINCTS':
-      return {
-        ...previousState,
-        showingPrecincts: true,
-      };
-    case 'RESET_PRECINCTS':
-      return {
-        ...previousState,
-        showingPrecincts: false,
       };
     case 'RESET_HOVER':
       return {

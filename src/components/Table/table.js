@@ -175,7 +175,7 @@ class ResultsTable extends React.Component {
           className="-highlight"
           SubComponent={row => (
             <div style={{ padding: '20px' }}>
-              <CountyContainer row={row} />
+              <CountyContainer row={row} geographies={this.props.geographies} />
             </div>
           )}
         />

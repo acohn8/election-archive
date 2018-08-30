@@ -3,7 +3,6 @@ import { Grid, Header, Segment, List } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import Loader from '../Loader';
-import CountyMap from '../Map/countyMap';
 import ResultsList from './ResultsList';
 import PrecinctResultsTable from './PrecinctResultsTable';
 import { fetchPrecinctData } from '../../redux/actions/precinctActions';
@@ -12,7 +11,6 @@ import NewMapComponent from '../Map/NewMapComponent';
 class CountyContainer extends React.Component {
   componentDidMount() {
     this.props.fetchPrecinctData(this.props.row.original);
-    this.props.setActive('countyShow');
   }
 
   formatCountyToplines = () => {
@@ -66,7 +64,17 @@ class CountyContainer extends React.Component {
                       ].attributes.name
                     }
                   </Header>
-                  {/* <NewMapComponent minHeight={398}/> */}
+                  <NewMapComponent
+                    minHeight={398}
+                    geographies={this.props.geographies}
+                    countyMap
+                    mapFilter={{
+                      property: 'GEOID',
+                      value: this.props.countyResults.entities.results[
+                        this.props.precinctResults.county_id
+                      ].fips,
+                    }}
+                  />
                 </Grid.Column>
               )}
           </Grid>
@@ -85,7 +93,6 @@ const mapStateToProps = state => ({
   precinctResults: state.results.precinctResults,
   countyResults: state.results.countyResults,
   stateResults: state.results.stateResults,
-  selectedOfficeId: state.offices.selectedOfficeId,
 });
 
 const mapDispatchToProps = dispatch => ({

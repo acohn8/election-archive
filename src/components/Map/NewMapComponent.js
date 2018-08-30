@@ -11,13 +11,10 @@ import {
   addSource,
   removeSource,
   removeLayer,
-  resetMapData,
   getHoverInfo,
   resetHover,
   hideHeader,
   showHeader,
-  resetPrecincts,
-  showingPrecincts,
 } from '../../redux/actions/mapActions';
 import { setActiveOffice, fetchStateOffices } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
@@ -72,13 +69,17 @@ class NewMap extends React.Component {
     const geographies = this.props.geographies;
     const nonPrecinctGeographies = geographies.filter(geography => geography.name !== 'precinct');
     this.addSources(geographies);
-    this.addHoverLayers(geographies);
     this.addFillLayers(geographies);
     this.addLineLayers(geographies);
-    this.map.on('mousemove', e => this.enableHover(e));
-    if (this.props.activeItem === 'national map') {
+    if (!this.props.countyMap) {
+      this.addHoverLayers(geographies);
+      this.map.on('mousemove', e => this.enableHover(e));
+    }
+    if (this.props.clickToNavigate) {
       this.map.on('click', e => this.stateSelection(e));
-      this.map.off('click', e => this.stateSelection(e));
+    }
+    if (this.props.hideHeaderOnPrecincts) {
+      this.map.on('zoom', this.hideHeaderOnPrecinct);
     }
     if (this.props.mapFilter) {
       this.setGeographyFilter(this.props.mapFilter.property, this.props.mapFilter.value);
@@ -108,12 +109,11 @@ class NewMap extends React.Component {
         this.map.removeSource(source);
       }
     });
-    this.props.resetPrecincts();
   };
 
-  getRenderedFeatures(layer, point) {
+  getRenderedFeatures(layers, point) {
     return this.map.queryRenderedFeatures(point, {
-      layers: [layer],
+      layers: layers,
     });
   }
 
@@ -122,19 +122,24 @@ class NewMap extends React.Component {
       return;
     }
     this.props.geographies.forEach(geography => {
-      const features = this.getRenderedFeatures(`${geography.name}Fill`, e.point);
-      console.log(features);
+      const features = this.getRenderedFeatures([`${geography.name}Fill`], e.point);
       if (features.length > 0) {
-        const feature = features[0];
         this.map.getCanvas().style.cursor = 'pointer';
-        if (feature.layer.source === 'state' || feature.layer.source === 'congressionalDistrict') {
-          this.filterTopHover(geography, feature, geography.filter);
-        } else if (feature.layer.source === 'county') {
+        const feature = features[0];
+        if (
+          (feature.layer.source === 'state' && feature.properties[geography.filter].length > 0) ||
+          (feature.layer.source === 'congressionalDistrict' &&
+            feature.properties[geography.filter].length > 0)
+        ) {
+          this.filterTopHover(geography, feature);
+        } else if (
+          feature.layer.source === 'county' &&
+          feature.properties[geography.filter].length > 0
+        ) {
           this.filterSubGeographyHover(geography, feature);
         }
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
-        this.props.resetHover();
         geography.sourceLayer === 'cb_2017_us_state_500k' ||
         geography.sourceLayer === 'cb_2017_us_cd115_500k'
           ? this.resetTopFilter(geography)
@@ -144,9 +149,7 @@ class NewMap extends React.Component {
   };
 
   resetTopFilter = geography => {
-    if (this.map.getLayer(`${geography.name}Hover`)) {
-      this.map.setFilter(`${geography.name}Hover`, ['==', geography.filter, '']);
-    }
+    this.map.setFilter(`${geography.name}Hover`, ['==', geography.filter, '']);
   };
 
   resetSubGeoFilter = geography => {
@@ -158,9 +161,12 @@ class NewMap extends React.Component {
     }
   };
 
-  filterTopHover = (geography, feature, filter) => {
-    console.log(feature), filter;
-    this.map.setFilter(`${geography.name}Hover`, ['==', filter, feature.properties[filter]]);
+  filterTopHover = (geography, feature) => {
+    this.map.setFilter(`${geography.name}Hover`, [
+      '==',
+      geography.filter,
+      feature.properties[geography.filter],
+    ]);
     this.addGeographyInfoToOverlay(feature);
   };
 
@@ -180,6 +186,13 @@ class NewMap extends React.Component {
     if (sourceFeatures.length > 0) {
       this.map.getSource(`${geography.name}Hover`).setData(feature);
       this.addGeographyInfoToOverlay(dataFeature);
+    }
+  };
+
+  hideHeaderOnPrecinct = () => {
+    const nonPrecinctGeography = this.props.geographies.find(geo => geo.name !== 'precinct');
+    if (this.map.getZoom() > nonPrecinctGeography.maxzoom) {
+      this.props.resetHover();
     }
   };
 
@@ -213,8 +226,9 @@ class NewMap extends React.Component {
       return;
     }
     const clickLayer = this.getClickLayer();
-    const features = this.getRenderedFeatures(`${clickLayer.name}Fill`, e.point);
+    const features = this.getRenderedFeatures([`${clickLayer.name}Fill`], e.point);
     if (features.length) {
+      this.props.geographies.forEach(geography => this.map.removeLayer(`${geography.name}Hover`));
       const coords = e.lngLat;
       const state = this.getStateName(features[0]);
       const district = this.getDistrictId(features[0]);
@@ -323,8 +337,18 @@ class NewMap extends React.Component {
   };
 
   setGeographyFilter(property, value) {
-    const nonPrecinctLayers = this.props.savedLayers.filter(layer => !layer.includes('precinct'));
-    nonPrecinctLayers.forEach(layer => this.map.setFilter(layer, ['==', property, value]));
+    let layersToFilter;
+    if (this.props.countyMap) {
+      layersToFilter = this.props.savedLayers;
+    } else {
+      layersToFilter = this.props.savedLayers.filter(layer => !layer.includes('precinct'));
+    }
+
+    layersToFilter.forEach(layer => {
+      if (this.map.getLayer(layer)) {
+        this.map.setFilter(layer, ['==', property, value]);
+      }
+    });
   }
 
   addHoverLayers = geographies => {
@@ -457,20 +481,15 @@ const mapDispatchToProps = dispatch => ({
   addSource: source => dispatch(addSource(source)),
   removeLayer: layer => dispatch(removeLayer(layer)),
   removeSource: source => dispatch(removeSource(source)),
-  resetMapData: () => dispatch(resetMapData()),
-  showingPrecincts: () => dispatch(showingPrecincts()),
-  resetPrecincts: () => dispatch(resetPrecincts()),
   getStateData: stateId => dispatch(getStateData(stateId)),
 });
 
 const mapStateToProps = state => ({
   states: state.states,
   offices: state.offices,
-  shortName: state.results.shortName,
   windowWidth: state.nav.windowWidth,
   activeItem: state.nav.activePage,
   savedLayers: state.maps.layers,
-  renderPrecincts: state.maps.showingPrecincts,
   savedSources: state.maps.sources,
   stateFips: state.results.stateFips,
 });
