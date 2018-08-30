@@ -123,17 +123,15 @@ class NewMap extends React.Component {
     }
     this.props.geographies.forEach(geography => {
       const features = this.getRenderedFeatures(`${geography.name}Fill`, e.point);
+      console.log(features);
       if (features.length > 0) {
         const feature = features[0];
-        if (
-          (features !== undefined && feature.layer.source === 'state') ||
-          (features !== undefined && feature.layer.source === 'congressionalDistrict')
-        ) {
+        this.map.getCanvas().style.cursor = 'pointer';
+        if (feature.layer.source === 'state' || feature.layer.source === 'congressionalDistrict') {
           this.filterTopHover(geography, feature, geography.filter);
-        } else if (features !== undefined && feature.layer.source === 'county') {
+        } else if (feature.layer.source === 'county') {
           this.filterSubGeographyHover(geography, feature);
         }
-        this.map.getCanvas().style.cursor = 'pointer';
       } else if (features.length === 0) {
         this.map.getCanvas().style.cursor = '';
         this.props.resetHover();
@@ -161,6 +159,7 @@ class NewMap extends React.Component {
   };
 
   filterTopHover = (geography, feature, filter) => {
+    console.log(feature), filter;
     this.map.setFilter(`${geography.name}Hover`, ['==', filter, feature.properties[filter]]);
     this.addGeographyInfoToOverlay(feature);
   };

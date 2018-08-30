@@ -22,7 +22,7 @@ const MapLayers = {
     sourceLayer: 'cb_2017_us_state_500k',
     colorScale: StateColorScale,
     layer: 'state-map',
-    filter: 'GEOID',
+    filter: 'STATEFP',
     order: 2,
   },
 };
