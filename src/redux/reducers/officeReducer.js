@@ -23,6 +23,11 @@ const officesReducer = (previousState = initialStatesState, action) => {
         selectedOfficeId: action.officeId,
         selectedDistrictId: action.districtId,
       };
+    case 'SET_ACTIVE_DISTRICT':
+      return {
+        ...previousState,
+        selectedDistrictId: action.districtId,
+      };
     case 'RESET_OFFICE':
       return {
         ...previousState,

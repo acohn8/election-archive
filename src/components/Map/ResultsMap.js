@@ -16,14 +16,14 @@ import {
   hideHeader,
   showHeader,
 } from '../../redux/actions/mapActions';
-import { setActiveOffice, fetchStateOffices } from '../../redux/actions/officeActions';
+import { setActiveDistrict, fetchStateOffices } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
 import { setStateId, getStateData } from '../../redux/actions/stateActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
 
-class NewMap extends React.Component {
+class ResultsMap extends React.Component {
   componentDidMount() {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -149,7 +149,9 @@ class NewMap extends React.Component {
   };
 
   resetTopFilter = geography => {
-    this.map.setFilter(`${geography.name}Hover`, ['==', geography.filter, '']);
+    if (this.map.getLayer(`${geography.name}Hover`)) {
+      this.map.setFilter(`${geography.name}Hover`, ['==', geography.filter, '']);
+    }
   };
 
   resetSubGeoFilter = geography => {
@@ -213,27 +215,21 @@ class NewMap extends React.Component {
   };
 
   getClickLayer = () => {
-    const geographies = this.props.geographies;
-    if (geographies.length > 1) {
-      return geographies.sort((a, b) => a.order - b.order)[1];
+    if (this.props.geographies.length > 1) {
+      return this.props.geographies.find(geo => geo.name === 'state');
     } else {
-      return geographies[0];
+      return this.props.geographies.find(geo => geo.name === 'congressionalDistrict');
     }
   };
 
   stateSelection = e => {
-    if (!this.map.loaded()) {
-      return;
-    }
     const clickLayer = this.getClickLayer();
     const features = this.getRenderedFeatures([`${clickLayer.name}Fill`], e.point);
     if (features.length) {
-      this.props.geographies.forEach(geography => this.map.removeLayer(`${geography.name}Hover`));
-      const coords = e.lngLat;
       const state = this.getStateName(features[0]);
       const district = this.getDistrictId(features[0]);
       if (district !== 0) {
-        this.setStateOnClick(state, coords, district);
+        this.setStateOnClick(state, district);
       }
     }
   };
@@ -261,18 +257,15 @@ class NewMap extends React.Component {
     }
   };
 
-  setStateOnClick = (state, coords, districtId) => {
-    this.map.flyTo({
-      center: coords,
-      zoom: 6,
-      speed: 0.75,
-    });
+  setStateOnClick = (state, districtId) => {
     this.props.setStateId(state.id);
     this.props.getStateData(state.id);
     this.props.fetchStateOffices(state.id);
-    this.props.setActiveOffice(this.props.offices.selectedOfficeId, districtId);
+    if (districtId) {
+      this.props.setActiveDistrict(districtId);
+    }
     this.props.fetchStateData(state.id, districtId);
-    this.map.on('zoomend', () => this.props.pushToNewState(state.id));
+    this.props.pushToNewState(state.id);
   };
 
   getUrl = geography => {
@@ -474,7 +467,7 @@ const mapDispatchToProps = dispatch => ({
   hideHeader: () => dispatch(hideHeader()),
   showHeader: () => dispatch(showHeader()),
   pushToNewState: stateId => dispatch(pushToNewState(stateId)),
-  setActiveOffice: (officeId, districtId) => dispatch(setActiveOffice(officeId, districtId)),
+  setActiveDistrict: districtId => dispatch(setActiveDistrict(districtId)),
   setStateId: stateId => dispatch(setStateId(stateId)),
   fetchStateOffices: stateId => dispatch(fetchStateOffices(stateId)),
   addLayer: layer => dispatch(addLayer(layer)),
@@ -497,4 +490,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(NewMap);
+)(ResultsMap);

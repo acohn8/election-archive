@@ -15,7 +15,8 @@ const fetchStateOffices = stateId => async (dispatch) => {
 
 const setActiveOffice = (officeId, districtId) => dispatch =>
   dispatch({ type: 'SET_ACTIVE_OFFICE', officeId: officeId.toString(), districtId });
-
+const setActiveDistrict = districtId => dispatch =>
+  dispatch({ type: 'SET_ACTIVE_DISTRICT', districtId });
 const resetOffice = () => dispatch => dispatch({ type: 'RESET_OFFICE' });
 
-export { fetchOfficesList, setActiveOffice, fetchStateOffices, resetOffice };
+export { fetchOfficesList, setActiveOffice, fetchStateOffices, resetOffice, setActiveDistrict };

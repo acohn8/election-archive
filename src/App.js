@@ -8,7 +8,6 @@ import { fetchOfficesList } from './redux/actions/officeActions';
 import StateContainer from './components/stateContainer';
 import HomeContainer from './components/Home/HomeContainer';
 import NationalMapContainer from './components/NationalMap/NationalMapContainer';
-import NewMapContainer from './components/Map/NewMapContainer';
 
 import './App.css';
 import StateListContainer from './components/StateList/StateListContainer';
@@ -31,7 +30,6 @@ class App extends React.Component {
           <Route exact path="/states" component={StateListContainer} />
           <Route path="/states/:activeStateName" component={StateContainer} />
           <Route path="/about" component={AboutContainer} />
-          <Route path="/newmap" component={NewMapContainer} />
           <Route path="/faq" component={FrequentlyAskedQuestionsContainer} />
         </Switch>
       </ResponsiveNav>

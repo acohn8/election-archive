@@ -12,7 +12,7 @@ import { fetchStateOffices, resetOffice } from '../redux/actions/officeActions';
 import { setActive } from '../redux/actions/navActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from './StateList/MobileStateSelect';
-import NewMapComponent from './Map/NewMapComponent';
+import ResultsMap from './Map/ResultsMap';
 import { PrecinctColorScale } from '../functions/ColorScale';
 import MapLayers from '../functions/MapLayers';
 
@@ -146,7 +146,7 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Segment>
-                        <NewMapComponent
+                        <ResultsMap
                           minHeight={368}
                           geographies={this.getMapGeographies()}
                           mapFilter={this.getMapFilter()}

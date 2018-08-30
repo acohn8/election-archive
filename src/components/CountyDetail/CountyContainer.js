@@ -6,7 +6,7 @@ import Loader from '../Loader';
 import ResultsList from './ResultsList';
 import PrecinctResultsTable from './PrecinctResultsTable';
 import { fetchPrecinctData } from '../../redux/actions/precinctActions';
-import NewMapComponent from '../Map/NewMapComponent';
+import ResultsMap from '../Map/ResultsMap';
 
 class CountyContainer extends React.Component {
   componentDidMount() {
@@ -64,7 +64,7 @@ class CountyContainer extends React.Component {
                       ].attributes.name
                     }
                   </Header>
-                  <NewMapComponent
+                  <ResultsMap
                     minHeight={398}
                     geographies={this.props.geographies}
                     countyMap

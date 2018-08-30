@@ -6,7 +6,7 @@ import MapLayers from '../../functions/MapLayers';
 import MapInfo from '../Map/mapInfo';
 import { resetActiveState } from '../../redux/actions/stateActions';
 import { setActive } from '../../redux/actions/navActions';
-import NewMapComponent from '../Map/NewMapComponent';
+import ResultsMap from '../Map/ResultsMap.js';
 
 class NationalMapContainer extends React.Component {
   componentDidMount() {
@@ -34,7 +34,7 @@ class NationalMapContainer extends React.Component {
     return (
       <div ref={divElement => (this.divElement = divElement)}>
         {this.props.offices.allOffices.result !== undefined && (
-          <NewMapComponent
+          <ResultsMap
             minHeight={this.props.windowWidth >= 768 ? '94vh' : '65vh'}
             geographies={this.getMapGeographies()}
             clickToNavigate
