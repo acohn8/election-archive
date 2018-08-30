@@ -55,7 +55,7 @@ class CountyContainer extends React.Component {
               <PrecinctResultsTable />
             </Grid.Column>
             {this.props.states.stateInfo.id !== '17' &&
-              this.props.states.stateInfo.id !== '322' && (
+              this.props.selectedOfficeId !== '322' && (
                 <Grid.Column>
                   <Header as="h3">
                     {
@@ -89,6 +89,7 @@ class CountyContainer extends React.Component {
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
   states: state.states,
+  selectedOfficeId: state.offices.selectedOfficeId,
   counties: state.results.counties,
   precinctResults: state.results.precinctResults,
   countyResults: state.results.countyResults,
