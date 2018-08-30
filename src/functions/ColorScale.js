@@ -41,7 +41,7 @@ const CountyColorScale = {
 };
 
 const PrecinctColorScale = {
-  'fill-outline-color': '#696969',
+  // 'fill-outline-color': '#696969',
   'fill-color': [
     'interpolate',
     ['linear'],
