@@ -3,18 +3,16 @@ import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
+import './App.css';
 import { fetchStatesList } from './redux/actions/stateActions';
 import { fetchOfficesList } from './redux/actions/officeActions';
 import StateContainer from './components/stateContainer';
 import HomeContainer from './components/Home/HomeContainer';
 import NationalMapContainer from './components/NationalMap/NationalMapContainer';
-
-import './App.css';
 import StateListContainer from './components/StateList/StateListContainer';
 import AboutContainer from './components/About/AboutContainer';
 import ResponsiveNav from './components/Nav/ResponsiveNav';
 import FrequentlyAskedQuestionsContainer from './components/Faq/FrequentlyAskedQuestionsContainer';
-import NewTableContainer from './components/Table/NewTableContainer';
 
 class App extends React.Component {
   componentDidMount() {
@@ -28,7 +26,6 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={HomeContainer} />
           <Route exact path="/national-map" component={NationalMapContainer} />
-          <Route exact path="/new-table" component={NewTableContainer} />
           <Route exact path="/states" component={StateListContainer} />
           <Route path="/states/:activeStateName" component={StateContainer} />
           <Route path="/about" component={AboutContainer} />

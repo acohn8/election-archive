@@ -15,6 +15,7 @@ import MobileStateSelector from './StateList/MobileStateSelect';
 import ResultsMap from './Map/ResultsMap';
 import { PrecinctColorScale } from '../functions/ColorScale';
 import MapLayers from '../functions/MapLayers';
+import NewTable from './Table/NewTable';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -146,12 +147,7 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Segment>
-                        <ResultsMap
-                          minHeight={368}
-                          geographies={this.getMapGeographies()}
-                          mapFilter={this.getMapFilter()}
-                          hideHeaderOnPrecincts
-                        />
+                        <NewTable />
                         <MapContainer />
                       </Segment>
                     </Grid.Column>
@@ -160,7 +156,12 @@ class StateContainer extends React.Component {
                     <Grid.Column>
                       <Segment>
                         <Container fluid>
-                          <ResultsTable geographies={this.getMapGeographies()} />
+                          <ResultsMap
+                            minHeight={500}
+                            geographies={this.getMapGeographies()}
+                            mapFilter={this.getMapFilter()}
+                            hideHeaderOnPrecincts
+                          />
                         </Container>
                       </Segment>
                     </Grid.Column>
