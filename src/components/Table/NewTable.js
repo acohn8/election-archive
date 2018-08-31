@@ -3,6 +3,13 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
+const colors = {
+  democratic: 'rgb(32,133,208,.2)',
+  republican: 'rgb(219,40,40,.2)',
+  libertarian: 'rgb(251,189,9, .2)',
+  other: 'rgb(100,53,201, .2)',
+};
+
 class NewTable extends Component {
   state = {
     column: null,
@@ -15,23 +22,29 @@ class NewTable extends Component {
   }
 
   handleSort = clickedColumn => () => {
-    const { column, data, direction } = this.state;
-
-    if (column !== clickedColumn) {
-      console.log(column, data, clickedColumn);
+    const data = this.sortColumns(clickedColumn);
+    if (this.state.column !== clickedColumn) {
       this.setState({
         column: clickedColumn,
-        data: _.sortBy(data.map(d => d.results), [clickedColumn]),
+        data: data,
         direction: 'ascending',
       });
-      console.log(this.state);
       return;
     }
 
     this.setState({
-      data: this.makeData().reverse(),
-      direction: direction === 'ascending' ? 'descending' : 'ascending',
+      column: clickedColumn,
+      data: this.state.data.reverse(),
+      direction: this.state.direction === 'ascending' ? 'descending' : 'ascending',
     });
+  };
+
+  sortColumns = column => {
+    if (column === 'name') {
+      return this.state.data.slice().sort((a, b) => a[column].localeCompare(b[column]));
+    } else {
+      return this.state.data.slice().sort((a, b) => b[column].total - a[column].total);
+    }
   };
 
   sortedCandidates = () => {
@@ -42,97 +55,143 @@ class NewTable extends Component {
     return sortedCandidates.slice(0, 2);
   };
 
+  getCountyWinner = countyResults => {
+    const winner = Object.keys(countyResults).sort(
+      (a, b) => countyResults[b] - countyResults[a],
+    )[0];
+    return this.props.candidates.entities.candidates[winner].attributes.party;
+  };
+
   makeData = () => {
     const countyResults = this.props.countyResults.result.map(county_id => ({
       id: county_id,
       name: this.props.countyResults.entities.results[county_id].name,
     }));
     countyResults.forEach(result => {
-      const countyTotal = Object.values(
-        this.props.countyResults.entities.results[result.id].results,
-      ).reduce((sum, n) => sum + n);
+      const countyResults = this.props.countyResults.entities.results[result.id].results;
+      const countyTotal = Object.values(countyResults).reduce((sum, n) => sum + n);
 
-      const firstVotes = this.props.countyResults.entities.results[result.id].results[
-        this.sortedCandidates()[0]
-      ];
-      const secondVotes = this.props.countyResults.entities.results[result.id].results[
-        this.sortedCandidates()[1]
-      ];
+      const countyWinnerParty = this.getCountyWinner(countyResults);
+
+      const firstVotes = countyResults[this.sortedCandidates()[0]];
+      const secondVotes = countyResults[this.sortedCandidates()[1]];
       const otherVotes = countyTotal - (firstVotes + secondVotes);
 
       const firstPlace = this.props.candidates.entities.candidates[this.sortedCandidates()[0]];
       const secondPlace = this.props.candidates.entities.candidates[this.sortedCandidates()[1]];
 
+      result.winnerParty = countyWinnerParty;
       result.first = {};
       result.first.id = this.sortedCandidates()[0];
       result.first.name = firstPlace.attributes.name;
       result.first.party = firstPlace.attributes.party;
       result.first.total = firstVotes;
       result.second = {};
-      result.second.id = this.sortedCandidates()[1];
-      result.second.name = secondPlace.attributes.name;
-      result.second.party = secondPlace.attributes.party;
-      result.second.total = secondVotes;
-      result.other = {};
-      result.other.id = 'other';
-      result.other.name = 'other';
-      result.other.party = null;
-      result.other.total = otherVotes;
+      if (secondVotes > 0) {
+        result.second.id = this.sortedCandidates()[1];
+        result.second.name = secondPlace.attributes.name;
+        result.second.party = secondPlace.attributes.party;
+        result.second.total = secondVotes;
+      }
+      if (otherVotes > 0) {
+        result.other = {};
+        result.other.id = 'other';
+        result.other.name = 'other';
+        result.other.party = null;
+        result.other.total = otherVotes;
+      }
     });
     this.setState({ data: countyResults });
   };
 
   render() {
-    const { column, data, direction } = this.state;
-    console.log(this.state);
+    const { column, direction } = this.state;
+    const candidates = Object.keys(this.props.stateResults).filter(
+      id => this.props.stateResults[id] > 0,
+    );
+    console.log(candidates);
     return (
-      <Table sortable celled fixed>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell
-              sorted={column === 'county' ? direction : null}
-              onClick={this.handleSort('county')}
-            >
-              County
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'second' ? direction : null}
-              onClick={this.handleSort('second')}
-            >
-              {
-                this.props.candidates.entities.candidates[this.sortedCandidates()[0]].attributes
-                  .name
-              }
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'first' ? direction : null}
-              onClick={this.handleSort('first')}
-            >
-              {
-                this.props.candidates.entities.candidates[this.sortedCandidates()[1]].attributes
-                  .name
-              }
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              sorted={column === 'other' ? direction : null}
-              onClick={this.handleSort('other')}
-            >
-              Other
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {this.state.data.length &&
-            this.state.data.map(county => (
-              <Table.Row key={county.id}>
-                <Table.Cell>{county.name}</Table.Cell>
-                <Table.Cell>{county.first.total}</Table.Cell>
-                <Table.Cell>{county.second.total}</Table.Cell>
-                <Table.Cell>{county.other.total}</Table.Cell>
-              </Table.Row>
-            ))}
-        </Table.Body>
-      </Table>
+      <div
+        style={{
+          overflow: 'auto',
+          height: 375,
+        }}
+      >
+        <Table sortable celled fixed unstackable>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell
+                sorted={column === 'name' ? direction : null}
+                onClick={this.handleSort('name')}
+              >
+                County
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                sorted={column === 'first' ? direction : null}
+                onClick={this.handleSort('first')}
+              >
+                {
+                  this.props.candidates.entities.candidates[this.sortedCandidates()[0]].attributes
+                    .name
+                }
+              </Table.HeaderCell>
+              {candidates.length >= 2 && (
+                <Table.HeaderCell
+                  sorted={column === 'second' ? direction : null}
+                  onClick={this.handleSort('second')}
+                >
+                  {
+                    this.props.candidates.entities.candidates[this.sortedCandidates()[1]].attributes
+                      .name
+                  }
+                </Table.HeaderCell>
+              )}
+              {candidates.length >= 3 && (
+                <Table.HeaderCell
+                  sorted={column === 'other' ? direction : null}
+                  onClick={this.handleSort('other')}
+                >
+                  Other
+                </Table.HeaderCell>
+              )}
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {this.state.data.length &&
+              this.state.data.map(county => (
+                <Table.Row key={county.id}>
+                  <Table.Cell>{county.name}</Table.Cell>
+                  {county.first.party === county.winnerParty ? (
+                    <Table.Cell style={{ backgroundColor: colors[county.winnerParty] }}>
+                      {county.first.total.toLocaleString()}
+                    </Table.Cell>
+                  ) : (
+                    <Table.Cell>{county.first.total.toLocaleString()}</Table.Cell>
+                  )}
+
+                  {candidates.length >= 2 && county.second.party === county.winnerParty ? (
+                    <Table.Cell style={{ backgroundColor: colors[county.winnerParty] }}>
+                      {county.second.total !== undefined ? county.second.total.toLocaleString() : 0}
+                    </Table.Cell>
+                  ) : (
+                    <Table.Cell>
+                      {county.second.total !== undefined ? county.second.total.toLocaleString() : 0}
+                    </Table.Cell>
+                  )}
+                  {candidates.length >= 3 && county.other.party === county.winnerParty ? (
+                    <Table.Cell style={{ backgroundColor: colors[county.winnerParty] }}>
+                      {county.other !== undefined ? county.other.total.toLocaleString() : 0}
+                    </Table.Cell>
+                  ) : (
+                    <Table.Cell>
+                      {county.other.total !== undefined ? county.other.total.toLocaleString() : 0}
+                    </Table.Cell>
+                  )}
+                </Table.Row>
+              ))}
+          </Table.Body>
+        </Table>
+      </div>
     );
   }
 }

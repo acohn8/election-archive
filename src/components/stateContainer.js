@@ -147,7 +147,7 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Segment>
-                        <NewTable />
+                        <NewTable style={{ overflow: 'hidden' }} />
                         <MapContainer />
                       </Segment>
                     </Grid.Column>
