@@ -17,7 +17,7 @@ const ToplinesContainer = (props) => {
   props.fetchCampaignFinanceData(sortedCandidates);
 
   return (
-    <Card.Group itemsPerRow={sortedCandidates.length}>
+    <Card.Group itemsPerRow={sortedCandidates.length} stackable>
       {sortedCandidates.map(candidateId => (
         <ToplinesCard
           candidate={props.candidates.entities.candidates[candidateId]}

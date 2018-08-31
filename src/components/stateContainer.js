@@ -3,7 +3,6 @@ import { Grid, Header, Container, Divider, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import ExportDropdown from './Table/ExportDropdown';
-import ResultsTable from './Table/table';
 import MapContainer from './Map/mapContainer';
 import ToplinesContainer from './Toplines/toplinesContainer';
 import ContentLoader from './Loader';
@@ -15,6 +14,7 @@ import MobileStateSelector from './StateList/MobileStateSelect';
 import ResultsMap from './Map/ResultsMap';
 import { PrecinctColorScale } from '../functions/ColorScale';
 import MapLayers from '../functions/MapLayers';
+import StateResultTable from './Table/StateResultTable';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -140,27 +140,41 @@ class StateContainer extends React.Component {
                       {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row>
+                  <Grid.Row verticalAlign="middle">
+                    <Grid.Column>
+                      <Header size="large">Statewide Results</Header>
+                    </Grid.Column>
+                    <Grid.Column>
+                      <Header size="large">County Results</Header>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row style={{ minHeight: 450 }}>
                     <Grid.Column>
                       <ToplinesContainer />
                     </Grid.Column>
                     <Grid.Column>
                       <Segment>
-                        <ResultsMap
-                          minHeight={368}
-                          geographies={this.getMapGeographies()}
-                          mapFilter={this.getMapFilter()}
-                          hideHeaderOnPrecincts
-                        />
-                        <MapContainer />
+                        <StateResultTable style={{ overflow: 'hidden' }} />
                       </Segment>
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row columns={1}>
+                  <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">
                     <Grid.Column>
+                      <Header size="large">
+                        County Map
+                        {this.props.states.stateInfo.attributes['precinct-map'] && (
+                          <Header.Subheader>Zoom in for precincts</Header.Subheader>
+                        )}
+                      </Header>
                       <Segment>
-                        <Container fluid>
-                          <ResultsTable geographies={this.getMapGeographies()} />
+                        <Container>
+                          <MapContainer />
+                          <ResultsMap
+                            minHeight={600}
+                            geographies={this.getMapGeographies()}
+                            mapFilter={this.getMapFilter()}
+                            hideHeaderOnPrecincts
+                          />
                         </Container>
                       </Segment>
                     </Grid.Column>

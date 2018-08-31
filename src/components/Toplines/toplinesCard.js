@@ -18,7 +18,7 @@ const ToplinesCard = ({
   <Card
     color={colors[candidate.attributes.party]}
     style={{
-      minHeight: 375,
+      minHeight: 400,
     }}
   >
     <Card.Content>
