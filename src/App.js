@@ -28,7 +28,6 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={HomeContainer} />
           <Route exact path="/national-map" component={NationalMapContainer} />
-          <Route exact path="/new-table" component={NewTableContainer} />
           <Route exact path="/states" component={StateListContainer} />
           <Route path="/states/:activeStateName" component={StateContainer} />
           <Route path="/about" component={AboutContainer} />
