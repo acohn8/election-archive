@@ -14,7 +14,7 @@ const MapContainer = props => (
           opacity: '0.8',
           padding: '10px',
           margin: 'auto',
-          left: 20,
+          left: 30,
           top: 20,
           borderColor: 'gray',
           borderStyle: 'solid',

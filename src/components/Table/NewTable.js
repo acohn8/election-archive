@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 import { connect } from 'react-redux';
@@ -13,7 +12,7 @@ const colors = {
 class NewTable extends Component {
   state = {
     column: null,
-    data: {},
+    data: [],
     direction: null,
   };
 
@@ -106,10 +105,6 @@ class NewTable extends Component {
 
   render() {
     const { column, direction } = this.state;
-    const candidates = Object.keys(this.props.stateResults).filter(
-      id => this.props.stateResults[id] > 0,
-    );
-    console.log(candidates);
     return (
       <div
         style={{
@@ -117,80 +112,55 @@ class NewTable extends Component {
           height: 375,
         }}
       >
-        <Table sortable celled fixed unstackable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell
-                sorted={column === 'name' ? direction : null}
-                onClick={this.handleSort('name')}
-              >
-                County
-              </Table.HeaderCell>
-              <Table.HeaderCell
-                sorted={column === 'first' ? direction : null}
-                onClick={this.handleSort('first')}
-              >
-                {
-                  this.props.candidates.entities.candidates[this.sortedCandidates()[0]].attributes
-                    .name
-                }
-              </Table.HeaderCell>
-              {candidates.length >= 2 && (
+        {this.state.data.length > 0 && (
+          <Table sortable celled fixed unstackable>
+            <Table.Header>
+              <Table.Row>
                 <Table.HeaderCell
-                  sorted={column === 'second' ? direction : null}
-                  onClick={this.handleSort('second')}
+                  sorted={column === 'name' ? direction : null}
+                  onClick={this.handleSort('name')}
                 >
-                  {
-                    this.props.candidates.entities.candidates[this.sortedCandidates()[1]].attributes
-                      .name
-                  }
+                  County
                 </Table.HeaderCell>
-              )}
-              {candidates.length >= 3 && (
-                <Table.HeaderCell
-                  sorted={column === 'other' ? direction : null}
-                  onClick={this.handleSort('other')}
-                >
-                  Other
-                </Table.HeaderCell>
-              )}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {this.state.data.length &&
-              this.state.data.map(county => (
+                {Object.keys(this.state.data[0])
+                  .filter(key => ['first', 'second', 'other'].includes(key))
+                  .map(position => (
+                    <Table.HeaderCell
+                      key={this.state.data[0][position].name}
+                      sorted={column === position ? direction : null}
+                      onClick={this.handleSort(position)}
+                    >
+                      {this.state.data[0][position].name}
+                    </Table.HeaderCell>
+                  ))}
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {this.state.data.map(county => (
                 <Table.Row key={county.id}>
                   <Table.Cell>{county.name}</Table.Cell>
-                  {county.first.party === county.winnerParty ? (
-                    <Table.Cell style={{ backgroundColor: colors[county.winnerParty] }}>
-                      {county.first.total.toLocaleString()}
-                    </Table.Cell>
-                  ) : (
-                    <Table.Cell>{county.first.total.toLocaleString()}</Table.Cell>
-                  )}
-
-                  {candidates.length >= 2 && county.second.party === county.winnerParty ? (
-                    <Table.Cell style={{ backgroundColor: colors[county.winnerParty] }}>
-                      {county.second.total !== undefined ? county.second.total.toLocaleString() : 0}
-                    </Table.Cell>
-                  ) : (
-                    <Table.Cell>
-                      {county.second.total !== undefined ? county.second.total.toLocaleString() : 0}
-                    </Table.Cell>
-                  )}
-                  {candidates.length >= 3 && county.other.party === county.winnerParty ? (
-                    <Table.Cell style={{ backgroundColor: colors[county.winnerParty] }}>
-                      {county.other !== undefined ? county.other.total.toLocaleString() : 0}
-                    </Table.Cell>
-                  ) : (
-                    <Table.Cell>
-                      {county.other.total !== undefined ? county.other.total.toLocaleString() : 0}
-                    </Table.Cell>
-                  )}
+                  {Object.keys(county)
+                    .filter(key => ['first', 'second', 'other'].includes(key))
+                    .map(
+                      position =>
+                        county.winnerParty === county[position].party ? (
+                          <Table.Cell
+                            key={`${county.name}${position}`}
+                            style={{ backgroundColor: colors[county.winnerParty] }}
+                          >
+                            {county[position].total.toLocaleString()}
+                          </Table.Cell>
+                        ) : (
+                          <Table.Cell key={`${county.name}${position}`}>
+                            {county[position].total ? county[position].total.toLocaleString() : 0}
+                          </Table.Cell>
+                        ),
+                    )}
                 </Table.Row>
               ))}
-          </Table.Body>
-        </Table>
+            </Table.Body>
+          </Table>
+        )}
       </div>
     );
   }
