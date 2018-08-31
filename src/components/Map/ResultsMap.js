@@ -111,11 +111,11 @@ class ResultsMap extends React.Component {
     });
   };
 
-  getRenderedFeatures(layers, point) {
+  getRenderedFeatures = (layers, point) => {
     return this.map.queryRenderedFeatures(point, {
       layers: layers,
     });
-  }
+  };
 
   enableHover = e => {
     if (!this.map.loaded()) {
@@ -185,10 +185,8 @@ class ResultsMap extends React.Component {
       }
       feature.properties = dataFeature.properties;
     }
-    if (sourceFeatures.length > 0) {
-      this.map.getSource(`${geography.name}Hover`).setData(feature);
-      this.addGeographyInfoToOverlay(dataFeature);
-    }
+    this.map.getSource(`${geography.name}Hover`).setData(feature);
+    this.addGeographyInfoToOverlay(dataFeature);
   };
 
   hideHeaderOnPrecinct = () => {
@@ -329,7 +327,7 @@ class ResultsMap extends React.Component {
     });
   };
 
-  setGeographyFilter(property, value) {
+  setGeographyFilter = (property, value) => {
     let layersToFilter;
     if (this.props.countyMap) {
       layersToFilter = this.props.savedLayers;
@@ -342,7 +340,7 @@ class ResultsMap extends React.Component {
         this.map.setFilter(layer, ['==', property, value]);
       }
     });
-  }
+  };
 
   addHoverLayers = geographies => {
     geographies.forEach(geography => {

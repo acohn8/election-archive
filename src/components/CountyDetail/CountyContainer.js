@@ -54,29 +54,6 @@ class CountyContainer extends React.Component {
               <Header as="h3">Precinct Results</Header>
               <PrecinctResultsTable />
             </Grid.Column>
-            {this.props.states.stateInfo.id !== '17' &&
-              this.props.selectedOfficeId !== '322' && (
-                <Grid.Column>
-                  <Header as="h3">
-                    {
-                      this.props.counties.entities.counties[
-                        this.props.precinctResults.county_id.toString()
-                      ].attributes.name
-                    }
-                  </Header>
-                  <ResultsMap
-                    minHeight={398}
-                    geographies={this.props.geographies}
-                    countyMap
-                    mapFilter={{
-                      property: 'GEOID',
-                      value: this.props.countyResults.entities.results[
-                        this.props.precinctResults.county_id
-                      ].fips,
-                    }}
-                  />
-                </Grid.Column>
-              )}
           </Grid>
         ) : (
           <Loader />
