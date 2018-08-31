@@ -28,6 +28,8 @@ class ResultsMap extends React.Component {
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/adamcohn/cjld3m3g66xlb2sl2ojc73n5v',
+      zoom: 3,
+      center: [-98.5795, 39.8283],
     });
     this.createMap();
   }
