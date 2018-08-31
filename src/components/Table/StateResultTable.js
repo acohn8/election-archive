@@ -9,7 +9,7 @@ const colors = {
   other: 'rgb(100,53,201, .2)',
 };
 
-class NewTable extends Component {
+class StateResultTable extends Component {
   state = {
     column: null,
     data: [],
@@ -172,4 +172,4 @@ const mapStateToProps = state => ({
   stateResults: state.results.stateResults,
 });
 
-export default connect(mapStateToProps)(NewTable);
+export default connect(mapStateToProps)(StateResultTable);

@@ -14,7 +14,7 @@ import MobileStateSelector from './StateList/MobileStateSelect';
 import ResultsMap from './Map/ResultsMap';
 import { PrecinctColorScale } from '../functions/ColorScale';
 import MapLayers from '../functions/MapLayers';
-import NewTable from './Table/NewTable';
+import StateResultTable from './Table/StateResultTable';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -154,7 +154,7 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Segment>
-                        <NewTable style={{ overflow: 'hidden' }} />
+                        <StateResultTable style={{ overflow: 'hidden' }} />
                       </Segment>
                     </Grid.Column>
                   </Grid.Row>
