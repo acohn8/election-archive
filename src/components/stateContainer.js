@@ -18,6 +18,7 @@ import ResultsMap from './Map/ResultsMap';
 import { PrecinctColorScale } from '../functions/ColorScale';
 import MapLayers from '../functions/MapLayers';
 import StateResultTable from './Table/StateResultTable';
+import StateResultTableContainer from './Table/StateResultTableContainer';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -200,11 +201,7 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Header size="large">Statewide Results</Header>
-                      <Segment>
-                        {this.props.topTwo.length && (
-                          <StateResultTable style={{ overflow: 'hidden' }} />
-                        )}
-                      </Segment>
+                      <StateResultTableContainer />
                     </Grid.Column>
                   </Grid.Row>
                   <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">

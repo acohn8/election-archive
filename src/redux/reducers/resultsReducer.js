@@ -53,6 +53,11 @@ const resultsReducer = (previousState = initialResultsState, action) => {
       return { ...previousState, topTwo: action.candidates };
     case 'RESET_TOP_TWO':
       return { ...previousState, topTwo: [] };
+    case 'SET_SORTED_COUNTY_RESULTS':
+      return {
+        ...previousState,
+        countyResults: { ...previousState.countyResults, result: action.results },
+      };
     case 'RESET_RESULTS':
       return {
         loading: false,

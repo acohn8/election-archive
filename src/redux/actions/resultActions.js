@@ -56,4 +56,6 @@ const setTopTwo = candidates => ({ type: 'SET_TOP_TWO', candidates });
 const resetTopTwo = () => ({ type: 'RESET_TOP_TWO' });
 const resetResults = () => ({ type: 'RESET_RESULTS' });
 
-export { fetchStateData, resetResults, setTopTwo, resetTopTwo };
+const setSortedCountyResults = results => ({ type: 'SET_SORTED_COUNTY_RESULTS', results });
+
+export { fetchStateData, resetResults, setTopTwo, resetTopTwo, setSortedCountyResults };
