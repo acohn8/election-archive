@@ -6,6 +6,7 @@ const initialResultsState = {
   stateFips: null,
   counties: {},
   candidates: [],
+  topTwo: [],
   stateResults: {},
   countyResults: [],
   precinctResults: {},
@@ -17,12 +18,11 @@ const resultsReducer = (previousState = initialResultsState, action) => {
       return {
         ...previousState,
         loading: true,
-        // officeName: 'US President',
-        // stateName: null,
         counties: {},
         candidates: [],
         stateResults: {},
         countyResults: [],
+        topTwo: [],
         precinctResults: {},
       };
     case 'SET_STATE_DATA':
@@ -48,6 +48,11 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         ...previousState,
         precinctResults: { county_id: action.county, precincts: action.precincts },
       };
+    case 'SET_TOP_TWO':
+      console.log(action.candidates);
+      return { ...previousState, topTwo: action.candidates };
+    case 'RESET_TOP_TWO':
+      return { ...previousState, topTwo: [] };
     case 'RESET_RESULTS':
       return {
         loading: false,
@@ -56,6 +61,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         stateFips: null,
         counties: {},
         candidates: [],
+        topTwo: [],
         stateResults: {},
         countyResults: [],
         precinctResults: {},

@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Card, Image, Statistic, Label, Header } from 'semantic-ui-react';
 
 import CampaignFinanceTable from './financeTable';
@@ -13,7 +12,7 @@ const colors = {
 };
 
 const ToplinesCard = ({
-  candidate, votes, total, winner, financeData,
+  candidate, votes, total, winner, children,
 }) => (
   <Card
     color={colors[candidate.attributes.party]}
@@ -48,21 +47,8 @@ const ToplinesCard = ({
         </Statistic.Group>
       </Card.Description>
     </Card.Content>
-    {financeData && (
-      <Card.Content>
-        <Header as="h4">Finance</Header>
-        {candidate.attributes['fec-id'] !== null ? (
-          <CampaignFinanceTable candidateId={candidate.id} disabled={false} />
-        ) : (
-          <CampaignFinanceTable candidateId={candidate.id} disabled />
-        )}
-      </Card.Content>
-    )}
+    {children}
   </Card>
 );
 
-const mapStateToProps = state => ({
-  financeData: state.campaignFinance.financeData,
-});
-
-export default connect(mapStateToProps)(ToplinesCard);
+export default ToplinesCard;

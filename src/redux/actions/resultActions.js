@@ -52,6 +52,8 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
   });
 };
 
+const setTopTwo = candidates => ({ type: 'SET_TOP_TWO', candidates });
+const resetTopTwo = () => ({ type: 'RESET_TOP_TWO' });
 const resetResults = () => ({ type: 'RESET_RESULTS' });
 
-export { fetchStateData, resetResults };
+export { fetchStateData, resetResults, setTopTwo, resetTopTwo };

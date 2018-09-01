@@ -6,8 +6,10 @@ import ExportDropdown from './Table/ExportDropdown';
 import MapContainer from './Map/mapContainer';
 import ToplinesCard from './Toplines/toplinesCard';
 import ContentLoader from './Loader';
+import CampaignFinanceTable from './Toplines/financeTable';
 import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
 import { fetchStateOffices, resetOffice } from '../redux/actions/officeActions';
+import { setTopTwo, resetTopTwo } from '../redux/actions/resultActions';
 import { fetchCampaignFinanceData } from '../redux/actions/campaignFinanceActions';
 import { setActive } from '../redux/actions/navActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
@@ -30,7 +32,7 @@ class StateContainer extends React.Component {
           .join('-')
           .toLowerCase() === this.props.match.params.activeStateName.toLowerCase(),
     );
-    if (this.props.states.states.length > 0 && this.props.states.activeStateId === null) {
+    if (this.props.states.states.length && this.props.states.activeStateId === null) {
       this.props.setActiveState(state.id);
     } else if (
       this.props.states.states.length > 0 &&
@@ -38,6 +40,9 @@ class StateContainer extends React.Component {
     ) {
       this.props.resetOffice();
       this.props.setActiveState(state.id);
+    }
+    if (Object.keys(this.props.stateResults).length > 0 && this.props.topTwo.length === 0) {
+      this.getTopTwoCandidates();
     }
   }
 
@@ -52,7 +57,6 @@ class StateContainer extends React.Component {
       this.props.offices.selectedOfficeId === '308'
     ) {
       const countyLayer = MapLayers.county;
-      //adapts to PA higher zoom threshold for precinct map
       const precinctMinCountyMaxZoom = this.props.states.activeStateId === '3' ? 9 : 8;
       countyLayer.order = 2;
       countyLayer.minzoom = 0;
@@ -111,8 +115,8 @@ class StateContainer extends React.Component {
       .map(id => parseInt(id, 10))
       .sort((a, b) => this.props.stateResults[b] - this.props.stateResults[a])
       .slice(0, 2);
-    this.fetchCampaignFinanceData(candidateIds);
-    return topTwoCandidates;
+    this.props.setTopTwo(topTwoCandidates);
+    this.props.fetchCampaignFinanceData(topTwoCandidates);
   };
 
   getStatewideTotal = () => {
@@ -121,6 +125,7 @@ class StateContainer extends React.Component {
   };
 
   render() {
+    const topCandidates = this.props.topTwo;
     return (
       <div>
         <Divider hidden />
@@ -163,22 +168,42 @@ class StateContainer extends React.Component {
                   <Grid.Row style={{ minHeight: 450 }}>
                     <Grid.Column>
                       <Header size="large">County Results</Header>
-                      <Card.Group itemsPerRow={2} stackable style={{ minWidth: 500 }}>
-                        {this.getTopTwoCandidates().map(candidateId => (
-                          <ToplinesCard
-                            candidate={this.props.candidates.entities.candidates[candidateId]}
-                            key={candidateId}
-                            votes={this.props.stateResults[candidateId]}
-                            winner={this.getTopTwoCandidates()[0]}
-                            total={this.getStatewideTotal()}
-                          />
-                        ))}
-                      </Card.Group>
+                      {this.props.topTwo && (
+                        <Card.Group itemsPerRow={2} stackable style={{ minWidth: 500 }}>
+                          {topCandidates.map(candidateId => (
+                            <ToplinesCard
+                              candidate={this.props.candidates.entities.candidates[candidateId]}
+                              key={candidateId}
+                              votes={this.props.stateResults[candidateId]}
+                              winner={topCandidates[0]}
+                              total={this.getStatewideTotal()}
+                            >
+                              {Object.keys(this.props.financeData) && (
+                                <Card.Content>
+                                  <Header as="h4">Finance</Header>
+                                  {this.props.candidates.entities.candidates[candidateId]
+                                    .attributes['fec-id'] !== null ? (
+                                    <CampaignFinanceTable
+                                      candidateId={candidateId}
+                                      campaignFinance={this.props.financeData[candidateId]}
+                                      disabled={false}
+                                    />
+                                  ) : (
+                                    <CampaignFinanceTable candidateId={candidateId} disabled />
+                                  )}
+                                </Card.Content>
+                              )}
+                            </ToplinesCard>
+                          ))}
+                        </Card.Group>
+                      )}
                     </Grid.Column>
                     <Grid.Column>
                       <Header size="large">Statewide Results</Header>
                       <Segment>
-                        <StateResultTable style={{ overflow: 'hidden' }} />
+                        {this.props.topTwo.length && (
+                          <StateResultTable style={{ overflow: 'hidden' }} />
+                        )}
                       </Segment>
                     </Grid.Column>
                   </Grid.Row>
@@ -220,6 +245,8 @@ const mapStateToProps = state => ({
   stateFips: state.results.stateFips,
   stateResults: state.results.stateResults,
   candidates: state.results.candidates,
+  financeData: state.campaignFinance.financeData,
+  topTwo: state.results.topTwo,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -229,6 +256,8 @@ const mapDispatchToProps = dispatch => ({
   fetchStateOffices: () => dispatch(fetchStateOffices()),
   resetOffice: () => dispatch(resetOffice()),
   fetchCampaignFinanceData: candidateIds => dispatch(fetchCampaignFinanceData(candidateIds)),
+  setTopTwo: candidates => dispatch(setTopTwo(candidates)),
+  resetTopTwo: () => dispatch(resetTopTwo()),
 });
 
 export default connect(

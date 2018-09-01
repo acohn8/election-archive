@@ -46,14 +46,6 @@ class StateResultTable extends Component {
     }
   };
 
-  sortedCandidates = () => {
-    const sortedCandidates = Object.keys(this.props.stateResults)
-      .filter(id => id !== 'other')
-      .map(id => parseInt(id, 10))
-      .sort((a, b) => this.props.stateResults[b] - this.props.stateResults[a]);
-    return sortedCandidates.slice(0, 2);
-  };
-
   getCountyWinner = countyResults => {
     const winner = Object.keys(countyResults).sort(
       (a, b) => countyResults[b] - countyResults[a],
@@ -72,22 +64,22 @@ class StateResultTable extends Component {
 
       const countyWinnerParty = this.getCountyWinner(countyResults);
 
-      const firstVotes = countyResults[this.sortedCandidates()[0]];
-      const secondVotes = countyResults[this.sortedCandidates()[1]];
+      const firstVotes = countyResults[this.props.topTwo[0]];
+      const secondVotes = countyResults[this.props.topTwo[1]];
       const otherVotes = countyTotal - (firstVotes + secondVotes);
 
-      const firstPlace = this.props.candidates.entities.candidates[this.sortedCandidates()[0]];
-      const secondPlace = this.props.candidates.entities.candidates[this.sortedCandidates()[1]];
+      const firstPlace = this.props.candidates.entities.candidates[this.props.topTwo[0]];
+      const secondPlace = this.props.candidates.entities.candidates[this.props.topTwo[1]];
 
       result.winnerParty = countyWinnerParty;
       result.first = {};
-      result.first.id = this.sortedCandidates()[0];
+      result.first.id = this.props.topTwo[0];
       result.first.name = firstPlace.attributes.name;
       result.first.party = firstPlace.attributes.party;
       result.first.total = firstVotes;
       result.second = {};
       if (secondVotes > 0) {
-        result.second.id = this.sortedCandidates()[1];
+        result.second.id = this.props.topTwo[1];
         result.second.name = secondPlace.attributes.name;
         result.second.party = secondPlace.attributes.party;
         result.second.total = secondVotes;
@@ -170,6 +162,7 @@ const mapStateToProps = state => ({
   candidates: state.results.candidates,
   countyResults: state.results.countyResults,
   stateResults: state.results.stateResults,
+  topTwo: state.results.topTwo,
 });
 
 export default connect(mapStateToProps)(StateResultTable);
