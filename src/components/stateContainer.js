@@ -1,13 +1,14 @@
 import React from 'react';
-import { Grid, Header, Container, Divider, Segment } from 'semantic-ui-react';
+import { Grid, Header, Container, Divider, Segment, Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import ExportDropdown from './Table/ExportDropdown';
 import MapContainer from './Map/mapContainer';
-import ToplinesContainer from './Toplines/toplinesContainer';
+import ToplinesCard from './Toplines/toplinesCard';
 import ContentLoader from './Loader';
 import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
 import { fetchStateOffices, resetOffice } from '../redux/actions/officeActions';
+import { fetchCampaignFinanceData } from '../redux/actions/campaignFinanceActions';
 import { setActive } from '../redux/actions/navActions';
 import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from './StateList/MobileStateSelect';
@@ -100,6 +101,25 @@ class StateContainer extends React.Component {
     }
   };
 
+  fetchCampaignFinanceData = candidates => {
+    this.props.fetchCampaignFinanceData(candidates);
+  };
+
+  getTopTwoCandidates = () => {
+    const candidateIds = Object.keys(this.props.stateResults).filter(id => id !== 'other');
+    const topTwoCandidates = candidateIds
+      .map(id => parseInt(id, 10))
+      .sort((a, b) => this.props.stateResults[b] - this.props.stateResults[a])
+      .slice(0, 2);
+    this.fetchCampaignFinanceData(candidateIds);
+    return topTwoCandidates;
+  };
+
+  getStatewideTotal = () => {
+    const votes = Object.values(this.props.stateResults);
+    return votes.reduce((sum, num) => sum + num);
+  };
+
   render() {
     return (
       <div>
@@ -140,19 +160,23 @@ class StateContainer extends React.Component {
                       {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row verticalAlign="middle">
-                    <Grid.Column>
-                      <Header size="large">Statewide Results</Header>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Header size="large">County Results</Header>
-                    </Grid.Column>
-                  </Grid.Row>
                   <Grid.Row style={{ minHeight: 450 }}>
                     <Grid.Column>
-                      <ToplinesContainer />
+                      <Header size="large">County Results</Header>
+                      <Card.Group itemsPerRow={2} stackable style={{ minWidth: 500 }}>
+                        {this.getTopTwoCandidates().map(candidateId => (
+                          <ToplinesCard
+                            candidate={this.props.candidates.entities.candidates[candidateId]}
+                            key={candidateId}
+                            votes={this.props.stateResults[candidateId]}
+                            winner={this.getTopTwoCandidates()[0]}
+                            total={this.getStatewideTotal()}
+                          />
+                        ))}
+                      </Card.Group>
                     </Grid.Column>
                     <Grid.Column>
+                      <Header size="large">Statewide Results</Header>
                       <Segment>
                         <StateResultTable style={{ overflow: 'hidden' }} />
                       </Segment>
@@ -194,6 +218,8 @@ const mapStateToProps = state => ({
   offices: state.offices,
   nav: state.nav,
   stateFips: state.results.stateFips,
+  stateResults: state.results.stateResults,
+  candidates: state.results.candidates,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -202,6 +228,7 @@ const mapDispatchToProps = dispatch => ({
   setActive: name => dispatch(setActive(name)),
   fetchStateOffices: () => dispatch(fetchStateOffices()),
   resetOffice: () => dispatch(resetOffice()),
+  fetchCampaignFinanceData: candidateIds => dispatch(fetchCampaignFinanceData(candidateIds)),
 });
 
 export default connect(
