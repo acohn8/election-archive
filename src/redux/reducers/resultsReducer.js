@@ -49,7 +49,6 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         precinctResults: { county_id: action.county, precincts: action.precincts },
       };
     case 'SET_TOP_TWO':
-      console.log(action.candidates);
       return { ...previousState, topTwo: action.candidates };
     case 'RESET_TOP_TWO':
       return { ...previousState, topTwo: [] };

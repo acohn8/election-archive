@@ -11,89 +11,86 @@ class StateResultTableContainer extends React.Component {
     direction: null,
   };
 
-  handleSort = clickedColumn => () => {
+  handleSort = clickedColumn => {
     const newData = this.sortColumns(clickedColumn);
     if (this.state.column !== clickedColumn) {
-      this.setState({
-        column: clickedColumn,
-        direction: 'ascending',
-      });
+      this.setState(
+        {
+          column: clickedColumn,
+          direction: 'ascending',
+        },
+        () => this.props.setSortedCountyResults(newData),
+      );
       return;
     }
-
-    this.setState({
-      column: clickedColumn,
-      direction: this.state.direction === 'ascending' ? 'descending' : 'ascending',
-    });
-    this.props.setSortedCountyResults(newData);
+    const previousSort = this.props.countyResults.result.slice();
+    this.setState(
+      {
+        column: clickedColumn,
+        direction: this.state.direction === 'ascending' ? 'descending' : 'ascending',
+      },
+      () => this.props.setSortedCountyResults(previousSort.reverse()),
+    );
   };
 
   sortColumns = column => {
     const countyKeys = this.props.countyResults.result.slice();
-    console.log(column);
-    // const countyResults = this.props.countyResults.entities.results;
-    console.log(
-      countyKeys.sort((a, b) =>
-        this.props.countyResults.entities.results[a][column].localeCompare(
-          this.props.countyResults.entities.results[b][column],
-        ),
-      ),
-    );
-    // if (column === 'name') {
-    //   return countyKeys.sort((a, b) =>
-    //     this.props.countyResults.entities.results[a][column].localeCompare(
-    //       this.props.countyResults.entities.results[b][column],
-    //     ),
-    //   );
-    // }
-    // else {
-    //   return countyKeys.sort((a, b) =>
-    //     countyResults[a][column].localeCompare(countyResults[b][column]),
-    //   );
-    //   // return this.state.data.slice().sort((a, b) => b[column].total - a[column].total);
-    // }
+    const countyData = Object.assign({}, this.props.countyResults.entities.results);
+    if (column === 'name') {
+      return countyKeys.sort((a, b) => countyData[a][column].localeCompare(countyData[b][column]));
+    } else {
+      let candidate;
+      const first = this.props.topTwo[0];
+      const second = this.props.topTwo[1];
+      column === 'first' ? (candidate = first) : (candidate = second);
+      return countyKeys.sort(
+        (a, b) => countyData[b].results[candidate] - countyData[a].results[candidate],
+      );
+    }
   };
 
   makeData = () => {
-    const countyResults = this.props.countyResults.result.map(county_id => ({
-      id: county_id,
-      name: this.props.countyResults.entities.results[county_id].name,
-    }));
-    countyResults.forEach(result => {
-      const countyResults = this.props.countyResults.entities.results[result.id].results;
-      const countyTotal = Object.values(countyResults).reduce((sum, n) => sum + n);
+    if (this.props.countyResults.result) {
+      const countyResults = this.props.countyResults.result.map(county_id => ({
+        id: county_id,
+        name: this.props.countyResults.entities.results[county_id].name,
+      }));
+      countyResults.forEach(result => {
+        const countyResults = this.props.countyResults.entities.results[result.id].results;
+        const countyTotal = Object.values(countyResults).reduce((sum, n) => sum + n);
 
-      const countyWinnerParty = this.getCountyWinner(countyResults);
+        const countyWinnerParty = this.getCountyWinner(countyResults);
 
-      const firstVotes = countyResults[this.props.topTwo[0]];
-      const secondVotes = countyResults[this.props.topTwo[1]];
-      const otherVotes = countyTotal - (firstVotes + secondVotes);
+        const firstVotes = countyResults[this.props.topTwo[0]];
+        const secondVotes = countyResults[this.props.topTwo[1]];
+        const otherVotes = countyTotal - (firstVotes + secondVotes);
 
-      const firstPlace = this.props.candidates.entities.candidates[this.props.topTwo[0]];
-      const secondPlace = this.props.candidates.entities.candidates[this.props.topTwo[1]];
+        const firstPlace = this.props.candidates.entities.candidates[this.props.topTwo[0]];
+        const secondPlace = this.props.candidates.entities.candidates[this.props.topTwo[1]];
 
-      result.winnerParty = countyWinnerParty;
-      result.first = {};
-      result.first.id = this.props.topTwo[0];
-      result.first.name = firstPlace.attributes.name;
-      result.first.party = firstPlace.attributes.party;
-      result.first.total = firstVotes;
-      result.second = {};
-      if (secondVotes > 0) {
-        result.second.id = this.props.topTwo[1];
-        result.second.name = secondPlace.attributes.name;
-        result.second.party = secondPlace.attributes.party;
-        result.second.total = secondVotes;
-      }
-      if (otherVotes > 0) {
-        result.other = {};
-        result.other.id = 'other';
-        result.other.name = 'Other';
-        result.other.party = null;
-        result.other.total = otherVotes;
-      }
-    });
-    return countyResults;
+        result.winnerParty = countyWinnerParty;
+        result.first = {};
+        result.first.id = this.props.topTwo[0];
+        result.first.name = firstPlace.attributes.name;
+        result.first.party = firstPlace.attributes.party;
+        result.first.total = firstVotes;
+        result.second = {};
+        if (secondVotes > 0) {
+          result.second.id = this.props.topTwo[1];
+          result.second.name = secondPlace.attributes.name;
+          result.second.party = secondPlace.attributes.party;
+          result.second.total = secondVotes;
+        }
+        if (otherVotes > 0) {
+          result.other = {};
+          result.other.id = 'other';
+          result.other.name = 'Other';
+          result.other.party = null;
+          result.other.total = otherVotes;
+        }
+      });
+      return countyResults;
+    }
   };
 
   getCountyWinner = countyResults => {
@@ -110,7 +107,9 @@ class StateResultTableContainer extends React.Component {
           <StateResultTable
             style={{ overflow: 'hidden' }}
             data={this.makeData()}
-            sortColumns={this.sortColumns}
+            handleSort={this.handleSort}
+            column={this.state.column}
+            direction={this.state.direction}
           />
         )}
       </Segment>
