@@ -16,9 +16,9 @@ import {
   hideHeader,
   showHeader,
 } from '../../redux/actions/mapActions';
-import { setActiveDistrict, fetchStateOffices } from '../../redux/actions/officeActions';
+import { setActiveDistrict } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
-import { setStateId, getStateData } from '../../redux/actions/stateActions';
+import { setStateId } from '../../redux/actions/stateActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -259,8 +259,6 @@ class ResultsMap extends React.Component {
 
   setStateOnClick = (state, districtId) => {
     this.props.setStateId(state.id);
-    this.props.getStateData(state.id);
-    this.props.fetchStateOffices(state.id);
     if (districtId) {
       this.props.setActiveDistrict(districtId);
     }
@@ -469,12 +467,10 @@ const mapDispatchToProps = dispatch => ({
   pushToNewState: stateId => dispatch(pushToNewState(stateId)),
   setActiveDistrict: districtId => dispatch(setActiveDistrict(districtId)),
   setStateId: stateId => dispatch(setStateId(stateId)),
-  fetchStateOffices: stateId => dispatch(fetchStateOffices(stateId)),
   addLayer: layer => dispatch(addLayer(layer)),
   addSource: source => dispatch(addSource(source)),
   removeLayer: layer => dispatch(removeLayer(layer)),
   removeSource: source => dispatch(removeSource(source)),
-  getStateData: stateId => dispatch(getStateData(stateId)),
 });
 
 const mapStateToProps = state => ({

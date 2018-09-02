@@ -8,7 +8,7 @@ import ToplinesCard from './Toplines/toplinesCard';
 import ContentLoader from './Loader';
 import CampaignFinanceTable from './Toplines/financeTable';
 import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
-import { fetchStateOffices, resetOffice } from '../redux/actions/officeActions';
+import { resetOffice } from '../redux/actions/officeActions';
 import { setTopTwo, resetTopTwo } from '../redux/actions/resultActions';
 import { fetchCampaignFinanceData } from '../redux/actions/campaignFinanceActions';
 import { setActive } from '../redux/actions/navActions';
@@ -53,7 +53,7 @@ class StateContainer extends React.Component {
 
   getMapGeographies = () => {
     if (
-      this.props.states.stateInfo.attributes['precinct-map'] !== null &&
+      this.props.stateInfo.attributes['precinct-map'] !== null &&
       this.props.offices.selectedOfficeId === '308'
     ) {
       const countyLayer = MapLayers.county;
@@ -65,8 +65,8 @@ class StateContainer extends React.Component {
         this.props.states.activeStateId === '3' ? 9 : precinctMinCountyMaxZoom;
       const precinctLayer = {
         name: 'precinct',
-        url: this.props.states.stateInfo.attributes['precinct-map'],
-        sourceLayer: this.props.states.stateInfo.attributes['precinct-source'],
+        url: this.props.stateInfo.attributes['precinct-map'],
+        sourceLayer: this.props.stateInfo.attributes['precinct-source'],
         colorScale: PrecinctColorScale,
         minzoom: precinctMinZoom,
         maxzoom: 0,
@@ -92,7 +92,7 @@ class StateContainer extends React.Component {
     if (this.props.offices.selectedOfficeId !== '322') {
       return { property: 'STATEFP', value: this.props.stateFips };
     } else {
-      const congressionalDistricts = this.props.offices.stateOffices.entities.offices[
+      const congressionalDistricts = this.props.stateOffices.entities.offices[
         this.props.offices.selectedOfficeId
       ].districts;
       const districtNumber = congressionalDistricts
@@ -132,9 +132,7 @@ class StateContainer extends React.Component {
         <Container>
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&
-            this.props.offices.stateOffices.result !== undefined &&
-            this.props.states.activeStateId !== null &&
-            this.props.states.stateInfo !== null && (
+            this.props.stateOffices.result !== undefined && (
               <div>
                 <Grid columns={2} verticalAlign="middle" stackable>
                   <Grid.Row columns={3}>
@@ -207,7 +205,7 @@ class StateContainer extends React.Component {
                     <Grid.Column>
                       <Header size="large">
                         County Map
-                        {this.props.states.stateInfo.attributes['precinct-map'] && (
+                        {this.props.stateInfo.attributes['precinct-map'] && (
                           <Header.Subheader>Zoom in for precincts</Header.Subheader>
                         )}
                       </Header>
@@ -236,7 +234,9 @@ class StateContainer extends React.Component {
 const mapStateToProps = state => ({
   loading: state.results.loading,
   states: state.states,
+  stateInfo: state.results.stateInfo,
   offices: state.offices,
+  stateOffices: state.results.stateOffices,
   nav: state.nav,
   stateFips: state.results.stateFips,
   stateResults: state.results.stateResults,
@@ -249,7 +249,6 @@ const mapDispatchToProps = dispatch => ({
   setActiveState: stateId => dispatch(setActiveState(stateId)),
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
-  fetchStateOffices: () => dispatch(fetchStateOffices()),
   resetOffice: () => dispatch(resetOffice()),
   fetchCampaignFinanceData: candidateIds => dispatch(fetchCampaignFinanceData(candidateIds)),
   setTopTwo: candidates => dispatch(setTopTwo(candidates)),

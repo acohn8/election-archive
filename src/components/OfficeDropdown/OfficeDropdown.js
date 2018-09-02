@@ -9,7 +9,7 @@ const OfficeDropdown = (props) => {
   let filteredOffices;
   props.activeItem === 'national map'
     ? (filteredOffices = props.offices.allOffices)
-    : (filteredOffices = props.offices.stateOffices);
+    : (filteredOffices = props.stateOffices);
 
   const setAndFetchOfficeInfo = (officeId, stateId, districtId = null) => {
     props.setActiveOffice(officeId, districtId);
@@ -77,6 +77,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   offices: state.offices,
+  stateOffices: state.results.stateOffices,
   activeItem: state.nav.activePage,
   activeStateId: state.states.activeStateId,
   resultsOfficeName: state.results.name,

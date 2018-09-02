@@ -4,8 +4,9 @@ const initialResultsState = {
   stateName: null,
   shortName: null,
   stateFips: null,
-  counties: {},
   candidates: [],
+  stateOffices: [],
+  stateInfo: {},
   topTwo: [],
   stateResults: {},
   countyResults: [],
@@ -18,12 +19,13 @@ const resultsReducer = (previousState = initialResultsState, action) => {
       return {
         ...previousState,
         loading: true,
-        counties: {},
         candidates: [],
+        stateOffices: [],
         stateResults: {},
         countyResults: [],
         topTwo: [],
         precinctResults: {},
+        stateInfo: {},
       };
     case 'SET_STATE_DATA':
       return {
@@ -32,11 +34,12 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         officeName: action.officeName,
         stateName: action.stateName,
         shortName: action.shortName,
+        stateOffices: action.stateOffices,
         stateFips: action.stateFips,
-        counties: action.counties,
         candidates: action.candidates,
         stateResults: action.stateResults,
         countyResults: action.countyResults,
+        stateInfo: action.stateInfo,
       };
     case 'START_PRECINCT_FETCH':
       return {
@@ -63,12 +66,13 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         officeName: 'US President',
         shortName: null,
         stateFips: null,
-        counties: {},
         candidates: [],
+        stateOffices: [],
         topTwo: [],
         stateResults: {},
         countyResults: [],
         precinctResults: {},
+        stateInfo: {},
       };
     default:
       return previousState;

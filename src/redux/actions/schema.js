@@ -1,7 +1,5 @@
 import { schema } from 'normalizr';
 
-const countySchema = new schema.Entity('counties');
-
 const resultSchema = new schema.Entity('results');
 export const resultListSchema = [resultSchema];
 
@@ -13,5 +11,3 @@ export const officeListSchema = [officeSchema];
 
 const financeSchema = new schema.Entity('finance');
 export const financeListSchema = [financeSchema];
-
-export const stateCounties = [countySchema];
