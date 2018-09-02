@@ -17,7 +17,6 @@ import MobileStateSelector from './StateList/MobileStateSelect';
 import ResultsMap from './Map/ResultsMap';
 import { PrecinctColorScale } from '../functions/ColorScale';
 import MapLayers from '../functions/MapLayers';
-import StateResultTable from './Table/StateResultTable';
 import StateResultTableContainer from './Table/StateResultTableContainer';
 
 class StateContainer extends React.Component {

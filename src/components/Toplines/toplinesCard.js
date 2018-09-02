@@ -1,8 +1,6 @@
 import React from 'react';
 import { Card, Image, Statistic, Label, Header } from 'semantic-ui-react';
 
-import CampaignFinanceTable from './financeTable';
-
 const colors = {
   democratic: 'blue',
   republican: 'red',
