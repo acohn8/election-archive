@@ -10,7 +10,7 @@ const colors = {
 };
 
 const ToplinesCard = ({
-  candidate, votes, total, winner, children,
+  candidate, votes, winner, total, children,
 }) => (
   <Card
     color={colors[candidate.party]}

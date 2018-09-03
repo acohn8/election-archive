@@ -4,7 +4,6 @@ const initialResultsState = {
   stateOffices: [],
   stateInfo: {},
   officeInfo: {},
-  topTwo: [],
   stateResults: {},
   countyResults: [],
   precinctResults: {},
@@ -20,7 +19,6 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         stateOffices: [],
         stateResults: {},
         countyResults: [],
-        topTwo: [],
         precinctResults: {},
         officeInfo: {},
         stateInfo: {},
@@ -46,10 +44,6 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         ...previousState,
         precinctResults: { county_id: action.county, precincts: action.precincts },
       };
-    case 'SET_TOP_TWO':
-      return { ...previousState, topTwo: action.candidates };
-    case 'RESET_TOP_TWO':
-      return { ...previousState, topTwo: [] };
     case 'SET_SORTED_COUNTY_RESULTS':
       return {
         ...previousState,
@@ -62,7 +56,6 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         stateOffices: [],
         stateInfo: {},
         officeInfo: {},
-        topTwo: [],
         stateResults: {},
         countyResults: [],
         precinctResults: {},

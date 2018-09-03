@@ -9,7 +9,7 @@ const colors = {
 };
 
 const StateResultTable = ({
-  direction, column, data, handleSort,
+  direction, column, data, handleSort, candidateIds,
 }) => (
   <div
     style={{
@@ -27,10 +27,9 @@ const StateResultTable = ({
             >
               County
             </Table.HeaderCell>
-            {console.log(data[0].results)}
-            {Object.keys(data[0].results).map(candidateId => (
+            {candidateIds.map(candidateId => (
               <Table.HeaderCell
-                key={data[0].results[candidateId].name}
+                key={candidateId}
                 sorted={column === candidateId ? direction : null}
                 onClick={() => handleSort(candidateId)}
               >
@@ -43,18 +42,18 @@ const StateResultTable = ({
           {data.map(county => (
             <Table.Row key={county.id} textAlign="center">
               <Table.Cell>{county.name}</Table.Cell>
-              {Object.keys(county.results).map(position =>
-                  (county.winnerParty === county.results[position].party ? (
+              {candidateIds.map(candidateId =>
+                  (county.winnerParty === county.results[candidateId].party ? (
                     <Table.Cell
-                      key={`${county.name}${position}`}
-                      style={{ backgroundColor: colors[county.winnerParty] }}
+                      key={`${county.name}${candidateId}`}
+                      style={{ backgroundColor: colors[county.winnerParty], visibility: 'visible' }}
                     >
-                      {county.results[position].total.toLocaleString()}
+                      {county.results[candidateId].total.toLocaleString()}
                     </Table.Cell>
                   ) : (
-                    <Table.Cell key={`${county.name}${position}`}>
-                      {county.results[position]
-                        ? county.results[position].total.toLocaleString()
+                    <Table.Cell key={`${county.name}${candidateId}`}>
+                      {county.results[candidateId]
+                        ? county.results[candidateId].total.toLocaleString()
                         : 0}
                     </Table.Cell>
                   )))}

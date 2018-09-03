@@ -19,7 +19,6 @@ const initialMapState = {
   headerHid: false,
   layers: [],
   sources: [],
-  mapDetails: {},
 };
 
 const mapsReducer = (previousState = initialMapState, action) => {
@@ -67,16 +66,6 @@ const mapsReducer = (previousState = initialMapState, action) => {
       };
     case 'RESET_MAP_DATA':
       return { ...previousState, layers: [], sources: [] };
-    case 'SET_MAP_DETAILS':
-      return {
-        ...previousState,
-        mapDetails: action.details,
-      };
-    case 'RESET_MAP_DETAILS':
-      return {
-        ...previousState,
-        mapDetails: {},
-      };
     case 'RESET_HOVER':
       return {
         ...previousState,

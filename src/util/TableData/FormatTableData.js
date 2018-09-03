@@ -8,7 +8,7 @@ const formatTableData = () => {
     id: countyId,
     name: store.getState().results.countyResults.entities.results[countyId].name,
   }));
-  allCountyResults.map((result) => {
+  allCountyResults.forEach((result) => {
     const countyInfo = {};
     const countyResults = store.getState().results.countyResults.entities.results[result.id]
       .results;
@@ -19,7 +19,6 @@ const formatTableData = () => {
     countyInfo.results = {};
     candidateIds.forEach((candidateId) => {
       countyInfo.results[candidateId] = {};
-      countyInfo.results[candidateId].id = candidateId;
       countyInfo.results[candidateId].name = candidates[candidateId].name;
       countyInfo.results[candidateId].party = candidates[candidateId].party;
       countyInfo.results[candidateId].total = countyResults[candidateId];

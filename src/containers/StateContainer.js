@@ -10,7 +10,6 @@ import FinanceOverview from '../components/Toplines/FinanceOverview';
 import ToplinesCard from '../components/Toplines/toplinesCard';
 import { setActive } from '../redux/actions/navActions';
 import { resetOffice } from '../redux/actions/officeActions';
-import { resetTopTwo, setTopTwo } from '../redux/actions/resultActions';
 import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
 import { PrecinctColorScale } from '../util/ColorScale';
 import MapLayers from '../util/MapLayers';
@@ -38,9 +37,6 @@ class StateContainer extends React.Component {
     ) {
       this.props.resetOffice();
       this.props.setActiveState(state.id);
-    }
-    if (Object.keys(this.props.stateResults).length > 0 && this.props.topTwo.length === 0) {
-      this.getTopTwoCandidates();
     }
   }
 
@@ -104,29 +100,19 @@ class StateContainer extends React.Component {
     }
   };
 
-  getTopTwoCandidates = () => {
-    const candidateIds = Object.keys(this.props.stateResults).filter(id => id !== 'other');
-    const topTwoCandidates = candidateIds
-      .map(id => parseInt(id, 10))
-      .sort((a, b) => this.props.stateResults[b] - this.props.stateResults[a])
-      .slice(0, 2);
-    this.props.setTopTwo(topTwoCandidates);
-  };
-
   getStatewideTotal = () => {
     const votes = Object.values(this.props.stateResults);
     return votes.reduce((sum, num) => sum + num);
   };
 
   render() {
-    const topCandidates = this.props.topTwo;
     return (
       <div>
         <Divider hidden />
         <Container>
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&
-            this.props.stateOffices.result !== undefined && (
+            this.props.candidates.result !== undefined && (
               <div>
                 <Grid columns={2} verticalAlign="middle" stackable>
                   <Grid.Row columns={3}>
@@ -160,14 +146,15 @@ class StateContainer extends React.Component {
                   <Grid.Row style={{ minHeight: 450 }}>
                     <Grid.Column>
                       <Header size="large">Statewide</Header>
-                      {this.props.topTwo && (
-                        <Card.Group itemsPerRow={2} stackable>
-                          {topCandidates.map(candidateId => (
+                      <Card.Group itemsPerRow={2} stackable>
+                        {this.props.candidates.result
+                          .filter(id => id !== 'other')
+                          .map(candidateId => (
                             <ToplinesCard
-                              candidate={this.props.candidates.entities.candidates[candidateId]}
                               key={candidateId}
+                              candidate={this.props.candidates.entities.candidates[candidateId]}
                               votes={this.props.stateResults[candidateId]}
-                              winner={topCandidates[0]}
+                              winner={this.props.candidates.result[0]}
                               total={this.getStatewideTotal()}
                             >
                               <Card.Content>
@@ -185,12 +172,11 @@ class StateContainer extends React.Component {
                               </Card.Content>
                             </ToplinesCard>
                           ))}
-                        </Card.Group>
-                      )}
+                      </Card.Group>
                     </Grid.Column>
                     <Grid.Column>
                       <Header size="large">County</Header>
-                      {this.props.topTwo.length && <StateResultTableContainer />}
+                      <StateResultTableContainer />
                     </Grid.Column>
                   </Grid.Row>
                   <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">
@@ -232,7 +218,6 @@ const mapStateToProps = state => ({
   nav: state.nav,
   stateResults: state.results.stateResults,
   candidates: state.results.candidates,
-  topTwo: state.results.topTwo,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -240,8 +225,6 @@ const mapDispatchToProps = dispatch => ({
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
   resetOffice: () => dispatch(resetOffice()),
-  setTopTwo: candidates => dispatch(setTopTwo(candidates)),
-  resetTopTwo: () => dispatch(resetTopTwo()),
 });
 
 export default connect(

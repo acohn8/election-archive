@@ -31,9 +31,6 @@ const resetHover = () => ({ type: 'RESET_HOVER' });
 const showHeader = () => ({ type: 'SHOW_HEADER' });
 const hideHeader = () => ({ type: 'HIDE_HEADER' });
 
-const setMapDetails = details => ({ type: 'SET_MAP_DETAILS', details });
-const resetMapDetails = () => ({ type: 'RESET_MAP_DETAILS' });
-
 const addLayer = layer => dispatch => dispatch({ type: 'ADD_LAYER', layer });
 const removeLayer = layer => (dispatch, getState) =>
   dispatch({ type: 'REMOVE_LAYER', layer: getState().maps.layers.indexOf(layer) });
@@ -49,9 +46,7 @@ export {
   removeLayer,
   resetMapData,
   getHoverInfo,
-  setMapDetails,
   resetHover,
   hideHeader,
   showHeader,
-  resetMapDetails,
 };
