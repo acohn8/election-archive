@@ -1,6 +1,6 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { Dropdown } from 'semantic-ui-react';
 
 const ExportDropdown = (props) => {
   const stateName = props.shortName.toLowerCase();
@@ -32,8 +32,8 @@ const ExportDropdown = (props) => {
 };
 
 const mapStateToProps = state => ({
-  shortName: state.results.shortName,
-  officeName: state.results.officeName,
+  shortName: state.results.stateInfo.attributes['short-name'],
+  officeName: state.results.officeInfo.name,
 });
 
 export default connect(mapStateToProps)(ExportDropdown);

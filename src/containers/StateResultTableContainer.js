@@ -36,12 +36,13 @@ class StateResultTableContainer extends React.Component {
   sortColumns = column => {
     const countyKeys = this.props.countyResults.result.slice();
     const countyData = Object.assign({}, this.props.countyResults.entities.results);
+    const candidates = this.props.candidates.result;
     if (column === 'name') {
       return countyKeys.sort((a, b) => countyData[a][column].localeCompare(countyData[b][column]));
     } else {
       let candidate;
-      const first = this.props.topTwo[0];
-      const second = this.props.topTwo[1];
+      const first = candidates[0];
+      const second = candidates[1];
       column === 'first' ? (candidate = first) : (candidate = second);
       return countyKeys.sort(
         (a, b) => countyData[b].results[candidate] - countyData[a].results[candidate],
@@ -53,15 +54,14 @@ class StateResultTableContainer extends React.Component {
     const data = formatTableData();
     return (
       <Segment>
-        {this.props.topTwo.length && (
-          <StateResultTable
-            style={{ overflow: 'hidden' }}
-            data={data}
-            handleSort={this.handleSort}
-            column={this.state.column}
-            direction={this.state.direction}
-          />
-        )}
+        <StateResultTable
+          style={{ overflow: 'hidden' }}
+          data={data}
+          candidates={this.props.candidates.entities.candidates}
+          handleSort={this.handleSort}
+          column={this.state.column}
+          direction={this.state.direction}
+        />
       </Segment>
     );
   }
@@ -74,7 +74,6 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
   countyResults: state.results.countyResults,
-  stateResults: state.results.stateResults,
   topTwo: state.results.topTwo,
 });
 

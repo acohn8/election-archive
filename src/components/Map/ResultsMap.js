@@ -1,24 +1,22 @@
-import React from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { connect } from 'react-redux';
 import bbox from '@turf/bbox';
 import union from '@turf/union';
-
-import { pushToNewState } from '../../redux/actions/stateActions';
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   addLayer,
   addSource,
-  removeSource,
-  removeLayer,
   getHoverInfo,
-  resetHover,
   hideHeader,
+  removeLayer,
+  removeSource,
+  resetHover,
   showHeader,
 } from '../../redux/actions/mapActions';
 import { setActiveDistrict } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
-import { setStateId } from '../../redux/actions/stateActions';
+import { pushToNewState, setStateId } from '../../redux/actions/stateActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -480,7 +478,6 @@ const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
   savedLayers: state.maps.layers,
   savedSources: state.maps.sources,
-  stateFips: state.results.stateFips,
 });
 
 export default connect(

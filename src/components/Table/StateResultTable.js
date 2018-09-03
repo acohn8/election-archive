@@ -27,38 +27,37 @@ const StateResultTable = ({
             >
               County
             </Table.HeaderCell>
-            {Object.keys(data[0])
-              .filter(key => ['first', 'second', 'other'].includes(key))
-              .map(position => (
-                <Table.HeaderCell
-                  key={data[0][position].name}
-                  sorted={column === position ? direction : null}
-                  onClick={() => handleSort(position)}
-                >
-                  {data[0][position].name}
-                </Table.HeaderCell>
-              ))}
+            {console.log(data[0].results)}
+            {Object.keys(data[0].results).map(candidateId => (
+              <Table.HeaderCell
+                key={data[0].results[candidateId].name}
+                sorted={column === candidateId ? direction : null}
+                onClick={() => handleSort(candidateId)}
+              >
+                {data[0].results[candidateId].name}
+              </Table.HeaderCell>
+            ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {data.map(county => (
             <Table.Row key={county.id} textAlign="center">
               <Table.Cell>{county.name}</Table.Cell>
-              {Object.keys(county)
-                .filter(key => ['first', 'second', 'other'].includes(key))
-                .map(position =>
-                    (county.winnerParty === county[position].party ? (
-                      <Table.Cell
-                        key={`${county.name}${position}`}
-                        style={{ backgroundColor: colors[county.winnerParty] }}
-                      >
-                        {county[position].total.toLocaleString()}
-                      </Table.Cell>
-                    ) : (
-                      <Table.Cell key={`${county.name}${position}`}>
-                        {county[position].total ? county[position].total.toLocaleString() : 0}
-                      </Table.Cell>
-                    )))}
+              {Object.keys(county.results).map(position =>
+                  (county.winnerParty === county.results[position].party ? (
+                    <Table.Cell
+                      key={`${county.name}${position}`}
+                      style={{ backgroundColor: colors[county.winnerParty] }}
+                    >
+                      {county.results[position].total.toLocaleString()}
+                    </Table.Cell>
+                  ) : (
+                    <Table.Cell key={`${county.name}${position}`}>
+                      {county.results[position]
+                        ? county.results[position].total.toLocaleString()
+                        : 0}
+                    </Table.Cell>
+                  )))}
             </Table.Row>
           ))}
         </Table.Body>

@@ -3,7 +3,7 @@ const initialStatesState = {
   activeStateId: null,
 };
 
-const resultsReducer = (previousState = initialStatesState, action) => {
+const statesReducer = (previousState = initialStatesState, action) => {
   switch (action.type) {
     case 'SET_STATES':
       return {
@@ -19,4 +19,4 @@ const resultsReducer = (previousState = initialStatesState, action) => {
   }
 };
 
-export default resultsReducer;
+export default statesReducer;

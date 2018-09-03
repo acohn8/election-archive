@@ -3,7 +3,7 @@ import { normalize } from 'normalizr';
 import { candidateListSchema, officeListSchema, resultListSchema } from './schema';
 
 const fetchStateData = (stateId, districtId = null) => async (dispatch, getState) => {
-  const url = 'https://election-data-2016.herokuapp.com/';
+  const url = 'http://localhost:3000/api/v1';
   dispatch({ type: 'START_FETCH' });
   let officeTotal;
   let subgeography;
@@ -32,24 +32,18 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
 
   const countyResults = normalize(response[0].data.results, resultListSchema);
   const stateResults = response[1].data.results;
-  const officeName = response[1].data.office_name;
-  const stateName = response[1].data.name;
-  const stateFips = response[1].data.fips;
-  const shortName = response[1].data.short_name;
   const candidates = normalize(response[1].data.candidates, candidateListSchema);
-  const stateOffices = normalize(response[3].data, officeListSchema);
+  const stateOffices = normalize(response[2].data, officeListSchema);
   const stateInfo = response[3].data.data;
+  const officeInfo = response[1].data.office;
 
   dispatch({
     type: 'SET_STATE_DATA',
-    shortName,
-    officeName,
-    stateName,
     stateOffices,
-    stateFips,
     candidates,
     countyResults,
     stateResults,
+    officeInfo,
     stateInfo,
   });
 };

@@ -87,8 +87,9 @@ class StateContainer extends React.Component {
   };
 
   getMapFilter = () => {
+    const stateFips = this.props.stateInfo.attributes.fips.toString().padStart(2, '0');
     if (this.props.offices.selectedOfficeId !== '322') {
-      return { property: 'STATEFP', value: this.props.stateFips };
+      return { property: 'STATEFP', value: stateFips };
     } else {
       const congressionalDistricts = this.props.stateOffices.entities.offices[
         this.props.offices.selectedOfficeId
@@ -98,7 +99,7 @@ class StateContainer extends React.Component {
         .name.split('-')[1];
       return {
         property: 'GEOID',
-        value: `${this.props.stateFips}${districtNumber}`,
+        value: `${stateFips}${districtNumber}`,
       };
     }
   };
@@ -229,7 +230,6 @@ const mapStateToProps = state => ({
   offices: state.offices,
   stateOffices: state.results.stateOffices,
   nav: state.nav,
-  stateFips: state.results.stateFips,
   stateResults: state.results.stateResults,
   candidates: state.results.candidates,
   topTwo: state.results.topTwo,
