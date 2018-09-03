@@ -13,28 +13,28 @@ const ToplinesCard = ({
   candidate, votes, total, winner, children,
 }) => (
   <Card
-    color={colors[candidate.attributes.party]}
+    color={colors[candidate.party]}
     style={{
       minHeight: 400,
     }}
   >
     <Card.Content>
       {parseInt(candidate.id, 10) === winner && (
-        <Label color={colors[candidate.attributes.party]} corner="right" icon="check" />
+        <Label color={colors[candidate.party]} corner="right" icon="check" />
       )}
       <Card.Header as="h4">
-        {candidate.attributes.image !== null && (
-          <Image rounded size="mini" src={candidate.attributes.image} spaced="right" />
+        {candidate.image !== null && (
+          <Image rounded size="mini" src={candidate.image} spaced="right" />
         )}
-        {candidate.attributes.name}
+        {candidate.name}
       </Card.Header>
       <Card.Description>
         <Statistic.Group size="mini" widths="two">
-          <Statistic color={colors[candidate.attributes.party]}>
+          <Statistic color={colors[candidate.party]}>
             <Statistic.Value>{Math.round((votes / total) * 100)}</Statistic.Value>
             <Statistic.Label>Percent</Statistic.Label>
           </Statistic>
-          <Statistic color={colors[candidate.attributes.party]}>
+          <Statistic color={colors[candidate.party]}>
             <Statistic.Value>{votes.toLocaleString()}</Statistic.Value>
             <Statistic.Label>Votes</Statistic.Label>
           </Statistic>

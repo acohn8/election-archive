@@ -25,14 +25,14 @@ const formatTableData = () => {
     result.winnerParty = countyWinnerParty;
     result.first = {};
     result.first.id = store.getState().results.topTwo[0];
-    result.first.name = firstPlace.attributes.name;
-    result.first.party = firstPlace.attributes.party;
+    result.first.name = firstPlace.name;
+    result.first.party = firstPlace.party;
     result.first.total = firstVotes;
     result.second = {};
     if (secondVotes > 0) {
       result.second.id = store.getState().results.topTwo[1];
-      result.second.name = secondPlace.attributes.name;
-      result.second.party = secondPlace.attributes.party;
+      result.second.name = secondPlace.name;
+      result.second.party = secondPlace.party;
       result.second.total = secondVotes;
     }
     if (otherVotes > 0) {
@@ -48,7 +48,7 @@ const formatTableData = () => {
 
 const getCountyWinner = (countyResults) => {
   const winner = Object.keys(countyResults).sort((a, b) => countyResults[b] - countyResults[a])[0];
-  return store.getState().results.candidates.entities.candidates[winner].attributes.party;
+  return store.getState().results.candidates.entities.candidates[winner].party;
 };
 
 export default formatTableData;

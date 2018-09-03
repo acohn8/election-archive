@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { push } from 'connected-react-router';
-
-import { fetchStateData, resetResults } from './resultActions';
 import { resetHover } from './mapActions';
+import { fetchStateData, resetResults } from './resultActions';
 
 const fetchStatesList = () => async (dispatch) => {
   const response = await axios.get('https://election-data-2016.herokuapp.com/api/v1/states');

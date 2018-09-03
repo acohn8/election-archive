@@ -8,7 +8,7 @@ const FinanceOverview = ({ campaignFinance }) => (
       <List.Content>
         <List.Header>Receipts</List.Header>
         <List.Description>
-          {campaignFinance === undefined
+          {campaignFinance.total_receipts === undefined
             ? 'Not available'
             : `$${Math.round(campaignFinance.total_receipts).toLocaleString()}`}
         </List.Description>
@@ -19,18 +19,18 @@ const FinanceOverview = ({ campaignFinance }) => (
       <List.Content>
         <List.Header>Disbursements</List.Header>
         <List.Description>
-          {campaignFinance === undefined
+          {campaignFinance.total_disbursements === undefined
             ? 'Not available'
             : `$${Math.round(campaignFinance.total_disbursements).toLocaleString()}`}
         </List.Description>
       </List.Content>
     </List.Item>
     <List.Item>
-      <List.Icon name="money bill" size="large" verticalAlign="middle" />
+      <List.Icon name="money bill alternate outline" size="large" verticalAlign="middle" />
       <List.Content>
         <List.Header>Ending Cash</List.Header>
         <List.Description>
-          {campaignFinance === undefined
+          {campaignFinance.end_cash === undefined
             ? 'Not available'
             : `$${Math.round(campaignFinance.end_cash).toLocaleString()}`}
         </List.Description>
@@ -41,7 +41,7 @@ const FinanceOverview = ({ campaignFinance }) => (
       <List.Content>
         <List.Header>Debts</List.Header>
         <List.Description>
-          {campaignFinance === undefined
+          {campaignFinance.debts_owed === undefined
             ? 'Not available'
             : `$${Math.round(campaignFinance.debts_owed).toLocaleString()}`}
         </List.Description>

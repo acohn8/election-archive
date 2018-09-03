@@ -8,7 +8,6 @@ import MobileStateSelector from '../components/StateList/MobileStateSelect';
 import ExportDropdown from '../components/Table/ExportDropdown';
 import FinanceOverview from '../components/Toplines/FinanceOverview';
 import ToplinesCard from '../components/Toplines/toplinesCard';
-import { fetchCampaignFinanceData } from '../redux/actions/campaignFinanceActions';
 import { setActive } from '../redux/actions/navActions';
 import { resetOffice } from '../redux/actions/officeActions';
 import { resetTopTwo, setTopTwo } from '../redux/actions/resultActions';
@@ -104,10 +103,6 @@ class StateContainer extends React.Component {
     }
   };
 
-  fetchCampaignFinanceData = candidates => {
-    this.props.fetchCampaignFinanceData(candidates);
-  };
-
   getTopTwoCandidates = () => {
     const candidateIds = Object.keys(this.props.stateResults).filter(id => id !== 'other');
     const topTwoCandidates = candidateIds
@@ -115,7 +110,6 @@ class StateContainer extends React.Component {
       .sort((a, b) => this.props.stateResults[b] - this.props.stateResults[a])
       .slice(0, 2);
     this.props.setTopTwo(topTwoCandidates);
-    this.props.fetchCampaignFinanceData(topTwoCandidates);
   };
 
   getStatewideTotal = () => {
@@ -175,19 +169,19 @@ class StateContainer extends React.Component {
                               winner={topCandidates[0]}
                               total={this.getStatewideTotal()}
                             >
-                              {Object.keys(this.props.financeData) && (
-                                <Card.Content>
-                                  <Header as="h4">Finance</Header>
-                                  {this.props.candidates.entities.candidates[candidateId]
-                                    .attributes['fec-id'] !== null && (
-                                    <FinanceOverview
-                                      candidateId={candidateId}
-                                      campaignFinance={this.props.financeData[candidateId]}
-                                      disabled={false}
-                                    />
-                                  )}
-                                </Card.Content>
-                              )}
+                              <Card.Content>
+                                <Header as="h4">Finance</Header>
+                                {this.props.candidates.entities.candidates[candidateId].fec_id !==
+                                  null && (
+                                  <FinanceOverview
+                                    candidateId={candidateId}
+                                    campaignFinance={
+                                      this.props.candidates.entities.candidates[candidateId]
+                                        .finance_data
+                                    }
+                                  />
+                                )}
+                              </Card.Content>
                             </ToplinesCard>
                           ))}
                         </Card.Group>
@@ -238,7 +232,6 @@ const mapStateToProps = state => ({
   stateFips: state.results.stateFips,
   stateResults: state.results.stateResults,
   candidates: state.results.candidates,
-  financeData: state.campaignFinance.financeData,
   topTwo: state.results.topTwo,
 });
 
@@ -247,7 +240,6 @@ const mapDispatchToProps = dispatch => ({
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
   resetOffice: () => dispatch(resetOffice()),
-  fetchCampaignFinanceData: candidateIds => dispatch(fetchCampaignFinanceData(candidateIds)),
   setTopTwo: candidates => dispatch(setTopTwo(candidates)),
   resetTopTwo: () => dispatch(resetTopTwo()),
 });

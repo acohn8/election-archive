@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { normalize } from 'normalizr';
-
-import { candidateListSchema, resultListSchema, officeListSchema } from './schema';
+import { candidateListSchema, officeListSchema, resultListSchema } from './schema';
 
 const fetchStateData = (stateId, districtId = null) => async (dispatch, getState) => {
-  const url = 'https://election-data-2016.herokuapp.com/api/v1/';
+  const url = 'https://election-data-2016.herokuapp.com/';
   dispatch({ type: 'START_FETCH' });
   let officeTotal;
   let subgeography;
@@ -25,22 +24,21 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
   }
 
   const response = await Promise.all([
-    axios.get(`${url}/states/${stateId}/offices/${getState().offices.selectedOfficeId}/candidates`),
     axios.get(`${url}/${subgeography}`),
     axios.get(`${url}/${officeTotal}`),
     axios.get(`${url}/states/${stateId}/offices`),
     axios.get(`${url}/states/${stateId}`),
   ]);
 
-  const countyResults = normalize(response[1].data.results, resultListSchema);
-  const stateResults = response[2].data.results;
-  const officeName = response[2].data.office_name;
-  const stateName = response[2].data.name;
-  const stateFips = response[2].data.fips;
-  const shortName = response[2].data.short_name;
-  const candidates = normalize(response[0].data.data, candidateListSchema);
+  const countyResults = normalize(response[0].data.results, resultListSchema);
+  const stateResults = response[1].data.results;
+  const officeName = response[1].data.office_name;
+  const stateName = response[1].data.name;
+  const stateFips = response[1].data.fips;
+  const shortName = response[1].data.short_name;
+  const candidates = normalize(response[1].data.candidates, candidateListSchema);
   const stateOffices = normalize(response[3].data, officeListSchema);
-  const stateInfo = response[4].data.data;
+  const stateInfo = response[3].data.data;
 
   dispatch({
     type: 'SET_STATE_DATA',

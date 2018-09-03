@@ -1,11 +1,9 @@
 import { combineReducers } from 'redux';
-
-import resultsReducer from './resultsReducer';
-import statesReducer from './stateReducer';
 import mapsReducer from './mapReducer';
 import navReducer from './navReducer';
 import officesReducer from './officeReducer';
-import campaignFinanceReducer from './campaignFinanceReducer';
+import resultsReducer from './resultsReducer';
+import statesReducer from './stateReducer';
 
 const rootReducer = combineReducers({
   maps: mapsReducer,
@@ -13,7 +11,6 @@ const rootReducer = combineReducers({
   states: statesReducer,
   offices: officesReducer,
   nav: navReducer,
-  campaignFinance: campaignFinanceReducer,
 });
 
 export default rootReducer;
