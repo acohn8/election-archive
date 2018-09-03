@@ -13,7 +13,7 @@ class StateListContainer extends React.Component {
 
   render() {
     const images = this.importAll(
-      require.context('../components/state-flags', false, /\.(png|jpe?g|svg)$/),
+      require.context('../images/state-flags', false, /\.(png|jpe?g|svg)$/),
     );
 
     return (
