@@ -6,7 +6,7 @@ import ResultsMap from '../components/Map/ResultsMap';
 import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from '../components/StateList/MobileStateSelect';
 import ExportDropdown from '../components/Table/ExportDropdown';
-import CampaignFinanceTable from '../components/Toplines/financeTable';
+import FinanceOverview from '../components/Toplines/FinanceOverview';
 import ToplinesCard from '../components/Toplines/toplinesCard';
 import { fetchCampaignFinanceData } from '../redux/actions/campaignFinanceActions';
 import { setActive } from '../redux/actions/navActions';
@@ -166,7 +166,7 @@ class StateContainer extends React.Component {
                     <Grid.Column>
                       <Header size="large">County Results</Header>
                       {this.props.topTwo && (
-                        <Card.Group itemsPerRow={2} stackable style={{ minWidth: 500 }}>
+                        <Card.Group itemsPerRow={2} stackable>
                           {topCandidates.map(candidateId => (
                             <ToplinesCard
                               candidate={this.props.candidates.entities.candidates[candidateId]}
@@ -179,14 +179,12 @@ class StateContainer extends React.Component {
                                 <Card.Content>
                                   <Header as="h4">Finance</Header>
                                   {this.props.candidates.entities.candidates[candidateId]
-                                    .attributes['fec-id'] !== null ? (
-                                    <CampaignFinanceTable
+                                    .attributes['fec-id'] !== null && (
+                                    <FinanceOverview
                                       candidateId={candidateId}
                                       campaignFinance={this.props.financeData[candidateId]}
                                       disabled={false}
                                     />
-                                  ) : (
-                                    <CampaignFinanceTable candidateId={candidateId} disabled />
                                   )}
                                 </Card.Content>
                               )}

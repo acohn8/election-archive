@@ -20,7 +20,7 @@ const StateResultTable = ({
     {data.length > 0 && (
       <Table sortable celled fixed unstackable>
         <Table.Header>
-          <Table.Row>
+          <Table.Row textAlign="center">
             <Table.HeaderCell
               sorted={column === 'name' ? direction : null}
               onClick={() => handleSort('name')}
@@ -42,7 +42,7 @@ const StateResultTable = ({
         </Table.Header>
         <Table.Body>
           {data.map(county => (
-            <Table.Row key={county.id}>
+            <Table.Row key={county.id} textAlign="center">
               <Table.Cell>{county.name}</Table.Cell>
               {Object.keys(county)
                 .filter(key => ['first', 'second', 'other'].includes(key))

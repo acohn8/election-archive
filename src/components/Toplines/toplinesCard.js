@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Image, Statistic, Label, Header } from 'semantic-ui-react';
+import { Card, Image, Label, Statistic } from 'semantic-ui-react';
 
 const colors = {
   democratic: 'blue',
@@ -28,11 +28,7 @@ const ToplinesCard = ({
         )}
         {candidate.attributes.name}
       </Card.Header>
-    </Card.Content>
-    <Card.Content>
-      {/* <Card.Meta>{candidate.attributes.party}</Card.Meta> */}
       <Card.Description>
-        <Header as="h4">Results</Header>
         <Statistic.Group size="mini" widths="two">
           <Statistic color={colors[candidate.attributes.party]}>
             <Statistic.Value>{Math.round((votes / total) * 100)}</Statistic.Value>
