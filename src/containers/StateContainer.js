@@ -164,7 +164,7 @@ class StateContainer extends React.Component {
                   </Grid.Row>
                   <Grid.Row style={{ minHeight: 450 }}>
                     <Grid.Column>
-                      <Header size="large">County Results</Header>
+                      <Header size="large">Statewide</Header>
                       {this.props.topTwo && (
                         <Card.Group itemsPerRow={2} stackable>
                           {topCandidates.map(candidateId => (
@@ -194,7 +194,7 @@ class StateContainer extends React.Component {
                       )}
                     </Grid.Column>
                     <Grid.Column>
-                      <Header size="large">Statewide Results</Header>
+                      <Header size="large">County</Header>
                       {this.props.topTwo.length && <StateResultTableContainer />}
                     </Grid.Column>
                   </Grid.Row>
