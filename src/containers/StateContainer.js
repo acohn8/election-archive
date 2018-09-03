@@ -8,13 +8,13 @@ import MobileStateSelector from '../components/StateList/MobileStateSelect';
 import ExportDropdown from '../components/Table/ExportDropdown';
 import CampaignFinanceTable from '../components/Toplines/financeTable';
 import ToplinesCard from '../components/Toplines/toplinesCard';
-import { PrecinctColorScale } from '../functions/ColorScale';
-import MapLayers from '../functions/MapLayers';
 import { fetchCampaignFinanceData } from '../redux/actions/campaignFinanceActions';
 import { setActive } from '../redux/actions/navActions';
 import { resetOffice } from '../redux/actions/officeActions';
 import { resetTopTwo, setTopTwo } from '../redux/actions/resultActions';
 import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
+import { PrecinctColorScale } from '../util/ColorScale';
+import MapLayers from '../util/MapLayers';
 import MapContainer from './StateMapContainer';
 import StateResultTableContainer from './StateResultTableContainer';
 

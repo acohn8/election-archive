@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { Container, Header, Segment } from 'semantic-ui-react';
 import MapInfo from '../components/Map/mapInfo';
 import ResultsMap from '../components/Map/ResultsMap.js';
-import MapLayers from '../functions/MapLayers';
 import { setActive } from '../redux/actions/navActions';
 import { resetActiveState } from '../redux/actions/stateActions';
+import MapLayers from '../util/MapLayers';
 
 class NationalMapContainer extends React.Component {
   componentDidMount() {
