@@ -2,10 +2,10 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 
 const colors = {
-  democratic: 'rgb(32,133,208,.2)',
-  republican: 'rgb(219,40,40,.2)',
-  libertarian: 'rgb(251,189,9, .2)',
-  other: 'rgb(100,53,201, .2)',
+  democratic: 'rgba(32,133,208,.2)',
+  republican: 'rgba(219,40,40,.2)',
+  libertarian: 'rgba(251,189,9, .2)',
+  other: 'rgba(100,53,201, .2)',
 };
 
 const StateResultTable = ({
