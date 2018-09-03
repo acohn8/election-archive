@@ -18,7 +18,7 @@ const StateResultTable = ({
     }}
   >
     {data.length > 0 && (
-      <Table sortable celled fixed unstackable>
+      <Table sortable celled unstackable basic>
         <Table.Header>
           <Table.Row textAlign="center">
             <Table.HeaderCell

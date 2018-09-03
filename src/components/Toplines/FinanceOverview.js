@@ -2,7 +2,7 @@ import React from 'react';
 import { List } from 'semantic-ui-react';
 
 const FinanceOverview = ({ campaignFinance }) => (
-  <List relaxed size="large">
+  <List relaxed="very">
     <List.Item>
       <List.Icon name="dollar sign" size="large" verticalAlign="middle" />
       <List.Content>
