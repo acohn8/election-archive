@@ -46,7 +46,7 @@ const StateResultTable = ({
                   (county.winnerParty === county.results[candidateId].party ? (
                     <Table.Cell
                       key={`${county.name}${candidateId}`}
-                      style={{ backgroundColor: colors[county.winnerParty], visibility: 'visible' }}
+                      style={{ backgroundColor: colors[county.winnerParty] }}
                     >
                       {county.results[candidateId].total.toLocaleString()}
                     </Table.Cell>
