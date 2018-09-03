@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Segment } from 'semantic-ui-react';
-import StateResultTable from './StateResultTable';
-
-import { setSortedCountyResults } from '../../redux/actions/resultActions';
+import StateResultTable from '../components/Table/StateResultTable';
+import { setSortedCountyResults } from '../redux/actions/resultActions';
+import formatTableData from '../util/TableData/FormatTableData';
 
 class StateResultTableContainer extends React.Component {
   state = {
@@ -49,64 +49,14 @@ class StateResultTableContainer extends React.Component {
     }
   };
 
-  makeData = () => {
-    if (this.props.countyResults.result) {
-      const countyResults = this.props.countyResults.result.map(county_id => ({
-        id: county_id,
-        name: this.props.countyResults.entities.results[county_id].name,
-      }));
-      countyResults.forEach(result => {
-        const countyResults = this.props.countyResults.entities.results[result.id].results;
-        const countyTotal = Object.values(countyResults).reduce((sum, n) => sum + n);
-
-        const countyWinnerParty = this.getCountyWinner(countyResults);
-
-        const firstVotes = countyResults[this.props.topTwo[0]];
-        const secondVotes = countyResults[this.props.topTwo[1]];
-        const otherVotes = countyTotal - (firstVotes + secondVotes);
-
-        const firstPlace = this.props.candidates.entities.candidates[this.props.topTwo[0]];
-        const secondPlace = this.props.candidates.entities.candidates[this.props.topTwo[1]];
-
-        result.winnerParty = countyWinnerParty;
-        result.first = {};
-        result.first.id = this.props.topTwo[0];
-        result.first.name = firstPlace.attributes.name;
-        result.first.party = firstPlace.attributes.party;
-        result.first.total = firstVotes;
-        result.second = {};
-        if (secondVotes > 0) {
-          result.second.id = this.props.topTwo[1];
-          result.second.name = secondPlace.attributes.name;
-          result.second.party = secondPlace.attributes.party;
-          result.second.total = secondVotes;
-        }
-        if (otherVotes > 0) {
-          result.other = {};
-          result.other.id = 'other';
-          result.other.name = 'Other';
-          result.other.party = null;
-          result.other.total = otherVotes;
-        }
-      });
-      return countyResults;
-    }
-  };
-
-  getCountyWinner = countyResults => {
-    const winner = Object.keys(countyResults).sort(
-      (a, b) => countyResults[b] - countyResults[a],
-    )[0];
-    return this.props.candidates.entities.candidates[winner].attributes.party;
-  };
-
   render() {
+    const data = formatTableData();
     return (
       <Segment>
         {this.props.topTwo.length && (
           <StateResultTable
             style={{ overflow: 'hidden' }}
-            data={this.makeData()}
+            data={data}
             handleSort={this.handleSort}
             column={this.state.column}
             direction={this.state.direction}

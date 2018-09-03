@@ -1,20 +1,21 @@
 import React from 'react';
-import { Container, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-
-import { setActive } from '../../redux/actions/navActions';
-import FrequentlyAskedQuestions from './FrequentlyAskedQuestions';
+import { Container, Divider } from 'semantic-ui-react';
+import AboutMe from '../components/About/AboutMe';
+import OtherProjects from '../components/About/OtherProjects';
+import { setActive } from '../redux/actions/navActions';
 
 class AboutContainer extends React.Component {
   componentDidMount() {
-    this.props.setActive('faq');
+    this.props.setActive('about');
   }
 
   render() {
     return (
       <Container text>
         <Divider hidden />
-        <FrequentlyAskedQuestions />
+        <AboutMe />
+        <OtherProjects />
       </Container>
     );
   }

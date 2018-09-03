@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, Container, Header, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import StateCard from './StateCard';
-import { setActive } from '../../redux/actions/navActions';
+import { Card, Container, Divider, Header } from 'semantic-ui-react';
+import StateCard from '../components/StateList/StateCard';
+import { setActive } from '../redux/actions/navActions';
 
 class StateListContainer extends React.Component {
   componentDidMount() {
@@ -12,7 +12,9 @@ class StateListContainer extends React.Component {
   importAll = r => r.keys().map(r);
 
   render() {
-    const images = this.importAll(require.context('../state-flags', false, /\.(png|jpe?g|svg)$/));
+    const images = this.importAll(
+      require.context('../components/state-flags', false, /\.(png|jpe?g|svg)$/),
+    );
 
     return (
       <Container>

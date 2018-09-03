@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import HomepageHeading from './HomepageHeadeading';
-import { setActive } from '../../redux/actions/navActions';
+import HomepageHeading from '../components/Home/HomepageHeadeading';
+import { setActive } from '../redux/actions/navActions';
 
 class HomeContainer extends React.Component {
   componentDidMount() {

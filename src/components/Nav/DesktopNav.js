@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Container, Menu, Visibility, Segment, Image } from 'semantic-ui-react';
-
-import StateDropdown from '../StateDropdown';
+import { Link } from 'react-router-dom';
+import { Container, Image, Menu, Segment, Visibility } from 'semantic-ui-react';
 import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
+import StateDropdown from '../StateDropdown/StateDropdown';
 
 class DesktopNav extends Component {
   state = {};

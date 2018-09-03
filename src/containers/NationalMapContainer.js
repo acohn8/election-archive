@@ -1,12 +1,11 @@
 import React from 'react';
-import { Header, Segment, Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-
-import MapLayers from '../../functions/MapLayers';
-import MapInfo from '../Map/mapInfo';
-import { resetActiveState } from '../../redux/actions/stateActions';
-import { setActive } from '../../redux/actions/navActions';
-import ResultsMap from '../Map/ResultsMap.js';
+import { Container, Header, Segment } from 'semantic-ui-react';
+import MapInfo from '../components/Map/mapInfo';
+import ResultsMap from '../components/Map/ResultsMap.js';
+import MapLayers from '../functions/MapLayers';
+import { setActive } from '../redux/actions/navActions';
+import { resetActiveState } from '../redux/actions/stateActions';
 
 class NationalMapContainer extends React.Component {
   componentDidMount() {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import MobileNav from './MobileNav';
-import DesktopNav from './DesktopNav';
-import { setWindowWidth } from '../../redux/actions/navActions';
+import DesktopNav from '../components/Nav/DesktopNav';
+import MobileNav from '../components/Nav/MobileNav';
+import { setWindowWidth } from '../redux/actions/navActions';
 
 class ResponsiveNav extends React.Component {
   componentDidMount() {

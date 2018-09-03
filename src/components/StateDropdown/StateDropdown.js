@@ -1,11 +1,11 @@
 import React from 'react';
-import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Dropdown } from 'semantic-ui-react';
 
 const StateDropdown = (props) => {
   const importAll = r => r.keys().map(r);
-  const images = importAll(require.context('./state-flags', false, /\.(png|jpe?g|svg)$/));
+  const images = importAll(require.context('../state-flags', false, /\.(png|jpe?g|svg)$/));
   return (
     <Dropdown
       text={

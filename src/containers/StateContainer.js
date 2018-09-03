@@ -1,23 +1,22 @@
 import React from 'react';
-import { Grid, Header, Container, Divider, Segment, Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-
-import ExportDropdown from './Table/ExportDropdown';
-import MapContainer from './Map/mapContainer';
-import ToplinesCard from './Toplines/toplinesCard';
-import ContentLoader from './Loader';
-import CampaignFinanceTable from './Toplines/financeTable';
-import { setActiveState, resetActiveState } from '../redux/actions/stateActions';
-import { resetOffice } from '../redux/actions/officeActions';
-import { setTopTwo, resetTopTwo } from '../redux/actions/resultActions';
-import { fetchCampaignFinanceData } from '../redux/actions/campaignFinanceActions';
-import { setActive } from '../redux/actions/navActions';
-import OfficeDropdown from './OfficeDropdown/OfficeDropdown';
-import MobileStateSelector from './StateList/MobileStateSelect';
-import ResultsMap from './Map/ResultsMap';
+import { Card, Container, Divider, Grid, Header, Segment } from 'semantic-ui-react';
+import ContentLoader from '../components/Loader/Loader';
+import ResultsMap from '../components/Map/ResultsMap';
+import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
+import MobileStateSelector from '../components/StateList/MobileStateSelect';
+import ExportDropdown from '../components/Table/ExportDropdown';
+import CampaignFinanceTable from '../components/Toplines/financeTable';
+import ToplinesCard from '../components/Toplines/toplinesCard';
 import { PrecinctColorScale } from '../functions/ColorScale';
 import MapLayers from '../functions/MapLayers';
-import StateResultTableContainer from './Table/StateResultTableContainer';
+import { fetchCampaignFinanceData } from '../redux/actions/campaignFinanceActions';
+import { setActive } from '../redux/actions/navActions';
+import { resetOffice } from '../redux/actions/officeActions';
+import { resetTopTwo, setTopTwo } from '../redux/actions/resultActions';
+import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
+import MapContainer from './StateMapContainer';
+import StateResultTableContainer from './StateResultTableContainer';
 
 class StateContainer extends React.Component {
   componentDidMount() {
@@ -198,7 +197,7 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                     <Grid.Column>
                       <Header size="large">Statewide Results</Header>
-                      <StateResultTableContainer />
+                      {this.props.topTwo.length && <StateResultTableContainer />}
                     </Grid.Column>
                   </Grid.Row>
                   <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">

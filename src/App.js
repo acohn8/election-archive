@@ -1,18 +1,17 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
-import { fetchStatesList } from './redux/actions/stateActions';
+import AboutContainer from './containers/AboutContainer';
+import FrequentlyAskedQuestionsContainer from './containers/FrequentlyAskedQuestionsContainer';
+import HomeContainer from './containers/HomeContainer';
+import NationalMapContainer from './containers/NationalMapContainer';
+import ResponsiveNav from './containers/ResponsiveNav';
+import StateContainer from './containers/StateContainer';
+import StateListContainer from './containers/StateListContainer';
 import { fetchOfficesList } from './redux/actions/officeActions';
-import StateContainer from './components/stateContainer';
-import HomeContainer from './components/Home/HomeContainer';
-import NationalMapContainer from './components/NationalMap/NationalMapContainer';
-import StateListContainer from './components/StateList/StateListContainer';
-import AboutContainer from './components/About/AboutContainer';
-import ResponsiveNav from './components/Nav/ResponsiveNav';
-import FrequentlyAskedQuestionsContainer from './components/Faq/FrequentlyAskedQuestionsContainer';
+import { fetchStatesList } from './redux/actions/stateActions';
 
 class App extends React.Component {
   componentDidMount() {
