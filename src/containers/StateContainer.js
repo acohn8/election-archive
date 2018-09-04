@@ -8,32 +8,32 @@ import ExportDropdown from '../components/Table/ExportDropdown';
 import FinanceOverview from '../components/Toplines/FinanceOverview';
 import ToplinesCard from '../components/Toplines/toplinesCard';
 import { setActive } from '../redux/actions/navActions';
-import { resetOffice } from '../redux/actions/officeActions';
+import { resetOffice, setActiveOffice, updateOffices } from '../redux/actions/officeActions';
 import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
+import { updateOfficeData } from '../redux/actions/resultActions';
 import MapContainer from './StateMapContainer';
 import StateResultTableContainer from './StateResultTableContainer';
 
 class StateContainer extends React.Component {
   componentDidMount() {
     this.props.setActive('statesShow');
+    this.fetchStateData();
   }
 
-  componentDidUpdate() {
-    const state = this.props.states.states.find(
-      state =>
-        state.attributes.name
-          .split(' ')
-          .join('-')
-          .toLowerCase() === this.props.match.params.activeStateName.toLowerCase(),
-    );
-    if (this.props.states.states.length && this.props.states.activeStateId === null) {
-      this.props.setActiveState(state.id);
-    } else if (
-      this.props.states.states.length > 0 &&
-      this.props.states.activeStateId !== state.id
-    ) {
+  componentDidUpdate(prevProps) {
+    const state = this.getStateFromParams();
+    const officeId = this.getOfficeFromParams();
+    const districtName = this.props.match.params.activeDistrict;
+    if (this.props.match.params.activeStateName !== prevProps.match.params.activeStateName) {
       this.props.resetOffice();
-      this.props.setActiveState(state.id);
+      this.props.setActiveState(state.id, officeId);
+    } else if (
+      (this.props.match.params.activeStateName === prevProps.match.params.activeStateName &&
+        this.props.match.params.activeOfficeName !== prevProps.match.params.activeOfficeName) ||
+      (this.props.match.params.activeStateName === prevProps.match.params.activeStateName &&
+        this.props.match.params.activeDistrict !== prevProps.match.params.activeDistrict)
+    ) {
+      this.props.updateOffices(officeId, districtName);
     }
   }
 
@@ -41,6 +41,37 @@ class StateContainer extends React.Component {
     this.props.resetOffice();
     this.props.resetActiveState();
   }
+
+  fetchStateData = () => {
+    const state = this.getStateFromParams();
+    const officeId = this.getOfficeFromParams();
+    const districtName = this.props.match.params.activeDistrict;
+    this.props.setActiveState(state.id, officeId, districtName);
+  };
+
+  getStateFromParams = () => {
+    return this.props.states.states.find(
+      state =>
+        state.attributes.name
+          .split(' ')
+          .join('-')
+          .toLowerCase() === this.props.match.params.activeStateName.toLowerCase(),
+    );
+  };
+
+  getOfficeFromParams = () => {
+    return this.props.offices.allOffices.result.find(
+      officeId =>
+        this.props.offices.allOffices.entities.offices[officeId].attributes.name
+          .split(' ')
+          .join('-')
+          .toLowerCase() ===
+        this.props.match.params.activeOfficeName
+          .split(' ')
+          .join('-')
+          .toLowerCase(),
+    );
+  };
 
   getStatewideTotal = () => {
     const votes = Object.values(this.props.stateResults);
@@ -104,8 +135,7 @@ class StateContainer extends React.Component {
                             >
                               <Card.Content>
                                 <Header as="h4">Finance</Header>
-                                {this.props.candidates.entities.candidates[candidateId].fec_id !==
-                                  null && (
+                                {this.props.candidates.entities.candidates[candidateId] && (
                                   <FinanceOverview
                                     candidateId={candidateId}
                                     campaignFinance={
@@ -154,16 +184,21 @@ const mapStateToProps = state => ({
   stateInfo: state.results.stateInfo,
   offices: state.offices,
   stateOffices: state.results.stateOffices,
+  officeInfo: state.results.officeInfo,
   nav: state.nav,
   stateResults: state.results.stateResults,
   candidates: state.results.candidates,
+  fetching: state.results.fetching,
 });
 
 const mapDispatchToProps = dispatch => ({
-  setActiveState: stateId => dispatch(setActiveState(stateId)),
+  setActiveState: (stateId, officeId, districtId) =>
+    dispatch(setActiveState(stateId, officeId, districtId)),
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
   resetOffice: () => dispatch(resetOffice()),
+  setActiveOffice: (officeId, districtName) => dispatch(setActiveOffice(officeId, districtName)),
+  updateOffices: (officeId, districtName) => dispatch(updateOffices(officeId, districtName)),
 });
 
 export default connect(

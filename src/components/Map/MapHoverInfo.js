@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 import PartyColorCircle from '../Ui/ColorCircle';
 
@@ -10,37 +9,36 @@ const colors = {
   other: '#6435C9',
 };
 
-const MapHoverInfo = props => (
+const MapHoverInfo = ({ overlay, mobile, isNational }) => (
   <div>
-    <Header as={props.overlay.isNational === true ? 'h2' : 'h4'}>
-      {props.overlay.hoveredGeography}
-      {props.overlay.layer === 'state' &&
-        !props.mobile && <Header.Subheader>Click for details</Header.Subheader>}
-      {props.overlay.layer === 'state' &&
-        props.mobile && <Header.Subheader>Tap for details</Header.Subheader>}
+    <Header as={isNational ? 'h2' : 'h4'}>
+      {overlay.hoveredGeography}
+      {overlay.layer === 'state' &&
+        !mobile && <Header.Subheader>Click for details</Header.Subheader>}
+      {overlay.layer === 'state' && mobile && <Header.Subheader>Tap for details</Header.Subheader>}
     </Header>
     <List divided relaxed>
       <List.Item>
         <List.Content>
           <List.Header>
             <span>
-              <PartyColorCircle color={colors[props.overlay.hoveredWinner.party]} />
-              {props.overlay.hoveredWinner.name}
+              <PartyColorCircle color={colors[overlay.hoveredWinner.party]} />
+              {overlay.hoveredWinner.name}
             </span>
           </List.Header>
           <List.Description>
-            {`${props.overlay.hoveredWinner.votes.toLocaleString()} votes (${Math.round(props.overlay.hoveredWinner.percent * 100)}%)`}
+            {`${overlay.hoveredWinner.votes.toLocaleString()} votes (${Math.round(overlay.hoveredWinner.percent * 100)}%)`}
           </List.Description>
         </List.Content>
       </List.Item>
       <List.Item>
         <List.Content>
           <List.Header>
-            <PartyColorCircle color={colors[props.overlay.hoveredSecond.party]} />
-            {props.overlay.hoveredSecond.name}
+            <PartyColorCircle color={colors[overlay.hoveredSecond.party]} />
+            {overlay.hoveredSecond.name}
           </List.Header>
           <List.Description>
-            {`${props.overlay.hoveredSecond.votes.toLocaleString()} votes (${Math.round(props.overlay.hoveredSecond.percent * 100)}%)`}
+            {`${overlay.hoveredSecond.votes.toLocaleString()} votes (${Math.round(overlay.hoveredSecond.percent * 100)}%)`}
           </List.Description>
         </List.Content>
       </List.Item>
@@ -48,8 +46,4 @@ const MapHoverInfo = props => (
   </div>
 );
 
-const mapStateToProps = state => ({
-  overlay: state.maps.overlay,
-});
-
-export default connect(mapStateToProps)(MapHoverInfo);
+export default MapHoverInfo;

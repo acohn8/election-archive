@@ -8,21 +8,21 @@ const StateDropdown = ({ states, activeState }) => (
     search
     transparent="true"
     options={states.map(state => ({
-        key: state.id,
-        value: state.id,
-        text: state.attributes.name,
-        as: Link,
-        to: `/states/${state.attributes.name
-          .split(' ')
-          .join('-')
-          .toLowerCase()}`,
-        image: {
-          size: 'tiny',
-          src: `https://s3.amazonaws.com/stateprecinctresults/flags/${state.attributes[
-            'short-name'
-          ].toLowerCase()}.svg`,
-        },
-      }))}
+      key: state.id,
+      value: state.id,
+      text: state.attributes.name,
+      as: Link,
+      to: `/states/${state.attributes.name
+        .split(' ')
+        .join('-')
+        .toLowerCase()}/us-president`,
+      image: {
+        size: 'tiny',
+        src: `https://s3.amazonaws.com/stateprecinctresults/flags/${state.attributes[
+          'short-name'
+        ].toLowerCase()}.svg`,
+      },
+    }))}
   />
 );
 

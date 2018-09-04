@@ -3,10 +3,11 @@ const initialResultsState = {
   candidates: [],
   stateOffices: [],
   stateInfo: {},
-  officeInfo: {},
+  officeInfo: { id: 308, name: 'US President' },
   stateResults: {},
   countyResults: [],
   precinctResults: {},
+  fetching: false,
 };
 
 const resultsReducer = (previousState = initialResultsState, action) => {
@@ -20,7 +21,6 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         stateResults: {},
         countyResults: [],
         precinctResults: {},
-        officeInfo: {},
         stateInfo: {},
       };
     case 'SET_STATE_DATA':
@@ -34,6 +34,15 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         countyResults: action.countyResults,
         stateInfo: action.stateInfo,
       };
+    case 'UPDATE_OFFICE_DATA':
+      return {
+        ...previousState,
+        candidates: action.candidates,
+        countyResults: action.countyResults,
+        stateResults: action.stateResults,
+        officeInfo: action.officeInfo,
+        fetching: false,
+      };
     case 'START_PRECINCT_FETCH':
       return {
         ...previousState,
@@ -43,6 +52,11 @@ const resultsReducer = (previousState = initialResultsState, action) => {
       return {
         ...previousState,
         precinctResults: { county_id: action.county, precincts: action.precincts },
+      };
+    case 'FETCHING':
+      return {
+        ...previousState,
+        fetching: true,
       };
     case 'SET_SORTED_COUNTY_RESULTS':
       return {
@@ -55,7 +69,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         candidates: [],
         stateOffices: [],
         stateInfo: {},
-        officeInfo: {},
+        officeInfo: { id: 308, name: 'US President' },
         stateResults: {},
         countyResults: [],
         precinctResults: {},

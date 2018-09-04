@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dropdown } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { setActiveOffice } from '../../redux/actions/officeActions';
 import { fetchStateData } from '../../redux/actions/resultActions';
@@ -33,8 +34,16 @@ const OfficeDropdown = (props) => {
             filteredOffices.entities.offices[office].districts.length <= 1 ? (
               <Dropdown.Item
                 key={office}
-                onClick={() => setAndFetchOfficeInfo(office, props.activeStateId)}
+                to={`/states/${props.stateInfo.attributes.name
+                  .split(' ')
+                  .join('-')
+                  .toLowerCase()}/${filteredOffices.entities.offices[office].name
+                  .split(' ')
+                  .join('-')
+                  .toLowerCase()}`}
+                as={Link}
               >
+                {/* // onClick={() => setAndFetchOfficeInfo(office, props.activeStateId)} */}
                 {props.activeItem === 'national map'
                   ? filteredOffices.entities.offices[office].attributes.name
                   : filteredOffices.entities.offices[office].name}
@@ -49,14 +58,14 @@ const OfficeDropdown = (props) => {
                       .map(district => (
                         <Dropdown.Item
                           key={district.id}
-                          onClick={
-                            () => {
-                              setAndFetchOfficeInfo(office, props.activeStateId, district.id);
-                            }
-                            // setAndFetchOfficeInfo(office, this.props.activeStateId, district.id)
-                            // props.setActiveOffice(office, this.props.activeStateId, district.id);
-                            // props.fetchStateData(this.props.activeStateId, district.id);
-                          }
+                          to={`/states/${props.stateInfo.attributes.name
+                            .split(' ')
+                            .join('-')
+                            .toLowerCase()}/${filteredOffices.entities.offices[office].name
+                            .split(' ')
+                            .join('-')
+                            .toLowerCase()}/${district.name.toLowerCase()}`}
+                          as={Link}
                         >
                           {district.name}
                         </Dropdown.Item>
@@ -81,6 +90,7 @@ const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
   activeStateId: state.states.activeStateId,
   resultsOfficeName: state.results.name,
+  stateInfo: state.results.stateInfo,
 });
 
 export default connect(

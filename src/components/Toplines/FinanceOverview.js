@@ -8,9 +8,9 @@ const FinanceOverview = ({ campaignFinance }) => (
       <List.Content>
         <List.Header>Receipts</List.Header>
         <List.Description>
-          {campaignFinance.total_receipts === undefined
-            ? 'Not available'
-            : `$${Math.round(campaignFinance.total_receipts).toLocaleString()}`}
+          {campaignFinance
+            ? `$${Math.round(campaignFinance.total_receipts).toLocaleString()}`
+            : 'Not available'}
         </List.Description>
       </List.Content>
     </List.Item>
@@ -19,9 +19,9 @@ const FinanceOverview = ({ campaignFinance }) => (
       <List.Content>
         <List.Header>Disbursements</List.Header>
         <List.Description>
-          {campaignFinance.total_disbursements === undefined
-            ? 'Not available'
-            : `$${Math.round(campaignFinance.total_disbursements).toLocaleString()}`}
+          {campaignFinance
+            ? `$${Math.round(campaignFinance.total_disbursements).toLocaleString()}`
+            : 'Not available'}
         </List.Description>
       </List.Content>
     </List.Item>
@@ -30,9 +30,9 @@ const FinanceOverview = ({ campaignFinance }) => (
       <List.Content>
         <List.Header>Ending Cash</List.Header>
         <List.Description>
-          {campaignFinance.end_cash === undefined
-            ? 'Not available'
-            : `$${Math.round(campaignFinance.end_cash).toLocaleString()}`}
+          {campaignFinance
+            ? `$${Math.round(campaignFinance.end_cash).toLocaleString()}`
+            : 'Not available'}
         </List.Description>
       </List.Content>
     </List.Item>
@@ -41,9 +41,9 @@ const FinanceOverview = ({ campaignFinance }) => (
       <List.Content>
         <List.Header>Debts</List.Header>
         <List.Description>
-          {campaignFinance.debts_owed === undefined
-            ? 'Not available'
-            : `$${Math.round(campaignFinance.debts_owed).toLocaleString()}`}
+          {campaignFinance
+            ? `$${Math.round(campaignFinance.debts_owed).toLocaleString()}`
+            : 'Not available'}
         </List.Description>
       </List.Content>
     </List.Item>

@@ -8,15 +8,11 @@ import {
   addLayer,
   addSource,
   getHoverInfo,
-  hideHeader,
   removeLayer,
   removeSource,
   resetHover,
-  showHeader,
 } from '../../redux/actions/mapActions';
-import { setActiveDistrict } from '../../redux/actions/officeActions';
-import { fetchStateData } from '../../redux/actions/resultActions';
-import { pushToNewState, setStateId } from '../../redux/actions/stateActions';
+import { pushToNewState } from '../../redux/actions/stateActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -230,7 +226,8 @@ class ResultsMap extends React.Component {
 
   getDistrictId = feature => {
     if (this.props.offices.selectedOfficeId === '322') {
-      return feature.properties.id;
+      console.log(feature.properties);
+      return feature.properties.NAME.toLowerCase();
     } else {
       return null;
     }
@@ -252,12 +249,7 @@ class ResultsMap extends React.Component {
   };
 
   setStateOnClick = (state, districtId) => {
-    this.props.setStateId(state.id);
-    if (districtId) {
-      this.props.setActiveDistrict(districtId);
-    }
-    this.props.fetchStateData(state.id, districtId);
-    this.props.pushToNewState(state.id);
+    this.props.pushToNewState(state.id, districtId);
   };
 
   getUrl = geography => {
@@ -455,12 +447,7 @@ const mapDispatchToProps = dispatch => ({
       ),
     ),
   resetHover: () => dispatch(resetHover()),
-  fetchStateData: (stateId, districtId) => dispatch(fetchStateData(stateId, districtId)),
-  hideHeader: () => dispatch(hideHeader()),
-  showHeader: () => dispatch(showHeader()),
-  pushToNewState: stateId => dispatch(pushToNewState(stateId)),
-  setActiveDistrict: districtId => dispatch(setActiveDistrict(districtId)),
-  setStateId: stateId => dispatch(setStateId(stateId)),
+  pushToNewState: (stateId, districtId) => dispatch(pushToNewState(stateId, districtId)),
   addLayer: layer => dispatch(addLayer(layer)),
   addSource: source => dispatch(addSource(source)),
   removeLayer: layer => dispatch(removeLayer(layer)),

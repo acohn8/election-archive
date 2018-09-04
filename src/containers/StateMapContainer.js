@@ -10,7 +10,7 @@ class StateMapContainer extends React.Component {
   getMapGeographies = () => {
     if (
       this.props.stateInfo.attributes['precinct-map'] !== null &&
-      this.props.offices.selectedOfficeId === '308'
+      this.props.selectedOfficeId === '308'
     ) {
       const countyLayer = MapLayers.county;
       const precinctMinCountyMaxZoom = this.props.stateInfo.id === '3' ? 9 : 8;
@@ -30,7 +30,7 @@ class StateMapContainer extends React.Component {
         order: 1,
       };
       return [precinctLayer, countyLayer];
-    } else if (this.props.offices.selectedOfficeId !== '322') {
+    } else if (this.props.selectedOfficeId !== '322') {
       const countyLayer = MapLayers.county;
       countyLayer.minzoom = 0;
       countyLayer.maxzoom = 0;
@@ -45,14 +45,14 @@ class StateMapContainer extends React.Component {
 
   getMapFilter = () => {
     const stateFips = this.props.stateInfo.attributes.fips.toString().padStart(2, '0');
-    if (this.props.offices.selectedOfficeId !== '322') {
+    if (this.props.selectedOfficeId !== '322') {
       return { property: 'STATEFP', value: stateFips };
     } else {
       const congressionalDistricts = this.props.stateOffices.entities.offices[
-        this.props.offices.selectedOfficeId
+        this.props.selectedOfficeId
       ].districts;
       const districtNumber = congressionalDistricts
-        .find(district => district.id === this.props.offices.selectedDistrictId)
+        .find(district => district.name.toLowerCase() === this.props.selectedDistrictId)
         .name.split('-')[1];
       return {
         property: 'GEOID',
@@ -66,7 +66,7 @@ class StateMapContainer extends React.Component {
       <div>
         {this.props.overlay.hoveredWinner.votes !== '' && (
           <StateHoverOverlay>
-            <MapHoverInfo />
+            <MapHoverInfo overlay={this.props.overlay} />
           </StateHoverOverlay>
         )}
         <ResultsMap
@@ -83,7 +83,9 @@ class StateMapContainer extends React.Component {
 const mapStateToProps = state => ({
   overlay: state.maps.overlay,
   stateInfo: state.results.stateInfo,
-  offices: state.offices,
+  stateOffices: state.results.stateOffices,
+  selectedOfficeId: state.offices.selectedOfficeId,
+  selectedDistrictId: state.offices.selectedDistrictId,
 });
 
 export default connect(mapStateToProps)(StateMapContainer);

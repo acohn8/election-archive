@@ -24,9 +24,17 @@ class App extends React.Component {
       <ResponsiveNav>
         <Switch>
           <Route exact path="/" component={HomeContainer} />
-          <Route exact path="/national-map" component={NationalMapContainer} />
+          {this.props.offices.allOffices.result !== undefined && (
+            <Route exact path="/national-map" component={NationalMapContainer} />
+          )}
           <Route exact path="/states" component={StateListContainer} />
-          <Route path="/states/:activeStateName" component={StateContainer} />
+          {this.props.allStates.length > 0 &&
+            this.props.offices.allOffices.result !== undefined && (
+              <Route
+                path="/states/:activeStateName/:activeOfficeName/:activeDistrict?"
+                component={StateContainer}
+              />
+            )}
           <Route path="/about" component={AboutContainer} />
           <Route path="/faq" component={FrequentlyAskedQuestionsContainer} />
         </Switch>
@@ -40,7 +48,13 @@ const mapDispatchToProps = dispatch => ({
   fetchOfficesList: () => dispatch(fetchOfficesList()),
 });
 
+const mapStateToProps = state => ({
+  allOffices: state.offices.allOffices,
+  allStates: state.states.states,
+  offices: state.offices,
+});
+
 export default withRouter(connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(App));

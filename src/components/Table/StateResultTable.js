@@ -52,7 +52,7 @@ const StateResultTable = ({
                     </Table.Cell>
                   ) : (
                     <Table.Cell key={`${county.name}${candidateId}`}>
-                      {county.results[candidateId]
+                      {county.results[candidateId].total
                         ? county.results[candidateId].total.toLocaleString()
                         : 0}
                     </Table.Cell>
