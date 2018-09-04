@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Header, Responsive, Segment } from 'semantic-ui-react';
-import MapInfo from '../Map/MapInfo';
+import MapHoverInfo from '../Map/MapInfo';
 
 const MobileNationalMapOverlay = ({ hoveredWinner, office }) => (
   <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
@@ -15,7 +15,7 @@ const MobileNationalMapOverlay = ({ hoveredWinner, office }) => (
           </Header>
         ) : (
           <div>
-            <MapInfo mobile />
+            <MapHoverInfo mobile />
           </div>
         )}
       </Segment>

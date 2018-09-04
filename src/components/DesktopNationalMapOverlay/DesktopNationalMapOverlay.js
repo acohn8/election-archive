@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Responsive } from 'semantic-ui-react';
-import MapInfo from '../Map/MapInfo';
+import MapHoverInfo from '../Map/MapInfo';
 
 const DesktopNationalMapOverlay = ({ hoveredWinner, office }) => (
   <Responsive minWidth={Responsive.onlyTablet.minWidth}>
@@ -29,7 +29,7 @@ const DesktopNationalMapOverlay = ({ hoveredWinner, office }) => (
         </Header>
       ) : (
         <div>
-          <MapInfo />
+          <MapHoverInfo />
         </div>
       )}
     </div>

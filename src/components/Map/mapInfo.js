@@ -9,7 +9,7 @@ const colors = {
   other: '#6435C9',
 };
 
-const MapInfo = props => (
+const MapHoverInfo = props => (
   <div>
     <Header as={props.overlay.isNational === true ? 'h2' : 'h4'}>
       {props.overlay.hoveredGeography}
@@ -70,4 +70,4 @@ const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
 });
 
-export default connect(mapStateToProps)(MapInfo);
+export default connect(mapStateToProps)(MapHoverInfo);
