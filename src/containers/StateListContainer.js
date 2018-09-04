@@ -9,13 +9,7 @@ class StateListContainer extends React.Component {
     this.props.setActive('states');
   }
 
-  importAll = r => r.keys().map(r);
-
   render() {
-    const images = this.importAll(
-      require.context('../images/state-flags', false, /\.(png|jpe?g|svg)$/),
-    );
-
     return (
       <Container>
         <Divider hidden />
@@ -27,9 +21,9 @@ class StateListContainer extends React.Component {
               key={state.id}
               id={state.id}
               name={state.attributes.name}
-              image={images.find(image =>
-                image.includes(`/static/media/${state.attributes['short-name'].toLowerCase()}`),
-              )}
+              image={`https://s3.amazonaws.com/stateprecinctresults/flags/${state.attributes[
+                'short-name'
+              ].toLowerCase()}.svg`}
             />
           ))}
         </Card.Group>

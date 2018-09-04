@@ -14,11 +14,6 @@ class DesktopNav extends Component {
   render() {
     const { fixed } = this.state;
     const activeItem = this.props.activeItem;
-
-    const importAll = r => r.keys().map(r);
-    const images = importAll(
-      require.context('../../images/state-flags', false, /\.(png|jpe?g|svg)$/),
-    );
     return (
       <div>
         <Visibility
@@ -64,23 +59,22 @@ class DesktopNav extends Component {
                   color="teal"
                   active={activeItem === 'about'}
                 />
-                {this.props.activeItem === 'statesShow' &&
-                  this.props.states.activeStateId !== null && (
+                {this.props.stateInfo.attributes !== undefined &&
+                  this.props.activeItem === 'statesShow' && (
                     <Menu.Menu position="right">
                       <Menu.Item>
                         <Image
                           size="mini"
                           spaced
                           verticalAlign="bottom"
-                          src={images.find(image =>
-                            image.includes(
-                              this.props.states.states
-                                .find(state => state.id === this.props.states.activeStateId)
-                                .attributes['short-name'].toLowerCase(),
-                            ),
-                          )}
+                          src={`https://s3.amazonaws.com/stateprecinctresults/flags/${this.props.stateInfo.attributes[
+                            'short-name'
+                          ].toLowerCase()}.svg`}
                         />
-                        <StateDropdown />
+                        <StateDropdown
+                          states={this.props.states}
+                          activeState={this.props.stateInfo.attributes.name}
+                        />
                       </Menu.Item>
                     </Menu.Menu>
                   )}
@@ -104,7 +98,8 @@ class DesktopNav extends Component {
 
 const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
-  states: state.states,
+  stateInfo: state.results.stateInfo,
+  states: state.states.states,
   offices: state.offices,
 });
 

@@ -1,19 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'semantic-ui-react';
 
-const StateDropdown = (props) => {
-  const importAll = r => r.keys().map(r);
-  const images = importAll(require.context('../../images/state-flags', false, /\.(png|jpe?g|svg)$/));
-  return (
-    <Dropdown
-      text={
-        props.states.states.find(state => state.id === props.states.activeStateId).attributes.name
-      }
-      search
-      transparent="true"
-      options={props.states.states.map(state => ({
+const StateDropdown = ({ states, activeState }) => (
+  <Dropdown
+    text={activeState}
+    search
+    transparent="true"
+    options={states.map(state => ({
         key: state.id,
         value: state.id,
         text: state.attributes.name,
@@ -24,17 +18,12 @@ const StateDropdown = (props) => {
           .toLowerCase()}`,
         image: {
           size: 'tiny',
-          src: images.find(image =>
-            image.includes(`/static/media/${state.attributes['short-name'].toLowerCase()}`)),
+          src: `https://s3.amazonaws.com/stateprecinctresults/flags/${state.attributes[
+            'short-name'
+          ].toLowerCase()}.svg`,
         },
       }))}
-    />
-  );
-};
+  />
+);
 
-const mapStateToProps = state => ({
-  states: state.states,
-  offices: state.offices,
-});
-
-export default connect(mapStateToProps)(StateDropdown);
+export default StateDropdown;

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Segment } from 'semantic-ui-react';
 import StateResultTable from '../components/Table/StateResultTable';
 import { setSortedCountyResults } from '../redux/actions/resultActions';
-import formatTableData from '../util/TableData/FormatTableData';
+import formatTableData from '../util/FormatTableData';
 
 class StateResultTableContainer extends React.Component {
   state = {
