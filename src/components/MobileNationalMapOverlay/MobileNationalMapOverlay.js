@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Header, Responsive, Segment } from 'semantic-ui-react';
-import MapHoverInfo from '../Map/MapInfo';
+import MapHoverInfo from '../Map/MapHoverInfo';
 
 const MobileNationalMapOverlay = ({ hoveredWinner, office }) => (
   <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>

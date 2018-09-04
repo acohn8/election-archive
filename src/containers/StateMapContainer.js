@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import MapInfo from '../components/Map/MapInfo';
+import MapHoverInfo from '../components/Map/MapHoverInfo';
 
 const MapContainer = props => (
   <div>
@@ -20,7 +20,7 @@ const MapContainer = props => (
           borderWidth: '0.5px',
         }}
       >
-        <MapInfo />
+        <MapHoverInfo />
       </div>
     )}
   </div>
