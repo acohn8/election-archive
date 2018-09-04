@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Container, Divider, Grid, Header, Segment } from 'semantic-ui-react';
+import { Card, Container, Divider, Grid, Header, Segment, Responsive } from 'semantic-ui-react';
 import ContentLoader from '../components/Loader/Loader';
 import ResultsMap from '../components/Map/ResultsMap';
 import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
@@ -118,11 +118,14 @@ class StateContainer extends React.Component {
                   <Grid.Row columns={3}>
                     <Grid.Column>
                       <Header size="huge">
-                        {this.props.nav.windowWidth >= 768 ? (
-                          this.props.states.states.find(
-                            state => state.id === this.props.states.activeStateId,
-                          ).attributes.name
-                        ) : (
+                        <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+                          {
+                            this.props.states.states.find(
+                              state => state.id === this.props.states.activeStateId,
+                            ).attributes.name
+                          }
+                        </Responsive>
+                        <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
                           <MobileStateSelector
                             state={
                               this.props.states.states.find(
@@ -130,7 +133,7 @@ class StateContainer extends React.Component {
                               ).attributes.name
                             }
                           />
-                        )}
+                        </Responsive>
                         <Header.Subheader>
                           Results for{' '}
                           <span style={{ color: '#00B5AD' }}>

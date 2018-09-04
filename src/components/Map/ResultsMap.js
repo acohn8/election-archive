@@ -58,10 +58,6 @@ class ResultsMap extends React.Component {
       this.addLayers();
       this.map.addControl(new mapboxgl.FullscreenControl());
       this.map.addControl(new mapboxgl.NavigationControl());
-      if (this.props.activeItem === 'national map') {
-        this.props.windowWidth >= 768 && this.map.on('movestart', () => this.props.hideHeader());
-        this.props.windowWidth >= 768 && this.map.on('moveend', () => this.props.showHeader());
-      }
     });
   };
 
@@ -474,7 +470,6 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   states: state.states,
   offices: state.offices,
-  windowWidth: state.nav.windowWidth,
   activeItem: state.nav.activePage,
   savedLayers: state.maps.layers,
   savedSources: state.maps.sources,

@@ -10,7 +10,7 @@ const MobileNationalMapOverlay = ({ hoveredWinner, office }) => (
           <Header size="huge">
             {office}
             <Header.Subheader>
-              Zoom in to see counties or out to see states. Click for details.
+              Zoom in to see counties or out to see states. Tap for details.
             </Header.Subheader>
           </Header>
         ) : (

@@ -65,7 +65,6 @@ const mapStateToProps = state => ({
   overlay: state.maps.overlay,
   selectedOffice: state.results.officeInfo,
   offices: state.offices,
-  windowWidth: state.nav.windowWidth,
 });
 
 export default connect(
