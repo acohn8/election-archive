@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import DesktopNationalMapOverlay from '../components/DesktopNationalMapOverlay/DesktopNationalMapOverlay';
+import DesktopNationalMapOverlay from '../components/NationalMapOverlay/DesktopNationalMapOverlay';
 import ResultsMap from '../components/Map/ResultsMap';
-import MobileNationalMapOverlay from '../components/MobileNationalMapOverlay/MobileNationalMapOverlay';
+import MobileNationalMapOverlay from '../components/NationalMapOverlay/MobileNationalMapOverlay';
 import { setActive } from '../redux/actions/navActions';
 import MapLayers from '../util/MapLayers';
+import MapHoverInfo from '../components/Map/MapHoverInfo';
+import DesktopNationalHoverContainer from '../components/NationalMapOverlay/DesktopNationalHoverOverlay';
 
 class NationalMapContainer extends React.Component {
   componentDidMount() {
@@ -33,23 +35,31 @@ class NationalMapContainer extends React.Component {
       <div>
         {this.props.offices.allOffices.result !== undefined && (
           <div>
+            <div style={{ position: 'fixed', width: '100%', height: '100%' }}>
+              <ResultsMap height={'100%'} geographies={this.getMapGeographies()} clickToNavigate />
+            </div>
+
             <MobileNationalMapOverlay
               hoveredWinner={this.props.overlay.hoveredWinner}
               office={
                 this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
                   .attributes.name
               }
-            />
-            <div style={{ position: 'fixed', width: '100%', height: '100%' }}>
-              <ResultsMap height={'100%'} geographies={this.getMapGeographies()} clickToNavigate />
-            </div>
-            <DesktopNationalMapOverlay
-              hoveredWinner={this.props.overlay.hoveredWinner}
-              office={
-                this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
-                  .attributes.name
-              }
-            />
+            >
+              <MapHoverInfo mobile />
+            </MobileNationalMapOverlay>
+            <DesktopNationalHoverContainer>
+              <DesktopNationalMapOverlay
+                hoveredWinner={this.props.overlay.hoveredWinner}
+                office={
+                  this.props.offices.allOffices.entities.offices[
+                    this.props.offices.selectedOfficeId
+                  ].attributes.name
+                }
+              >
+                <MapHoverInfo />
+              </DesktopNationalMapOverlay>
+            </DesktopNationalHoverContainer>
           </div>
         )}
       </div>

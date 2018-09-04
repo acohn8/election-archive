@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Card, Container, Divider, Grid, Header, Segment, Responsive } from 'semantic-ui-react';
 import ContentLoader from '../components/Loader/Loader';
-import ResultsMap from '../components/Map/ResultsMap';
 import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from '../components/StateList/MobileStateSelect';
 import ExportDropdown from '../components/Table/ExportDropdown';
@@ -11,8 +10,6 @@ import ToplinesCard from '../components/Toplines/toplinesCard';
 import { setActive } from '../redux/actions/navActions';
 import { resetOffice } from '../redux/actions/officeActions';
 import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
-import { PrecinctColorScale } from '../util/ColorScale';
-import MapLayers from '../util/MapLayers';
 import MapContainer from './StateMapContainer';
 import StateResultTableContainer from './StateResultTableContainer';
 
@@ -44,61 +41,6 @@ class StateContainer extends React.Component {
     this.props.resetOffice();
     this.props.resetActiveState();
   }
-
-  getMapGeographies = () => {
-    if (
-      this.props.stateInfo.attributes['precinct-map'] !== null &&
-      this.props.offices.selectedOfficeId === '308'
-    ) {
-      const countyLayer = MapLayers.county;
-      const precinctMinCountyMaxZoom = this.props.states.activeStateId === '3' ? 9 : 8;
-      countyLayer.order = 2;
-      countyLayer.minzoom = 0;
-      countyLayer.maxzoom = precinctMinCountyMaxZoom;
-      const precinctMinZoom =
-        this.props.states.activeStateId === '3' ? 9 : precinctMinCountyMaxZoom;
-      const precinctLayer = {
-        name: 'precinct',
-        url: this.props.stateInfo.attributes['precinct-map'],
-        sourceLayer: this.props.stateInfo.attributes['precinct-source'],
-        colorScale: PrecinctColorScale,
-        minzoom: precinctMinZoom,
-        maxzoom: 0,
-        layer: 'precinct-map',
-        filter: null,
-        order: 1,
-      };
-      return [precinctLayer, countyLayer];
-    } else if (this.props.offices.selectedOfficeId !== '322') {
-      const countyLayer = MapLayers.county;
-      countyLayer.minzoom = 0;
-      countyLayer.maxzoom = 0;
-      return [countyLayer];
-    } else {
-      const congressionalLayer = MapLayers.congressionalDistrict;
-      congressionalLayer.minzoom = 0;
-      congressionalLayer.maxzoom = 0;
-      return [congressionalLayer];
-    }
-  };
-
-  getMapFilter = () => {
-    const stateFips = this.props.stateInfo.attributes.fips.toString().padStart(2, '0');
-    if (this.props.offices.selectedOfficeId !== '322') {
-      return { property: 'STATEFP', value: stateFips };
-    } else {
-      const congressionalDistricts = this.props.stateOffices.entities.offices[
-        this.props.offices.selectedOfficeId
-      ].districts;
-      const districtNumber = congressionalDistricts
-        .find(district => district.id === this.props.offices.selectedDistrictId)
-        .name.split('-')[1];
-      return {
-        property: 'GEOID',
-        value: `${stateFips}${districtNumber}`,
-      };
-    }
-  };
 
   getStatewideTotal = () => {
     const votes = Object.values(this.props.stateResults);
@@ -193,12 +135,6 @@ class StateContainer extends React.Component {
                       <Segment>
                         <Container>
                           <MapContainer />
-                          <ResultsMap
-                            height={600}
-                            geographies={this.getMapGeographies()}
-                            mapFilter={this.getMapFilter()}
-                            hideHeaderOnPrecincts
-                          />
                         </Container>
                       </Segment>
                     </Grid.Column>
