@@ -7,7 +7,6 @@ const initialResultsState = {
   stateResults: {},
   countyResults: [],
   precinctResults: {},
-  fetching: false,
 };
 
 const resultsReducer = (previousState = initialResultsState, action) => {
@@ -41,7 +40,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         countyResults: action.countyResults,
         stateResults: action.stateResults,
         officeInfo: action.officeInfo,
-        fetching: false,
+        loading: false,
       };
     case 'START_PRECINCT_FETCH':
       return {
@@ -56,7 +55,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
     case 'FETCHING':
       return {
         ...previousState,
-        fetching: true,
+        loading: true,
       };
     case 'SET_SORTED_COUNTY_RESULTS':
       return {

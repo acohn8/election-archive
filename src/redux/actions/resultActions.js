@@ -14,7 +14,7 @@ const getSubGeography = (stateId, officeId, districtId = null) => {
   if (!districtId) {
     return `states/${stateId}/offices/${officeId}/results/county`;
   }
-  return `states/${stateId}/offices/${officeId}/results/county`;
+  return `states/${stateId}/offices/${officeId}/results/district/${districtId}/county`;
 };
 
 const fetchStateData = (stateId, districtId = null) => async (dispatch, getState) => {
@@ -29,6 +29,8 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
     axios.get(`${url}/states/${stateId}/offices`),
     axios.get(`${url}/states/${stateId}`),
   ]);
+
+  console.log(response[1]);
 
   const countyResults = normalize(response[0].data.results, resultListSchema);
   const stateResults = response[1].data.results;
@@ -59,6 +61,7 @@ const updateOfficeData = (officeId, districtId = null) => async (dispatch, getSt
     axios.get(`${url}/${subgeography}`),
     axios.get(`${url}/${officeTotal}`),
   ]);
+  console.log(response[1]);
 
   const countyResults = normalize(response[0].data.results, resultListSchema);
   const stateResults = response[1].data.results;
