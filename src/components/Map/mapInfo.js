@@ -15,6 +15,8 @@ const MapInfo = props => (
       {props.overlay.hoveredGeography}
       {props.overlay.layer === 'state' &&
         !props.mobile && <Header.Subheader>Click for details</Header.Subheader>}
+      {props.overlay.layer === 'state' &&
+        props.mobile && <Header.Subheader>Tap for details</Header.Subheader>}
     </Header>
     <List divided relaxed>
       <List.Item>
