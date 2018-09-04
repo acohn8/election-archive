@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Container, Image, Menu, Segment, Visibility } from 'semantic-ui-react';
+import { Container, Image, Menu, Responsive, Segment, Visibility } from 'semantic-ui-react';
 import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
 import StateDropdown from '../StateDropdown/StateDropdown';
 
@@ -15,7 +15,7 @@ class DesktopNav extends Component {
     const { fixed } = this.state;
     const activeItem = this.props.activeItem;
     return (
-      <div>
+      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
         <Visibility
           once={false}
           onBottomPassed={this.showFixedMenu}
@@ -91,7 +91,7 @@ class DesktopNav extends Component {
           </Segment>
         </Visibility>
         {this.props.children}
-      </div>
+      </Responsive>
     );
   }
 }

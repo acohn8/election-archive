@@ -191,7 +191,7 @@ class StateContainer extends React.Component {
                         <Container>
                           <MapContainer />
                           <ResultsMap
-                            minHeight={600}
+                            height={600}
                             geographies={this.getMapGeographies()}
                             mapFilter={this.getMapFilter()}
                             hideHeaderOnPrecincts

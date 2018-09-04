@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Segment } from 'semantic-ui-react';
-import MapInfo from '../components/Map/mapInfo';
-import ResultsMap from '../components/Map/ResultsMap.js';
+import DesktopNationalMapOverlay from '../components/DesktopNationalMapOverlay/DesktopNationalMapOverlay';
+import ResultsMap from '../components/Map/ResultsMap';
+import MobileNationalMapOverlay from '../components/MobileNationalMapOverlay/MobileNationalMapOverlay';
 import { setActive } from '../redux/actions/navActions';
-import { resetActiveState } from '../redux/actions/stateActions';
 import MapLayers from '../util/MapLayers';
 
 class NationalMapContainer extends React.Component {
@@ -31,86 +30,40 @@ class NationalMapContainer extends React.Component {
 
   render() {
     return (
-      <div ref={divElement => (this.divElement = divElement)}>
+      <div>
         {this.props.offices.allOffices.result !== undefined && (
-          <ResultsMap
-            minHeight={this.props.windowWidth >= 768 ? '94vh' : '65vh'}
-            geographies={this.getMapGeographies()}
-            clickToNavigate
-          />
-        )}
-        {!this.props.headerHid &&
-          this.props.windowWidth >= 768 && (
-            <div
-              style={{
-                position: 'absolute',
-                zIndex: 1,
-                left: 30,
-                borderRadius: '25px',
-                top: 80,
-                width: 300,
-                backgroundColor: 'white',
-                padding: '20px',
-                opacity: '0.8',
-                borderColor: 'gray',
-                borderStyle: 'solid',
-                borderWidth: '0.5px',
-              }}
-            >
-              {this.props.overlay.hoveredWinner.votes === '' &&
-              this.props.offices.allOffices.result !== undefined ? (
-                <Header size="huge">
-                  {
-                    this.props.offices.allOffices.entities.offices[
-                      this.props.offices.selectedOfficeId
-                    ].attributes.name
-                  }
-                  <Header.Subheader>
-                    Zoom in to see counties or out to see states. Click for details.
-                  </Header.Subheader>
-                </Header>
-              ) : (
-                <div>
-                  <MapInfo />
-                </div>
-              )}
+          <div>
+            <MobileNationalMapOverlay
+              hoveredWinner={this.props.overlay.hoveredWinner}
+              office={
+                this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
+                  .attributes.name
+              }
+            />
+            <div style={{ position: 'fixed', width: '100%', height: '100%' }}>
+              <ResultsMap height={'100%'} geographies={this.getMapGeographies()} clickToNavigate />
             </div>
-          )}
-        {this.props.windowWidth < 768 && (
-          <Container>
-            <Segment vertical padded>
-              {this.props.overlay.hoveredWinner.votes === '' &&
-              this.props.offices.allOffices.result !== undefined ? (
-                <Header size="huge">
-                  {
-                    this.props.offices.allOffices.entities.offices[
-                      this.props.offices.selectedOfficeId
-                    ].attributes.name
-                  }
-                  <Header.Subheader>
-                    Zoom in to see counties or out to see states. Click for details.
-                  </Header.Subheader>
-                </Header>
-              ) : (
-                <div>
-                  <MapInfo />
-                </div>
-              )}
-            </Segment>
-          </Container>
+            <DesktopNationalMapOverlay
+              hoveredWinner={this.props.overlay.hoveredWinner}
+              office={
+                this.props.offices.allOffices.entities.offices[this.props.offices.selectedOfficeId]
+                  .attributes.name
+              }
+            />
+          </div>
         )}
       </div>
     );
   }
 }
+
 const mapDispatchToProps = dispatch => ({
-  resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
 });
 
 const mapStateToProps = state => ({
-  headerHid: state.maps.headerHid,
   overlay: state.maps.overlay,
+  selectedOffice: state.results.officeInfo,
   offices: state.offices,
   windowWidth: state.nav.windowWidth,
 });

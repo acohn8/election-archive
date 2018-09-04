@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import MapInfo from '../components/Map/mapInfo';
+import MapInfo from '../components/Map/MapInfo';
 
 const MapContainer = props => (
   <div>

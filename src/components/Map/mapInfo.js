@@ -1,6 +1,6 @@
 import React from 'react';
-import { List, Header } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { Header, List } from 'semantic-ui-react';
 
 const colors = {
   democratic: '#2085D0',
@@ -13,8 +13,8 @@ const MapInfo = props => (
   <div>
     <Header as={props.overlay.isNational === true ? 'h2' : 'h4'}>
       {props.overlay.hoveredGeography}
-      {props.overlay.isNational === true &&
-        props.overlay.layer === 'state' && <Header.Subheader>Click for details</Header.Subheader>}
+      {props.overlay.layer === 'state' &&
+        !props.mobile && <Header.Subheader>Click for details</Header.Subheader>}
     </Header>
     <List divided relaxed>
       <List.Item>

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Icon, Menu, Segment, Sidebar } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-
-import { hideHeader, showHeader } from '../../redux/actions/mapActions';
+import { Link } from 'react-router-dom';
+import { Container, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
 import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
 
 class MobileNav extends Component {
@@ -13,11 +11,6 @@ class MobileNav extends Component {
     const { sidebarOpened } = this.state;
 
     if (sidebarOpened) this.setState({ sidebarOpened: false });
-    if (sidebarOpened && this.props.activeItem === 'national map') {
-      this.props.showHeader();
-    } else if (!sidebarOpened && this.props.activeItem === 'national map') {
-      this.props.hideHeader();
-    }
   };
 
   handleToggle = () => this.setState({ sidebarOpened: !this.state.sidebarOpened });
@@ -28,7 +21,7 @@ class MobileNav extends Component {
     const activeItem = this.props.activeItem;
 
     return (
-      <div>
+      <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
         <Sidebar.Pushable>
           <Sidebar
             as={Menu}
@@ -89,15 +82,10 @@ class MobileNav extends Component {
             {children}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
-      </div>
+      </Responsive>
     );
   }
 }
-
-const mapDispatchToProps = dispatch => ({
-  hideHeader: () => dispatch(hideHeader()),
-  showHeader: () => dispatch(showHeader()),
-});
 
 const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
@@ -105,7 +93,4 @@ const mapStateToProps = state => ({
   offices: state.offices,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MobileNav);
+export default connect(mapStateToProps)(MobileNav);

@@ -423,7 +423,7 @@ class ResultsMap extends React.Component {
       top: 0,
       bottom: 0,
       width: '100%',
-      minHeight: this.props.minHeight,
+      height: this.props.height,
     };
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }
