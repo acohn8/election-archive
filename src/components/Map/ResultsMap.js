@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import {
   addLayer,
   addSource,
@@ -12,7 +13,6 @@ import {
   removeSource,
   resetHover,
 } from '../../redux/actions/mapActions';
-import { pushToNewState } from '../../redux/actions/stateActions';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -248,7 +248,22 @@ class ResultsMap extends React.Component {
   };
 
   setStateOnClick = (state, districtId) => {
-    this.props.pushToNewState(state.id, districtId);
+    const statePath = state.attributes.name
+      .split(' ')
+      .join('-')
+      .toLowerCase();
+    const officePath = this.props.offices.allOffices.entities.offices[
+      this.props.offices.selectedOfficeId
+    ].attributes.name
+      .split(' ')
+      .join('-')
+      .toLowerCase();
+    if (!districtId) {
+      this.props.history.push(`states/${statePath}/${officePath}`);
+    } else {
+      const districtPath = districtId.toLowerCase();
+      this.props.history.push(`states/${statePath}/${officePath}/${districtPath}`);
+    }
   };
 
   getUrl = geography => {
@@ -446,7 +461,6 @@ const mapDispatchToProps = dispatch => ({
       ),
     ),
   resetHover: () => dispatch(resetHover()),
-  pushToNewState: (stateId, districtId) => dispatch(pushToNewState(stateId, districtId)),
   addLayer: layer => dispatch(addLayer(layer)),
   addSource: source => dispatch(addSource(source)),
   removeLayer: layer => dispatch(removeLayer(layer)),
@@ -461,7 +475,9 @@ const mapStateToProps = state => ({
   savedSources: state.maps.sources,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ResultsMap);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(ResultsMap),
+);

@@ -18,28 +18,10 @@ const setActiveState = (stateId, officeId, districtName = null) => (dispatch) =>
 
 const setStateId = stateId => dispatch => dispatch({ type: 'ACTIVE_STATE', stateId });
 
-const pushToNewState = (stateId, districtName = null) => (dispatch, getState) => {
-  const state = getState()
-    .states.states.find(state => state.id === stateId)
-    .attributes.name.split(' ')
-    .join('-')
-    .toLowerCase();
-  const office = getState()
-    .offices.allOffices.entities.offices[getState().offices.selectedOfficeId].attributes.name.split(' ')
-    .join('-')
-    .toLowerCase();
-
-  if (districtName) {
-    const district = districtName.toLowerCase();
-    dispatch(push(`/states/${state}/${office}/${district}`));
-  } else {
-    dispatch(push(`/states/${state}/${office}`));
-  }
-};
 const resetActiveState = () => (dispatch) => {
   dispatch({ type: 'RESET_ACTIVE_STATE' });
   dispatch(resetResults());
   dispatch(resetHover());
 };
 
-export { fetchStatesList, setActiveState, resetActiveState, pushToNewState, setStateId };
+export { fetchStatesList, setActiveState, resetActiveState, setStateId };

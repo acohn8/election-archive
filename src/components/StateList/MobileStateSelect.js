@@ -13,7 +13,7 @@ const MobileStateSelector = props => (
             href={`/states/${state.attributes.name
               .split(' ')
               .join('-')
-              .toLowerCase()}`}
+              .toLowerCase()}/us-president`}
           >
             <List.Icon name="right triangle" size="large" verticalAlign="middle" color="teal" />
             <List.Content>
