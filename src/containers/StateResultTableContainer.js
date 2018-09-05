@@ -70,7 +70,7 @@ class StateResultTableContainer extends React.Component {
           firstItem={null}
           lastItem={null}
           fluid
-          activePage={.activePage}
+          activePage={activePage}
           totalPages={Math.ceil(this.props.countyResults.result.length / 10)}
           onPageChange={this.handlePaginationChange}
           boundaryRange={1}
