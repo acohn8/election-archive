@@ -30,7 +30,7 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
     axios.get(`${url}/states/${stateId}`),
   ]);
 
-  console.log(response[1]);
+  console.log('here');
 
   const countyResults = normalize(response[0].data.results, resultListSchema);
   const stateResults = response[1].data.results;
@@ -61,7 +61,6 @@ const updateOfficeData = (officeId, districtId = null) => async (dispatch, getSt
     axios.get(`${url}/${subgeography}`),
     axios.get(`${url}/${officeTotal}`),
   ]);
-  console.log(response[1]);
 
   const countyResults = normalize(response[0].data.results, resultListSchema);
   const stateResults = response[1].data.results;

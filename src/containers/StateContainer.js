@@ -33,6 +33,7 @@ class StateContainer extends React.Component {
       (this.props.match.params.activeStateName === prevProps.match.params.activeStateName &&
         this.props.match.params.activeDistrict !== prevProps.match.params.activeDistrict)
     ) {
+      console.log('update');
       this.props.updateOffices(officeId, districtName);
     }
   }
@@ -110,7 +111,12 @@ class StateContainer extends React.Component {
                         <Header.Subheader>
                           Results for{' '}
                           <span style={{ color: '#00B5AD' }}>
-                            <OfficeDropdown className="link item" />
+                            <OfficeDropdown
+                              className="link item"
+                              offices={this.props.stateOffices}
+                              selectedOfficeId={this.props.offices.selectedOfficeId}
+                              stateName={this.props.stateInfo.attributes.name}
+                            />
                           </span>
                         </Header.Subheader>
                       </Header>

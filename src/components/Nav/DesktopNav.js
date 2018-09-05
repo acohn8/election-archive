@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Container, Image, Menu, Responsive, Segment, Visibility } from 'semantic-ui-react';
 import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
 import StateDropdown from '../StateDropdown/StateDropdown';
+import { setActiveOffice } from '../../redux/actions/officeActions';
 
 class DesktopNav extends Component {
   state = {};
@@ -82,7 +83,12 @@ class DesktopNav extends Component {
                   this.props.offices.allOffices.result !== undefined && (
                     <Menu.Menu position="right">
                       <Menu.Item>
-                        <OfficeDropdown />
+                        <OfficeDropdown
+                          offices={this.props.offices.allOffices}
+                          setOffice={this.props.setActiveOffice}
+                          selectedOfficeId={this.props.offices.selectedOfficeId}
+                          national
+                        />
                       </Menu.Item>
                     </Menu.Menu>
                   )}
@@ -96,6 +102,10 @@ class DesktopNav extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  setActiveOffice: officeId => dispatch(setActiveOffice(officeId)),
+});
+
 const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
   stateInfo: state.results.stateInfo,
@@ -103,4 +113,7 @@ const mapStateToProps = state => ({
   offices: state.offices,
 });
 
-export default connect(mapStateToProps)(DesktopNav);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DesktopNav);
