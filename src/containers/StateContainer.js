@@ -194,11 +194,9 @@ const mapStateToProps = state => ({
   stateInfo: state.results.stateInfo,
   offices: state.offices,
   stateOffices: state.results.stateOffices,
-  officeInfo: state.results.officeInfo,
   nav: state.nav,
   stateResults: state.results.stateResults,
   candidates: state.results.candidates,
-  fetching: state.results.fetching,
 });
 
 const mapDispatchToProps = dispatch => ({
