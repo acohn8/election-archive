@@ -51,7 +51,7 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
 const updateOfficeData = (officeId, districtId = null) => async (dispatch, getState) => {
   dispatch({ type: 'FETCHING' });
   dispatch(setActiveOffice(officeId, districtId));
-  const url = 'http://localhost:3000/api/v1';
+  const url = 'https://election-data-2016.herokuapp.com/api/v1';
   const officeTotal = getOfficeTotal(getState().states.activeStateId, officeId, districtId);
   const subgeography = getSubGeography(getState().states.activeStateId, officeId, districtId);
 
