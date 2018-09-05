@@ -3,18 +3,21 @@ import store from '../redux/store';
 const formatTableData = () => {
   const formattedResults = [];
   const candidates = store.getState().results.candidates.entities.candidates;
-  const candidateIds = store.getState().results.candidates.result;
-  const allCountyResults = store.getState().results.countyResults.result.map(countyId => ({
-    id: countyId,
-    name: store
-      .getState()
-      .results.countyResults.entities.results[countyId].name.replace(/County/g, ''),
-  }));
+  const resultEntities = store.getState().results.countyResults.entities.results;
+
+  const candidateIds = store.getState().results.candidates.result.slice();
+  const allCountyResults = store
+    .getState()
+    .results.countyResults.result.slice()
+    .map(countyId => ({
+      id: countyId,
+      name: resultEntities[countyId].name.replace(/County/g, ''),
+    }));
   allCountyResults.forEach((result) => {
     const countyInfo = {};
-    const countyResults = store.getState().results.countyResults.entities.results[result.id]
-      .results;
+    const countyResults = resultEntities[result.id].results;
     const winnerParty = getCountyWinner(countyResults);
+    const countyTotal = Object.values(countyResults).reduce((sum, n) => sum + n);
     countyInfo.id = result.id;
     countyInfo.name = result.name;
     countyInfo.winnerParty = winnerParty;
@@ -24,6 +27,7 @@ const formatTableData = () => {
       countyInfo.results[candidateId].name = candidates[candidateId].name;
       countyInfo.results[candidateId].party = candidates[candidateId].party;
       countyInfo.results[candidateId].total = countyResults[candidateId];
+      countyInfo.results[candidateId].percent = countyResults[candidateId] / countyTotal;
     });
     formattedResults.push(countyInfo);
   });

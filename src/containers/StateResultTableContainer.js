@@ -4,20 +4,23 @@ import { Segment, Pagination } from 'semantic-ui-react';
 import StateResultTable from '../components/Table/StateResultTable';
 import { setSortedCountyResults } from '../redux/actions/resultActions';
 import formatTableData from '../util/FormatTableData';
+import convertToPercent from '../util/ConvertToPercent';
 
 class StateResultTableContainer extends React.Component {
   state = {
     column: null,
+    value: null,
     direction: null,
     activePage: 1,
   };
 
-  handleSort = clickedColumn => {
-    const newData = this.sortColumns(clickedColumn);
+  handleSort = (clickedColumn, value = null) => {
+    const newData = this.sortColumns(clickedColumn, value);
     if (this.state.column !== clickedColumn) {
       this.setState(
         {
           column: clickedColumn,
+          value: value,
           direction: 'ascending',
         },
         () => this.props.setSortedCountyResults(newData),
@@ -28,20 +31,26 @@ class StateResultTableContainer extends React.Component {
     this.setState(
       {
         column: clickedColumn,
+        value: value,
         direction: this.state.direction === 'ascending' ? 'descending' : 'ascending',
       },
       () => this.props.setSortedCountyResults(previousSort.reverse()),
     );
   };
 
-  sortColumns = column => {
+  sortColumns = (column, value) => {
     const countyKeys = this.props.countyResults.result.slice();
-    const countyData = Object.assign({}, this.props.countyResults.entities.results);
+    const countyData = this.props.countyResults.entities.results;
     if (column === 'name') {
       return countyKeys.sort((a, b) => countyData[a][column].localeCompare(countyData[b][column]));
-    } else {
+    } else if (value === 'votes') {
       return countyKeys.sort(
         (a, b) => countyData[b].results[column] - countyData[a].results[column],
+      );
+    } else if (value === 'percent') {
+      const percentResults = convertToPercent(countyData, countyKeys);
+      return countyKeys.sort(
+        (a, b) => percentResults[b].results[column] - percentResults[a].results[column],
       );
     }
   };
@@ -62,6 +71,7 @@ class StateResultTableContainer extends React.Component {
           candidateIds={this.props.candidates.result}
           handleSort={this.handleSort}
           column={this.state.column}
+          value={this.state.value}
           direction={this.state.direction}
         />
         <Pagination

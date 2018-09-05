@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import { Table, TableRow, TableHeaderCell } from 'semantic-ui-react';
 
 const colors = {
   democratic: 'rgba(32,133,208,.2)',
@@ -9,49 +9,81 @@ const colors = {
 };
 
 const StateResultTable = ({
-  direction, column, data, handleSort, candidateIds,
+  direction, column, data, handleSort, candidateIds, value,
 }) => (
   <div>
     {data.length > 0 && (
-      <Table sortable celled unstackable fixed size="small" compact style={{ minHeight: 325 }}>
+      <Table sortable celled unstackable structured size="small" compact style={{ minHeight: 325 }}>
         <Table.Header>
           <Table.Row textAlign="center">
             <Table.HeaderCell
               sorted={column === 'name' ? direction : null}
               onClick={() => handleSort('name')}
+              rowSpan="2"
             >
               County
             </Table.HeaderCell>
             {candidateIds.map(candidateId => (
-              <Table.HeaderCell
-                key={candidateId}
-                sorted={column === candidateId ? direction : null}
-                onClick={() => handleSort(candidateId)}
-              >
+              <Table.HeaderCell key={candidateId} colSpan="2">
                 {data[0].results[candidateId].name}
               </Table.HeaderCell>
             ))}
           </Table.Row>
+          <TableRow>
+            {candidateIds.map(candidateId => [
+              <TableHeaderCell
+                key={`${candidateId}vc`}
+                sorted={column === 'name' && value === 'votes' ? direction : null}
+                onClick={() => handleSort(candidateId, 'votes')}
+              >
+                Votes
+              </TableHeaderCell>,
+              <TableHeaderCell
+                key={`${candidateId}pc`}
+                sorted={column === 'name' && value === 'percent' ? direction : null}
+                onClick={() => handleSort(candidateId, 'percent')}
+              >
+                Percent
+              </TableHeaderCell>,
+            ])}
+          </TableRow>
         </Table.Header>
         <Table.Body>
           {data.map(county => (
             <Table.Row key={county.id} textAlign="center">
               <Table.Cell>{county.name}</Table.Cell>
               {candidateIds.map(candidateId =>
-                  (county.winnerParty === county.results[candidateId].party ? (
-                    <Table.Cell
-                      key={`${county.name}${candidateId}`}
-                      style={{ backgroundColor: colors[county.winnerParty] }}
-                    >
-                      {county.results[candidateId].total.toLocaleString()}
-                    </Table.Cell>
-                  ) : (
-                    <Table.Cell key={`${county.name}${candidateId}`}>
-                      {county.results[candidateId].total
-                        ? county.results[candidateId].total.toLocaleString()
-                        : 0}
-                    </Table.Cell>
-                  )))}
+                  (county.winnerParty === county.results[candidateId].party
+                    ? [
+                      <Table.Cell
+                        key={`${county.name}${candidateId}v`}
+                        style={{ backgroundColor: colors[county.winnerParty] }}
+                      >
+                        {county.results[candidateId].total
+                            ? county.results[candidateId].total.toLocaleString()
+                            : 0}
+                      </Table.Cell>,
+                      <Table.Cell
+                        key={`${county.name}${candidateId}p`}
+                        style={{ backgroundColor: colors[county.winnerParty] }}
+                      >
+                        {county.results[candidateId].percent
+                            ? `${Math.round(county.results[candidateId].percent * 100)}%`
+                            : '0%'}
+                      </Table.Cell>,
+                      ]
+                    : [
+                      <Table.Cell key={`${county.name}${candidateId}v`}>
+                        {county.results[candidateId].total
+                            ? county.results[candidateId].total.toLocaleString()
+                            : 0}
+                      </Table.Cell>,
+                      <Table.Cell key={`${county.name}${candidateId}p`}>
+                        {county.results[candidateId].percent
+                            ? `${Math.round(county.results[candidateId].percent * 100)}%`
+                            : '0%'}
+                      </Table.Cell>,
+                      ]))}
             </Table.Row>
           ))}
         </Table.Body>
