@@ -56,7 +56,7 @@ class StateResultTableContainer extends React.Component {
 
     const { activePage } = this.state;
     return (
-      <Segment>
+      <Segment style={{ minHeight: 430 }}>
         <StateResultTable
           data={data}
           candidateIds={this.props.candidates.result}

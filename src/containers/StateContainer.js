@@ -92,47 +92,47 @@ class StateContainer extends React.Component {
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&
             this.props.candidates.result !== undefined && (
-              <div>
-                <Grid columns={2} verticalAlign="middle" stackable className="fill-content">
-                  <Grid.Row columns={3}>
-                    <Grid.Column>
-                      <Header size="huge">
-                        <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-                          {
+              <Grid columns={2} verticalAlign="middle" stackable className="fill-content">
+                <Grid.Row columns={3}>
+                  <Grid.Column>
+                    <Header size="huge">
+                      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+                        {
+                          this.props.states.states.find(
+                            state => state.id === this.props.states.activeStateId,
+                          ).attributes.name
+                        }
+                      </Responsive>
+                      <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+                        <MobileStateSelector
+                          state={
                             this.props.states.states.find(
                               state => state.id === this.props.states.activeStateId,
                             ).attributes.name
                           }
-                        </Responsive>
-                        <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
-                          <MobileStateSelector
-                            state={
-                              this.props.states.states.find(
-                                state => state.id === this.props.states.activeStateId,
-                              ).attributes.name
-                            }
+                        />
+                      </Responsive>
+                      <Header.Subheader>
+                        Results for{' '}
+                        <span style={{ color: '#00B5AD' }}>
+                          <OfficeDropdown
+                            className="link item"
+                            offices={this.props.stateOffices}
+                            selectedOfficeId={this.props.offices.selectedOfficeId}
+                            stateName={this.props.stateInfo.attributes.name}
                           />
-                        </Responsive>
-                        <Header.Subheader>
-                          Results for{' '}
-                          <span style={{ color: '#00B5AD' }}>
-                            <OfficeDropdown
-                              className="link item"
-                              offices={this.props.stateOffices}
-                              selectedOfficeId={this.props.offices.selectedOfficeId}
-                              stateName={this.props.stateInfo.attributes.name}
-                            />
-                          </span>
-                        </Header.Subheader>
-                      </Header>
-                    </Grid.Column>
-                    <Grid.Column floated="right" textAlign="right">
-                      {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
-                    </Grid.Column>
-                  </Grid.Row>
-                  <Grid.Row stretched>
-                    <Grid.Column>
-                      <Header size="large">Statewide</Header>
+                        </span>
+                      </Header.Subheader>
+                    </Header>
+                  </Grid.Column>
+                  <Grid.Column floated="right" textAlign="right">
+                    {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row stretched>
+                  <Grid.Column>
+                    <Header size="large">Statewide</Header>
+                    <Segment style={{ minHeight: 430 }}>
                       <Card.Group itemsPerRow={2} stackable>
                         {this.props.candidates.result
                           .filter(id => id !== 'other')
@@ -159,29 +159,29 @@ class StateContainer extends React.Component {
                             </ToplinesCard>
                           ))}
                       </Card.Group>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Header size="large">County</Header>
-                      <StateResultTableContainer />
-                    </Grid.Column>
-                  </Grid.Row>
-                  <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">
-                    <Grid.Column>
-                      <Header size="large">
-                        County Map
-                        {this.props.stateInfo.attributes['precinct-map'] && (
-                          <Header.Subheader>Zoom in for precincts</Header.Subheader>
-                        )}
-                      </Header>
-                      <Segment>
-                        <Container>
-                          <MapContainer />
-                        </Container>
-                      </Segment>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-              </div>
+                    </Segment>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Header size="large">County</Header>
+                    <StateResultTableContainer />
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">
+                  <Grid.Column>
+                    <Header size="large">
+                      County Map
+                      {this.props.stateInfo.attributes['precinct-map'] && (
+                        <Header.Subheader>Zoom in for precincts</Header.Subheader>
+                      )}
+                    </Header>
+                    <Segment>
+                      <Container>
+                        <MapContainer />
+                      </Container>
+                    </Segment>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
             )}
         </Container>
       </div>
