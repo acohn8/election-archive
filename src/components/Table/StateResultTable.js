@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Pagination } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 
 const colors = {
   democratic: 'rgba(32,133,208,.2)',

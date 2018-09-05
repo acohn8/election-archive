@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Container, Icon, Menu, Responsive, Segment, Sidebar } from 'semantic-ui-react';
 import OfficeDropdown from '../OfficeDropdown/OfficeDropdown';
+import { setActiveOffice } from '../../redux/actions/officeActions';
 
 class MobileNav extends Component {
   state = {};
@@ -92,10 +93,17 @@ class MobileNav extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  setActiveOffice: officeId => dispatch(setActiveOffice(officeId)),
+});
+
 const mapStateToProps = state => ({
   activeItem: state.nav.activePage,
   states: state.states,
   offices: state.offices,
 });
 
-export default connect(mapStateToProps)(MobileNav);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MobileNav);

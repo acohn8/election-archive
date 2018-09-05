@@ -10,7 +10,6 @@ import ToplinesCard from '../components/Toplines/toplinesCard';
 import { setActive } from '../redux/actions/navActions';
 import { resetOffice, setActiveOffice, updateOffices } from '../redux/actions/officeActions';
 import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
-import { updateOfficeData } from '../redux/actions/resultActions';
 import MapContainer from './StateMapContainer';
 import StateResultTableContainer from './StateResultTableContainer';
 
@@ -129,10 +128,10 @@ class StateContainer extends React.Component {
                     {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
                   </Grid.Column>
                 </Grid.Row>
-                <Grid.Row stretched>
+                <Grid.Row style={{ minHeight: 500 }}>
                   <Grid.Column>
                     <Header size="large">Statewide</Header>
-                    <Segment style={{ minHeight: 430 }}>
+                    <Segment style={{ minHeight: 430 }} basic>
                       <Card.Group itemsPerRow={2} stackable>
                         {this.props.candidates.result
                           .filter(id => id !== 'other')
