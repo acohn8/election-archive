@@ -5,6 +5,7 @@ import StateResultTable from '../components/Table/StateResultTable';
 import { setSortedCountyResults } from '../redux/actions/resultActions';
 import formatTableData from '../util/FormatTableData';
 import convertToPercent from '../util/ConvertToPercent';
+import numericalSort from '../util/NumericalSort';
 
 class StateResultTableContainer extends React.Component {
   state = {
@@ -44,20 +45,11 @@ class StateResultTableContainer extends React.Component {
     if (column === 'name') {
       return countyKeys.sort((a, b) => countyData[a][column].localeCompare(countyData[b][column]));
     } else if (value === 'votes') {
-      return this.numericalSort(countyKeys, countyData, column);
+      return numericalSort(countyKeys, countyData, column);
     } else if (value === 'percent') {
       const percentResults = convertToPercent(countyData, countyKeys);
-      return this.numericalSort(countyKeys, percentResults, column);
+      return numericalSort(countyKeys, percentResults, column);
     }
-  };
-
-  numericalSort = (keys, entities, column) => {
-    const zeroVoteCounties = keys.slice().filter(key => !entities[key].results[column]);
-    const countiesWithVotes = keys.slice().filter(key => entities[key].results[column]);
-    const sortedCounties = countiesWithVotes.sort(
-      (a, b) => entities[b].results[column] - entities[a].results[column],
-    );
-    return sortedCounties.concat(zeroVoteCounties);
   };
 
   handleInputChange = (e, { value }) => this.setState({ activePage: value });
@@ -70,7 +62,7 @@ class StateResultTableContainer extends React.Component {
 
     const { activePage } = this.state;
     return (
-      <Segment style={{ minHeight: 430 }}>
+      <Segment style={{ minHeight: 430, overflow: 'hidden' }} basic>
         <StateResultTable
           data={data}
           candidateIds={this.props.candidates.result}

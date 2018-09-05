@@ -11,9 +11,9 @@ const colors = {
 const StateResultTable = ({
   direction, column, data, handleSort, candidateIds, value,
 }) => (
-  <div>
+  <div style={{ overflowX: 'auto', width: '100%', height: '100%' }}>
     {data.length > 0 && (
-      <Table sortable celled unstackable structured size="small" compact style={{ minHeight: 325 }}>
+      <Table sortable celled unstackable structured size="small" compact>
         <Table.Header>
           <Table.Row textAlign="center">
             <Table.HeaderCell
@@ -29,18 +29,18 @@ const StateResultTable = ({
               </Table.HeaderCell>
             ))}
           </Table.Row>
-          <TableRow>
+          <TableRow textAlign="center">
             {candidateIds.map(candidateId => [
               <TableHeaderCell
                 key={`${candidateId}vc`}
-                sorted={column === 'name' && value === 'votes' ? direction : null}
+                sorted={column === candidateId && value === 'votes' ? direction : null}
                 onClick={() => handleSort(candidateId, 'votes')}
               >
                 Votes
               </TableHeaderCell>,
               <TableHeaderCell
                 key={`${candidateId}pc`}
-                sorted={column === 'name' && value === 'percent' ? direction : null}
+                sorted={column === candidateId && value === 'percent' ? direction : null}
                 onClick={() => handleSort(candidateId, 'percent')}
               >
                 Percent

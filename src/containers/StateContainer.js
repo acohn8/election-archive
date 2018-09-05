@@ -128,9 +128,8 @@ class StateContainer extends React.Component {
                     {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
                   </Grid.Column>
                 </Grid.Row>
-                <Grid.Row style={{ minHeight: 500 }}>
+                <Grid.Row style={{ minHeight: 500 }} stretched>
                   <Grid.Column>
-                    <Header size="large">Statewide</Header>
                     <Segment style={{ minHeight: 430 }} basic>
                       <Card.Group itemsPerRow={2} stackable>
                         {this.props.candidates.result
@@ -161,7 +160,6 @@ class StateContainer extends React.Component {
                     </Segment>
                   </Grid.Column>
                   <Grid.Column>
-                    <Header size="large">County</Header>
                     <StateResultTableContainer />
                   </Grid.Column>
                 </Grid.Row>
@@ -174,9 +172,9 @@ class StateContainer extends React.Component {
                       )}
                     </Header>
                     <Segment>
-                      <Container>
-                        <MapContainer />
-                      </Container>
+                      {/* <Container> */}
+                      <MapContainer />
+                      {/* </Container> */}
                     </Segment>
                   </Grid.Column>
                 </Grid.Row>
