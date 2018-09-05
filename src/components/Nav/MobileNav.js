@@ -72,7 +72,12 @@ class MobileNav extends Component {
                     this.props.offices.allOffices.result !== undefined && (
                       <Menu.Menu position="right">
                         <Menu.Item>
-                          <OfficeDropdown />
+                          <OfficeDropdown
+                            offices={this.props.offices.allOffices}
+                            setOffice={this.props.setActiveOffice}
+                            selectedOfficeId={this.props.offices.selectedOfficeId}
+                            national
+                          />
                         </Menu.Item>
                       </Menu.Menu>
                     )}

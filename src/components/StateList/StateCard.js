@@ -7,7 +7,7 @@ const StateCard = props => (
     href={`/states/${props.name
       .split(' ')
       .join('-')
-      .toLowerCase()}`}
+      .toLowerCase()}/us-president`}
   >
     <LazyImage fluid src={props.image} style={{ height: '200px' }} />
     <Card.Content>

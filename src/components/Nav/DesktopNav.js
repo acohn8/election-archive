@@ -22,7 +22,7 @@ class DesktopNav extends Component {
           onBottomPassed={this.showFixedMenu}
           onBottomPassedReverse={this.hideFixedMenu}
         >
-          <Segment basic style={{ height: '6vh' }}>
+          <Segment basic style={{ minHeight: '6vh' }}>
             <Menu fixed={fixed ? 'top' : null} pointing={!fixed} secondary={!fixed} size="large">
               <Container>
                 <Menu.Item

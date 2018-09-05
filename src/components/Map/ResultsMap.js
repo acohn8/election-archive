@@ -226,7 +226,6 @@ class ResultsMap extends React.Component {
 
   getDistrictId = feature => {
     if (this.props.offices.selectedOfficeId === '322') {
-      console.log(feature.properties);
       return feature.properties.NAME.toLowerCase();
     } else {
       return null;

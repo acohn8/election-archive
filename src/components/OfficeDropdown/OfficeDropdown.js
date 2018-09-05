@@ -18,13 +18,15 @@ const OfficeDropdown = ({
     <Dropdown.Menu>
       <Dropdown.Header>Offices</Dropdown.Header>
       {!national
-        ? offices.result.map(officeId => (
-          <StateOfficeDropdownItem
-            key={officeId}
-            office={offices.entities.offices[officeId]}
-            stateName={stateName}
-          />
-          ))
+        ? offices.result
+            .filter(id => id !== '322')
+            .map(officeId => (
+              <StateOfficeDropdownItem
+                key={officeId}
+                office={offices.entities.offices[officeId]}
+                stateName={stateName}
+              />
+            ))
         : offices.result.map(officeId => (
           <NationalOfficeDropdownItem
             key={officeId}
@@ -33,6 +35,25 @@ const OfficeDropdown = ({
             setOffice={setOffice}
           />
           ))}
+      {!national && (
+        <Dropdown.Item>
+          <Dropdown text="US House">
+            <Dropdown.Menu>
+              <Dropdown.Header>District</Dropdown.Header>
+              {offices.entities.offices['322'].districts
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map(district => (
+                  <StateOfficeDropdownItem
+                    key={district.id}
+                    office={offices.entities.offices['322']}
+                    stateName={stateName}
+                    district={district}
+                  />
+                ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Dropdown.Item>
+      )}
     </Dropdown.Menu>
   </Dropdown>
 );

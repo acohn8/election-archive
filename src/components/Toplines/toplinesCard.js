@@ -12,12 +12,7 @@ const colors = {
 const ToplinesCard = ({
   candidate, votes, winner, total, children,
 }) => (
-  <Card
-    color={colors[candidate.party]}
-    style={{
-      minHeight: 400,
-    }}
-  >
+  <Card color={colors[candidate.party]}>
     <Card.Content>
       {parseInt(candidate.id, 10) === winner && (
         <Label color={colors[candidate.party]} corner="right" icon="check" />

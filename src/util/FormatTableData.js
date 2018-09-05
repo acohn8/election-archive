@@ -6,7 +6,9 @@ const formatTableData = () => {
   const candidateIds = store.getState().results.candidates.result;
   const allCountyResults = store.getState().results.countyResults.result.map(countyId => ({
     id: countyId,
-    name: store.getState().results.countyResults.entities.results[countyId].name,
+    name: store
+      .getState()
+      .results.countyResults.entities.results[countyId].name.replace(/County/g, ''),
   }));
   allCountyResults.forEach((result) => {
     const countyInfo = {};

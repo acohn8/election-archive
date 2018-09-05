@@ -38,8 +38,8 @@ const FrequentlyAskedQuestions = () => (
       <List.Item>
         <List.Header>Will you be adding results from more offices?</List.Header>
         <p>
-          Yes! I am currently working on importing U.S. House and down-ballot statewide results.
-          State legislative, judicial, and local elections will be posted in the coming weeks.
+          Yes! I am currently working on importing down-ballot statewide results. State legislative,
+          judicial, and local elections will be posted in the coming weeks.
         </p>
       </List.Item>
       <List.Item>

@@ -33,8 +33,9 @@ class StateContainer extends React.Component {
       (this.props.match.params.activeStateName === prevProps.match.params.activeStateName &&
         this.props.match.params.activeDistrict !== prevProps.match.params.activeDistrict)
     ) {
-      console.log('update');
-      this.props.updateOffices(officeId, districtName);
+      districtName
+        ? this.props.updateOffices(officeId, districtName.toLowerCase())
+        : this.props.updateOffices(officeId);
     }
   }
 
@@ -47,7 +48,11 @@ class StateContainer extends React.Component {
     const state = this.getStateFromParams();
     const officeId = this.getOfficeFromParams();
     const districtName = this.props.match.params.activeDistrict;
-    this.props.setActiveState(state.id, officeId, districtName);
+    if (districtName) {
+      this.props.setActiveState(state.id, officeId, districtName.toLowerCase());
+    } else {
+      this.props.setActiveState(state.id, officeId);
+    }
   };
 
   getStateFromParams = () => {
@@ -88,7 +93,7 @@ class StateContainer extends React.Component {
           {this.props.loading === false &&
             this.props.candidates.result !== undefined && (
               <div>
-                <Grid columns={2} verticalAlign="middle" stackable>
+                <Grid columns={2} verticalAlign="middle" stackable className="fill-content">
                   <Grid.Row columns={3}>
                     <Grid.Column>
                       <Header size="huge">
@@ -125,7 +130,7 @@ class StateContainer extends React.Component {
                       {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row style={{ minHeight: 450 }}>
+                  <Grid.Row stretched>
                     <Grid.Column>
                       <Header size="large">Statewide</Header>
                       <Card.Group itemsPerRow={2} stackable>

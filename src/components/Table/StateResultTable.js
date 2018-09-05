@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
+import { Table, Pagination } from 'semantic-ui-react';
 
 const colors = {
   democratic: 'rgba(32,133,208,.2)',
@@ -11,14 +11,9 @@ const colors = {
 const StateResultTable = ({
   direction, column, data, handleSort, candidateIds,
 }) => (
-  <div
-    style={{
-      overflow: 'auto',
-      height: 375,
-    }}
-  >
+  <div>
     {data.length > 0 && (
-      <Table sortable celled unstackable fixed basic>
+      <Table sortable celled unstackable fixed size="small" compact style={{ minHeight: 325 }}>
         <Table.Header>
           <Table.Row textAlign="center">
             <Table.HeaderCell

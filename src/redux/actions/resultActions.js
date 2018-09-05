@@ -30,8 +30,6 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
     axios.get(`${url}/states/${stateId}`),
   ]);
 
-  console.log('here');
-
   const countyResults = normalize(response[0].data.results, resultListSchema);
   const stateResults = response[1].data.results;
   const candidates = normalize(response[1].data.candidates, candidateListSchema);
