@@ -40,7 +40,7 @@ class NationalMapContainer extends React.Component {
               .attributes.name
           }
         >
-          <MapHoverInfo mobile />
+          <MapHoverInfo overlay={this.props.overlay} mobile />
         </MobileNationalMapOverlay>
         <NationalMapWrapper>
           <ResultsMap height={'100%'} geographies={this.getMapGeographies()} clickToNavigate />

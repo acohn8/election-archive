@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { push } from 'connected-react-router';
 import { resetHover } from './mapActions';
 import { fetchStateData, resetResults } from './resultActions';
 import { setActiveOffice } from './officeActions';
