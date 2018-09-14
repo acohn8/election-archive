@@ -14,6 +14,7 @@ import {
   resetHover,
 } from '../../redux/actions/mapActions';
 import { stateOutline, subGeographyOutline, hoverOutline } from '../../util/ColorScale';
+import formatMapOverlayInfo from '../../util/FormatMapOverlayInfo';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -186,19 +187,9 @@ class ResultsMap extends React.Component {
   };
 
   addGeographyInfoToOverlay = feature => {
-    this.props.getHoverInfo({
-      geographyName: feature.properties.NAME,
-      winnerName: feature.properties.winner_name,
-      winnerParty: feature.properties.winner_party,
-      winnerMargin: feature.properties.winner_margin,
-      winnerVotes: feature.properties.winner_votes,
-      secondName: feature.properties.second_name,
-      secondParty: feature.properties.second_party,
-      secondMargin: feature.properties.second_margin,
-      secondVotes: feature.properties.second_votes,
-      layer: feature.layer.source,
-      isNational: this.props.activeItem === 'national map',
-    });
+    const isNational = this.props.activeItem === 'national map';
+    const overlayInfo = formatMapOverlayInfo(feature, isNational);
+    this.props.getHoverInfo(overlayInfo);
   };
 
   getClickLayer = () => {
