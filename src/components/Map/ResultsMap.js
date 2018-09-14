@@ -119,18 +119,9 @@ class ResultsMap extends React.Component {
       const features = this.getRenderedFeatures([`${geography.name}Fill`], e.point);
       if (this.getRenderedFeatures([`${geography.name}Fill`], e.point).length > 0) {
         const feature = features[0];
-        if (
-          (feature.layer.source === 'state' && feature.properties[geography.filter].length > 0) ||
-          (feature.layer.source === 'congressionalDistrict' &&
-            feature.properties[geography.filter].length > 0)
-        ) {
-          this.map.getCanvas().style.cursor = 'pointer';
+        if (feature.layer.source === 'state' || feature.layer.source === 'congressionalDistrict') {
           this.filterTopHover(geography, feature);
-        } else if (
-          feature.layer.source === 'county' &&
-          feature.properties[geography.filter].length > 0
-        ) {
-          this.map.getCanvas().style.cursor = '';
+        } else if (feature.layer.source === 'county') {
           this.filterSubGeographyHover(geography, feature);
         }
       } else if (!this.getRenderedFeatures(allRenderedLayers, e.point).length) {
@@ -160,6 +151,7 @@ class ResultsMap extends React.Component {
   };
 
   filterTopHover = (geography, feature) => {
+    this.map.getCanvas().style.cursor = 'pointer';
     this.map.setFilter(`${geography.name}Hover`, [
       '==',
       geography.filter,
@@ -174,6 +166,7 @@ class ResultsMap extends React.Component {
       sourceLayer: geography.sourceLayer,
       filter: ['==', geography.filter, feature.properties[geography.filter]],
     });
+    this.map.getCanvas().style.cursor = '';
     if (sourceFeatures.length > 1) {
       feature = sourceFeatures[0];
       for (let i = 1; i < sourceFeatures.length; i++) {
@@ -378,7 +371,6 @@ class ResultsMap extends React.Component {
   bindToMap = (layer, property = 'STATEFP', value = null) => {
     const features = this.filterGeojson(layer, property, value);
     this.addGeoJsonSource('bounds', features);
-    this.props.addSource('bounds');
     const boundingBox = bbox(this.map.getSource('bounds')._data);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
   };

@@ -22,7 +22,7 @@ class StateMapContainer extends React.Component {
         name: 'precinct',
         url: this.props.stateInfo.attributes['precinct-map'],
         sourceLayer: this.props.stateInfo.attributes['precinct-source'],
-        colorScale: PrecinctColorScale,
+        fillColorScale: PrecinctColorScale,
         minzoom: precinctMinZoom,
         maxzoom: 0,
         layer: 'precinct-map',
