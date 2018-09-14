@@ -114,25 +114,28 @@ class ResultsMap extends React.Component {
     if (!this.map.loaded()) {
       return;
     }
+    const allRenderedLayers = this.props.geographies.map(geography => `${geography.name}Fill`);
     this.props.geographies.forEach(geography => {
       const features = this.getRenderedFeatures([`${geography.name}Fill`], e.point);
-      if (features.length > 0) {
-        this.map.getCanvas().style.cursor = 'pointer';
+      if (this.getRenderedFeatures([`${geography.name}Fill`], e.point).length > 0) {
         const feature = features[0];
         if (
           (feature.layer.source === 'state' && feature.properties[geography.filter].length > 0) ||
           (feature.layer.source === 'congressionalDistrict' &&
             feature.properties[geography.filter].length > 0)
         ) {
+          this.map.getCanvas().style.cursor = 'pointer';
           this.filterTopHover(geography, feature);
         } else if (
           feature.layer.source === 'county' &&
           feature.properties[geography.filter].length > 0
         ) {
+          this.map.getCanvas().style.cursor = '';
           this.filterSubGeographyHover(geography, feature);
         }
-      } else if (features.length === 0) {
+      } else if (!this.getRenderedFeatures(allRenderedLayers, e.point).length) {
         this.map.getCanvas().style.cursor = '';
+        this.props.resetHover();
         geography.sourceLayer === 'cb_2017_us_state_500k' ||
         geography.sourceLayer === 'cb_2017_us_cd115_500k'
           ? this.resetTopFilter(geography)
@@ -190,19 +193,19 @@ class ResultsMap extends React.Component {
   };
 
   addGeographyInfoToOverlay = feature => {
-    this.props.getHoverInfo(
-      feature.properties.NAME,
-      feature.properties.winner_name,
-      feature.properties.winner_party,
-      feature.properties.winner_margin,
-      feature.properties.winner_votes,
-      feature.properties.second_name,
-      feature.properties.second_party,
-      feature.properties.second_margin,
-      feature.properties.second_votes,
-      feature.layer.source,
-      this.props.activeItem === 'national map',
-    );
+    this.props.getHoverInfo({
+      geographyName: feature.properties.NAME,
+      winnerName: feature.properties.winner_name,
+      winnerParty: feature.properties.winner_party,
+      winnerMargin: feature.properties.winner_margin,
+      winnerVotes: feature.properties.winner_votes,
+      secondName: feature.properties.second_name,
+      secondParty: feature.properties.second_party,
+      secondMargin: feature.properties.second_margin,
+      secondVotes: feature.properties.second_votes,
+      layer: feature.layer.source,
+      isNational: this.props.activeItem === 'national map',
+    });
   };
 
   getClickLayer = () => {
@@ -393,34 +396,7 @@ class ResultsMap extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  getHoverInfo: (
-    geographyName,
-    winnerName,
-    winnerParty,
-    winnerMargin,
-    winnerVotes,
-    secondName,
-    secondParty,
-    secondMargin,
-    secondVotes,
-    layer,
-    isNational,
-  ) =>
-    dispatch(
-      getHoverInfo(
-        geographyName,
-        winnerName,
-        winnerParty,
-        winnerMargin,
-        winnerVotes,
-        secondName,
-        secondParty,
-        secondMargin,
-        secondVotes,
-        layer,
-        isNational,
-      ),
-    ),
+  getHoverInfo: mapInfo => dispatch(getHoverInfo(mapInfo)),
   resetHover: () => dispatch(resetHover()),
   addLayer: layer => dispatch(addLayer(layer)),
   addSource: source => dispatch(addSource(source)),

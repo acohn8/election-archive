@@ -1,16 +1,17 @@
-const getHoverInfo = (
-  geographyName,
-  winnerName,
-  winnerParty,
-  winnerMargin,
-  winnerVotes,
-  secondName,
-  secondParty,
-  secondMargin,
-  secondVotes,
-  layer,
-  isNational,
-) => dispatch =>
+const getHoverInfo = mapInfo => (dispatch) => {
+  const {
+    geographyName,
+    winnerName,
+    winnerParty,
+    winnerMargin,
+    winnerVotes,
+    secondName,
+    secondParty,
+    secondMargin,
+    secondVotes,
+    layer,
+    isNational,
+  } = mapInfo;
   dispatch({
     type: 'SET_HOVER',
     geographyName,
@@ -25,6 +26,7 @@ const getHoverInfo = (
     layer,
     isNational,
   });
+};
 
 const resetHover = () => ({ type: 'RESET_HOVER' });
 
