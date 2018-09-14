@@ -1,4 +1,4 @@
-const StateColorScale = {
+export const StateColorScale = {
   'fill-color': [
     'interpolate',
     ['linear'],
@@ -17,7 +17,7 @@ const StateColorScale = {
   'fill-opacity': 0.7,
 };
 
-const CountyColorScale = {
+export const CountyColorScale = {
   'fill-color': [
     'interpolate',
     ['linear'],
@@ -40,7 +40,7 @@ const CountyColorScale = {
   'fill-opacity': 0.7,
 };
 
-const PrecinctColorScale = {
+export const PrecinctColorScale = {
   'fill-color': [
     'interpolate',
     ['linear'],
@@ -67,4 +67,20 @@ const PrecinctColorScale = {
   'fill-opacity': 0.7,
 };
 
-export { PrecinctColorScale, StateColorScale, CountyColorScale };
+export const subGeographyOutline = {
+  'line-width': 0.3,
+  'line-color': '#696969',
+  'line-opacity': 0.6,
+};
+
+export const stateOutline = {
+  'line-width': 0.7,
+  'line-color': '#696969',
+  'line-opacity': 0.6,
+};
+
+export const hoverOutline = {
+  'line-width': 2,
+  'line-color': '#696969',
+  'line-opacity': 1,
+};

@@ -4,7 +4,7 @@ const MapLayers = {
   county: {
     name: 'county',
     sourceLayer: 'cb_2017_us_county_500k',
-    colorScale: CountyColorScale,
+    fillColorScale: CountyColorScale,
     layer: 'county-map',
     filter: 'GEOID',
     order: 1,
@@ -12,7 +12,7 @@ const MapLayers = {
   congressionalDistrict: {
     name: 'congressionalDistrict',
     sourceLayer: 'cb_2017_us_cd115_500k',
-    colorScale: StateColorScale,
+    fillColorScale: StateColorScale,
     layer: 'state-map',
     filter: 'GEOID',
     order: 1,
@@ -20,7 +20,7 @@ const MapLayers = {
   state: {
     name: 'state',
     sourceLayer: 'cb_2017_us_state_500k',
-    colorScale: StateColorScale,
+    fillColorScale: StateColorScale,
     layer: 'state-map',
     filter: 'STATEFP',
     order: 2,

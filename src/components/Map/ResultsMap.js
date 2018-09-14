@@ -13,6 +13,7 @@ import {
   removeSource,
   resetHover,
 } from '../../redux/actions/mapActions';
+import { stateOutline, subGeographyOutline, hoverOutline } from '../../util/ColorScale';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiYWRhbWNvaG4iLCJhIjoiY2pod2Z5ZWQzMDBtZzNxcXNvaW8xcGNiNiJ9.fHYsK6UNzqknxKuchhfp7A';
@@ -35,7 +36,7 @@ class ResultsMap extends React.Component {
     ) {
       this.removeLayers();
       this.removeSources();
-      this.addLayers();
+      this.loadLayers();
     }
     if (this.map === undefined) {
       this.createMap();
@@ -51,13 +52,13 @@ class ResultsMap extends React.Component {
 
   createMap = () => {
     this.map.on('load', () => {
-      this.addLayers();
+      this.loadLayers();
       this.map.addControl(new mapboxgl.FullscreenControl());
       this.map.addControl(new mapboxgl.NavigationControl());
     });
   };
 
-  addLayers = () => {
+  loadLayers = () => {
     const geographies = this.props.geographies;
     const nonPrecinctGeographies = geographies.filter(geography => geography.name !== 'precinct');
     this.addSources(geographies);
@@ -275,6 +276,23 @@ class ResultsMap extends React.Component {
     }
   };
 
+  addNewLayer = (geography, layerId, type, layerStyle, subGeoHover = false) => {
+    this.map.addLayer(
+      {
+        id: layerId,
+        minzoom: geography.minzoom,
+        maxzoom: geography.maxzoom,
+        type: type,
+        source: !subGeoHover ? geography.name : layerId,
+        'source-layer': !subGeoHover ? geography.sourceLayer : '',
+        paint: layerStyle,
+      },
+      'waterway-label',
+    );
+    this.props.addLayer(layerId);
+    this.map.moveLayer(layerId, 'poi-parks-scalerank2');
+  };
+
   addSources = geographies => {
     geographies.forEach(geography => {
       this.map.addSource(geography.name, {
@@ -285,45 +303,30 @@ class ResultsMap extends React.Component {
     });
   };
 
-  addFillLayers = geographies => {
-    geographies.forEach(geography => {
-      this.map.addLayer(
-        {
-          id: `${geography.name}Fill`,
-          minzoom: geography.minzoom,
-          maxzoom: geography.maxzoom,
-          type: 'fill',
-          source: geography.name,
-          'source-layer': geography.sourceLayer,
-          paint: geography.colorScale,
-        },
-        'waterway-label',
-      );
-      this.props.addLayer(`${geography.name}Fill`);
-      this.map.moveLayer(`${geography.name}Fill`, 'poi-parks-scalerank2');
+  addGeoJsonSource = (layerId, features) => {
+    this.map.addSource(layerId, {
+      type: 'geojson',
+      data: {
+        type: 'FeatureCollection',
+        features: features,
+      },
     });
+    this.props.addSource(layerId);
+  };
+
+  addFillLayers = geographies => {
+    geographies.forEach(geography =>
+      this.addNewLayer(geography, `${geography.name}Fill`, 'fill', geography.fillColorScale),
+    );
   };
 
   addLineLayers = geographies => {
     geographies.sort((a, b) => a.order - b.order).forEach(geography => {
-      this.map.addLayer(
-        {
-          id: `${geography.name}Line`,
-          minzoom: geography.minzoom,
-          maxzoom: geography.maxzoom,
-          type: 'line',
-          source: geography.name,
-          'source-layer': geography.sourceLayer,
-          paint: {
-            'line-width': geography.name === 'state' ? 0.7 : 0.3,
-            'line-color': '#696969',
-            'line-opacity': 0.6,
-          },
-        },
-        'waterway-label',
-      );
-      this.props.addLayer(`${geography.name}Line`);
-      this.map.moveLayer(`${geography.name}Line`, 'poi-parks-scalerank2');
+      if (geography.name === 'state') {
+        this.addNewLayer(geography, `${geography.name}Line`, 'line', stateOutline);
+      } else {
+        this.addNewLayer(geography, `${geography.name}Line`, 'line', subGeographyOutline);
+      }
     });
   };
 
@@ -334,7 +337,6 @@ class ResultsMap extends React.Component {
     } else {
       layersToFilter = this.props.savedLayers.filter(layer => !layer.includes('precinct'));
     }
-
     layersToFilter.forEach(layer => {
       if (this.map.getLayer(layer)) {
         this.map.setFilter(layer, ['==', property, value]);
@@ -344,52 +346,17 @@ class ResultsMap extends React.Component {
 
   addHoverLayers = geographies => {
     geographies.forEach(geography => {
+      const layerId = `${geography.name}Hover`;
       if (
         geography.sourceLayer === 'cb_2017_us_state_500k' ||
         geography.sourceLayer === 'cb_2017_us_cd115_500k'
       ) {
-        this.map.addLayer(
-          {
-            id: `${geography.name}Hover`,
-            type: 'line',
-            minzoom: geography.minzoom,
-            maxzoom: geography.maxzoom,
-            source: geography.name,
-            'source-layer': geography.sourceLayer,
-            filter: ['==', geography.filter, ''],
-            paint: {
-              'line-width': 2,
-              'line-color': '#696969',
-              'line-opacity': 1,
-            },
-          },
-          'waterway-label',
-        );
-        this.props.addLayer(`${geography.name}Hover`);
+        this.addNewLayer(geography, layerId, 'line', hoverOutline);
+        this.map.setFilter(layerId, ['==', geography.filter, '']);
       } else {
-        this.map.addSource(`${geography.name}Hover`, {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [],
-          },
-        });
-        this.props.addSource(`${geography.name}Hover`);
-        this.map.addLayer({
-          id: `${geography.name}Hover`,
-          source: `${geography.name}Hover`,
-          minzoom: geography.minzoom,
-          maxzoom: geography.maxzoom,
-          type: 'line',
-          paint: {
-            'line-width': 2,
-            'line-color': '#696969',
-            'line-opacity': 1,
-          },
-        });
-        this.props.addLayer(`${geography.name}Hover`);
+        this.addGeoJsonSource(layerId, []);
+        this.addNewLayer(geography, layerId, 'line', hoverOutline, true);
       }
-      this.map.moveLayer(`${geography.name}Hover`, 'place-islands');
     });
   };
 
@@ -407,13 +374,7 @@ class ResultsMap extends React.Component {
 
   bindToMap = (layer, property = 'STATEFP', value = null) => {
     const features = this.filterGeojson(layer, property, value);
-    this.map.addSource('bounds', {
-      type: 'geojson',
-      data: {
-        type: 'FeatureCollection',
-        features: features,
-      },
-    });
+    this.addGeoJsonSource('bounds', features);
     this.props.addSource('bounds');
     const boundingBox = bbox(this.map.getSource('bounds')._data);
     this.map.fitBounds(boundingBox, { padding: 20, animate: false });
