@@ -10,7 +10,13 @@ const colors = {
 };
 
 const StateResultTable = ({
-  direction, column, data, handleSort, candidateIds, value,
+  direction,
+  column,
+  data,
+  handleSort,
+  candidateIds,
+  value,
+  precinct,
 }) => (
   <div style={{ overflowX: 'auto', width: '100%', height: '100%' }}>
     {data.length > 0 && (
@@ -22,7 +28,7 @@ const StateResultTable = ({
               onClick={() => handleSort('name')}
               rowSpan="2"
             >
-              County
+              {precinct ? 'Precinct' : 'County'}
             </Table.HeaderCell>
             {candidateIds.map(candidateId => (
               <Table.HeaderCell key={candidateId} colSpan="2">
@@ -50,38 +56,42 @@ const StateResultTable = ({
           </TableRow>
         </Table.Header>
         <Table.Body>
-          {data.map(county => (
-            <Table.Row key={county.id} textAlign="center">
-              <CountyModal countyName={county.name} countyId={county.id} />
+          {data.map(geo => (
+            <Table.Row key={geo.id} textAlign="center">
+              {precinct ? (
+                <Table.Cell>{geo.name}</Table.Cell>
+              ) : (
+                <CountyModal countyName={geo.name} countyId={geo.id} />
+              )}
               {candidateIds.map(candidateId =>
-                  (county.winnerParty === county.results[candidateId].party
+                  (geo.winnerParty === geo.results[candidateId].party
                     ? [
                       <Table.Cell
-                        key={`${county.name}${candidateId}v`}
-                        style={{ backgroundColor: colors[county.winnerParty] }}
+                        key={`${geo.name}${candidateId}v`}
+                        style={{ backgroundColor: colors[geo.winnerParty] }}
                       >
-                        {county.results[candidateId].total
-                            ? county.results[candidateId].total.toLocaleString()
+                        {geo.results[candidateId].total
+                            ? geo.results[candidateId].total.toLocaleString()
                             : 0}
                       </Table.Cell>,
                       <Table.Cell
-                        key={`${county.name}${candidateId}p`}
-                        style={{ backgroundColor: colors[county.winnerParty] }}
+                        key={`${geo.name}${candidateId}p`}
+                        style={{ backgroundColor: colors[geo.winnerParty] }}
                       >
-                        {county.results[candidateId].percent
-                            ? `${Math.round(county.results[candidateId].percent * 100)}%`
+                        {geo.results[candidateId].percent
+                            ? `${Math.round(geo.results[candidateId].percent * 100)}%`
                             : '0%'}
                       </Table.Cell>,
                       ]
                     : [
-                      <Table.Cell key={`${county.name}${candidateId}v`}>
-                        {county.results[candidateId].total
-                            ? county.results[candidateId].total.toLocaleString()
+                      <Table.Cell key={`${geo.name}${candidateId}v`}>
+                        {geo.results[candidateId].total
+                            ? geo.results[candidateId].total.toLocaleString()
                             : 0}
                       </Table.Cell>,
-                      <Table.Cell key={`${county.name}${candidateId}p`}>
-                        {county.results[candidateId].percent
-                            ? `${Math.round(county.results[candidateId].percent * 100)}%`
+                      <Table.Cell key={`${geo.name}${candidateId}p`}>
+                        {geo.results[candidateId].percent
+                            ? `${Math.round(geo.results[candidateId].percent * 100)}%`
                             : '0%'}
                       </Table.Cell>,
                       ]))}

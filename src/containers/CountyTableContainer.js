@@ -79,6 +79,7 @@ class StateResultTableContainer extends React.Component {
               column={this.state.column}
               value={this.state.value}
               direction={this.state.direction}
+              precinct={true}
             />
             <Pagination
               secondary
