@@ -6,6 +6,7 @@ import { setSortedResults } from '../redux/actions/resultActions';
 import formatTableData from '../util/FormatTableData';
 import convertToPercent from '../util/ConvertToPercent';
 import numericalSort from '../util/NumericalSort';
+import resultTotals from '../util/ResultTotals';
 
 class StateResultTableContainer extends React.Component {
   state = {
@@ -61,20 +62,23 @@ class StateResultTableContainer extends React.Component {
   render() {
     const pageMinusOne = this.state.activePage - 1;
     const { activePage } = this.state;
-    const data = formatTableData('precinctResults').slice(
-      pageMinusOne * 10,
-      pageMinusOne * 10 + 10,
-    );
+    const allData = formatTableData('precinctResults');
+    const displayData = allData.slice(pageMinusOne * 10, pageMinusOne * 10 + 10);
+    const countyTotal = Object.values(
+      this.props.countyResults.entities.results[this.props.countyId].results,
+    ).reduce((sum, n) => sum + n);
+    const toplines = resultTotals(allData, countyTotal);
     return (
       <Segment style={{ minHeight: 430, overflow: 'hidden' }} basic>
         <StateResultTable
-          data={data}
+          data={displayData}
           candidateIds={this.props.candidates.result}
           handleSort={this.handleSort}
           column={this.state.column}
           value={this.state.value}
           direction={this.state.direction}
-          precinct={true}
+          geography={'Precinct'}
+          toplines={toplines}
         />
         <Pagination
           secondary
@@ -100,6 +104,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   candidates: state.results.candidates,
   precinctResults: state.results.precinctResults,
+  countyResults: state.results.countyResults,
 });
 
 export default connect(

@@ -8,7 +8,18 @@ const resultTotals = (data, total) => {
     totals[candidate].votes = voteTotal;
     totals[candidate].percent = voteTotal / total;
   });
-  return totals;
+  const totalsWithWinner = getWinner(totals);
+  return totalsWithWinner;
+};
+
+const getWinner = (results) => {
+  const candidates = Object.keys(results);
+  const winner = candidates.sort((a, b) => results[b].votes - results[a].votes)[0];
+  candidates.forEach((candidate) => {
+    const isWinner = candidate === winner;
+    results[candidate].winner = isWinner;
+  });
+  return results;
 };
 
 export default resultTotals;

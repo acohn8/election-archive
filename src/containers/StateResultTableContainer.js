@@ -73,6 +73,7 @@ class StateResultTableContainer extends React.Component {
           column={this.state.column}
           value={this.state.value}
           direction={this.state.direction}
+          geography={'County'}
           toplines={toplines}
         />
         <Pagination

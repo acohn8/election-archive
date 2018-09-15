@@ -9,6 +9,13 @@ const colors = {
   other: 'rgba(100,53,201, .2)',
 };
 
+const totalColors = {
+  democratic: 'rgba(32,133,208)',
+  republican: 'rgba(219,40,40)',
+  libertarian: 'rgba(251,189,9)',
+  other: 'rgba(100,53,201)',
+};
+
 const StateResultTable = ({
   direction,
   column,
@@ -16,7 +23,7 @@ const StateResultTable = ({
   handleSort,
   candidateIds,
   value,
-  precinct,
+  geography,
   toplines,
 }) => (
   <div style={{ overflowX: 'auto', width: '100%', height: '100%' }}>
@@ -29,7 +36,7 @@ const StateResultTable = ({
               onClick={() => handleSort('name')}
               rowSpan="2"
             >
-              {precinct ? 'Precinct' : 'County'}
+              {geography}
             </Table.HeaderCell>
             {candidateIds.map(candidateId => (
               <Table.HeaderCell key={candidateId} colSpan="2">
@@ -59,7 +66,7 @@ const StateResultTable = ({
         <Table.Body>
           {data.map(geo => (
             <Table.Row key={geo.id} textAlign="center">
-              {precinct ? (
+              {geography === 'Precinct' ? (
                 <Table.Cell>{geo.name}</Table.Cell>
               ) : (
                 <CountyModal countyName={geo.name} countyId={geo.id} />
@@ -102,16 +109,52 @@ const StateResultTable = ({
         <Table.Footer>
           <Table.Row textAlign="center">
             <Table.HeaderCell />
-            {candidateIds.map(candidateId => [
-              <Table.HeaderCell>
-                {toplines[candidateId].votes ? toplines[candidateId].votes.toLocaleString() : 0}
-              </Table.HeaderCell>,
-              <Table.HeaderCell>
-                {toplines[candidateId].percent
-                  ? `${Math.round(toplines[candidateId].percent * 100)}%`
-                  : '0%'}
-              </Table.HeaderCell>,
-            ])}
+            {candidateIds.map(candidateId =>
+                (toplines[candidateId].winner
+                  ? [
+                    <Table.HeaderCell
+                      key={`${candidateId}totalVotes`}
+                      style={{
+                          backgroundColor: totalColors[data[0].results[candidateId].party],
+                          color: 'white',
+                        }}
+                    >
+                      <strong>
+                        {toplines[candidateId].votes
+                            ? toplines[candidateId].votes.toLocaleString()
+                            : 0}
+                      </strong>
+                    </Table.HeaderCell>,
+                    <Table.HeaderCell
+                      key={`${candidateId}totalPercent`}
+                      style={{
+                          backgroundColor: totalColors[data[0].results[candidateId].party],
+                          color: 'white',
+                        }}
+                    >
+                      <strong>
+                        {toplines[candidateId].percent
+                            ? `${Math.round(toplines[candidateId].percent * 100)}%`
+                            : '0%'}
+                      </strong>
+                    </Table.HeaderCell>,
+                    ]
+                  : [
+                    <Table.HeaderCell key={`${candidateId}totalVotes`}>
+                      <strong>
+                        {toplines[candidateId].votes
+                            ? toplines[candidateId].votes.toLocaleString()
+                            : 0}
+                      </strong>
+                    </Table.HeaderCell>,
+                    <Table.HeaderCell key={`${candidateId}totalPercent`}>
+                      <strong>
+                        {toplines[candidateId].percent
+                            ? `${Math.round(toplines[candidateId].percent * 100)}%`
+                            : '0%'}
+                      </strong>
+                    </Table.HeaderCell>,
+                    ]))}
           </Table.Row>
         </Table.Footer>
       </Table>
