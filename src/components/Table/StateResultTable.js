@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, TableRow, TableHeaderCell } from 'semantic-ui-react';
+import CountyModal from '../CountyModal/CountyModal';
 
 const colors = {
   democratic: 'rgba(32,133,208,.2)',
@@ -51,7 +52,7 @@ const StateResultTable = ({
         <Table.Body>
           {data.map(county => (
             <Table.Row key={county.id} textAlign="center">
-              <Table.Cell>{county.name}</Table.Cell>
+              <CountyModal countyName={county.name} />
               {candidateIds.map(candidateId =>
                   (county.winnerParty === county.results[candidateId].party
                     ? [
