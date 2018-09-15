@@ -17,6 +17,7 @@ const StateResultTable = ({
   candidateIds,
   value,
   precinct,
+  toplines,
 }) => (
   <div style={{ overflowX: 'auto', width: '100%', height: '100%' }}>
     {data.length > 0 && (
@@ -99,12 +100,17 @@ const StateResultTable = ({
           ))}
         </Table.Body>
         <Table.Footer>
-          <Table.Row>
-            {console.log(data)}
+          <Table.Row textAlign="center">
             <Table.HeaderCell />
             {candidateIds.map(candidateId => [
-              <Table.HeaderCell>3 People</Table.HeaderCell>,
-              <Table.HeaderCell>2 Approved</Table.HeaderCell>,
+              <Table.HeaderCell>
+                {toplines[candidateId].votes ? toplines[candidateId].votes.toLocaleString() : 0}
+              </Table.HeaderCell>,
+              <Table.HeaderCell>
+                {toplines[candidateId].percent
+                  ? `${Math.round(toplines[candidateId].percent * 100)}%`
+                  : '0%'}
+              </Table.HeaderCell>,
             ])}
           </Table.Row>
         </Table.Footer>

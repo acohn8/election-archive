@@ -62,7 +62,7 @@ class StateResultTableContainer extends React.Component {
     const allData = formatTableData('countyResults');
     const displayData = allData.slice(pageMinusOne * 10, pageMinusOne * 10 + 10);
     const statewideTotal = Object.values(this.props.statewideResults).reduce((sum, n) => sum + n);
-    resultTotals(allData, statewideTotal);
+    const toplines = resultTotals(allData, statewideTotal);
     const { activePage } = this.state;
     return (
       <Segment style={{ minHeight: 430, overflow: 'hidden' }} basic>
@@ -73,6 +73,7 @@ class StateResultTableContainer extends React.Component {
           column={this.state.column}
           value={this.state.value}
           direction={this.state.direction}
+          toplines={toplines}
         />
         <Pagination
           secondary

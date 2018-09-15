@@ -8,7 +8,7 @@ const resultTotals = (data, total) => {
     totals[candidate].votes = voteTotal;
     totals[candidate].percent = voteTotal / total;
   });
-  console.log(totals);
+  return totals;
 };
 
 export default resultTotals;
