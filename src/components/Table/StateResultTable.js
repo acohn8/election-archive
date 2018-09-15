@@ -98,6 +98,16 @@ const StateResultTable = ({
             </Table.Row>
           ))}
         </Table.Body>
+        <Table.Footer>
+          <Table.Row>
+            {console.log(data)}
+            <Table.HeaderCell />
+            {candidateIds.map(candidateId => [
+              <Table.HeaderCell>3 People</Table.HeaderCell>,
+              <Table.HeaderCell>2 Approved</Table.HeaderCell>,
+            ])}
+          </Table.Row>
+        </Table.Footer>
       </Table>
     )}
   </div>
