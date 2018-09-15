@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Pagination } from 'semantic-ui-react';
 import StateResultTable from '../components/Table/StateResultTable';
-import { setSortedResults, fetchPrecinctData } from '../redux/actions/resultActions';
+import { setSortedResults } from '../redux/actions/resultActions';
 import formatTableData from '../util/FormatTableData';
 import convertToPercent from '../util/ConvertToPercent';
 import numericalSort from '../util/NumericalSort';
@@ -14,10 +14,6 @@ class StateResultTableContainer extends React.Component {
     direction: null,
     activePage: 1,
   };
-
-  componentDidMount() {
-    this.props.fetchPrecinctData(this.props.countyId);
-  }
 
   handleSort = (clickedColumn, value = null) => {
     const newData = this.sortColumns(clickedColumn, value);
@@ -65,36 +61,33 @@ class StateResultTableContainer extends React.Component {
   render() {
     const pageMinusOne = this.state.activePage - 1;
     const { activePage } = this.state;
+    const data = formatTableData('precinctResults').slice(
+      pageMinusOne * 10,
+      pageMinusOne * 10 + 10,
+    );
     return (
       <Segment style={{ minHeight: 430, overflow: 'hidden' }} basic>
-        {this.props.precinctResults.result !== undefined && (
-          <div>
-            <StateResultTable
-              data={formatTableData('precinctResults').slice(
-                pageMinusOne * 10,
-                pageMinusOne * 10 + 10,
-              )}
-              candidateIds={this.props.candidates.result}
-              handleSort={this.handleSort}
-              column={this.state.column}
-              value={this.state.value}
-              direction={this.state.direction}
-              precinct={true}
-            />
-            <Pagination
-              secondary
-              pointing
-              firstItem={null}
-              lastItem={null}
-              fluid
-              activePage={activePage}
-              totalPages={Math.ceil(this.props.precinctResults.result.length / 10)}
-              onPageChange={this.handlePaginationChange}
-              boundaryRange={1}
-              style={{ padding: 0, margin: 0 }}
-            />
-          </div>
-        )}
+        <StateResultTable
+          data={data}
+          candidateIds={this.props.candidates.result}
+          handleSort={this.handleSort}
+          column={this.state.column}
+          value={this.state.value}
+          direction={this.state.direction}
+          precinct={true}
+        />
+        <Pagination
+          secondary
+          pointing
+          firstItem={null}
+          lastItem={null}
+          fluid
+          activePage={activePage}
+          totalPages={Math.ceil(this.props.precinctResults.result.length / 10)}
+          onPageChange={this.handlePaginationChange}
+          boundaryRange={1}
+          style={{ padding: 0, margin: 0 }}
+        />
       </Segment>
     );
   }
@@ -102,7 +95,6 @@ class StateResultTableContainer extends React.Component {
 
 const mapDispatchToProps = dispatch => ({
   setSortedResults: (keys, geography) => dispatch(setSortedResults(keys, geography)),
-  fetchPrecinctData: countyId => dispatch(fetchPrecinctData(countyId)),
 });
 
 const mapStateToProps = state => ({

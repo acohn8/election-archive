@@ -1,9 +1,11 @@
 import React from 'react';
-import { Button, Header, Icon, Image, Modal, Table } from 'semantic-ui-react';
-import CountyTableContainer from '../../containers/CountyTableContainer';
+import { Button, Header, Icon, Modal, Table } from 'semantic-ui-react';
+import CountyContainer from '../../containers/CountyContainer';
 
 const CountyModal = ({ countyName, countyId }) => (
   <Modal
+    size="large"
+    dimmer="blurring"
     trigger={
       <Table.Cell selectable>
         <a href="#">{countyName}</a>
@@ -14,7 +16,7 @@ const CountyModal = ({ countyName, countyId }) => (
     <Modal.Content>
       <Modal.Description>
         <Header>Results</Header>
-        <CountyTableContainer countyId={countyId} />
+        <CountyContainer countyId={countyId} />
       </Modal.Description>
     </Modal.Content>
     <Modal.Actions>

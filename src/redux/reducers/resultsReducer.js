@@ -67,6 +67,11 @@ const resultsReducer = (previousState = initialResultsState, action) => {
         ...previousState,
         precinctResults: { ...previousState.precinctResults, result: action.results },
       };
+    case 'RESET_PRECINCT_RESULTS':
+      return {
+        ...previousState,
+        precinctResults: {},
+      };
     case 'RESET_RESULTS':
       return {
         loading: false,

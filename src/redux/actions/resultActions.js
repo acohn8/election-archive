@@ -86,10 +86,19 @@ const updateOfficeData = (officeId, districtId = null) => async (dispatch, getSt
 
 const resetResults = () => ({ type: 'RESET_RESULTS' });
 
+const resetPrecinctResults = () => ({ type: 'RESET_PRECINCT_RESULTS' });
+
 const setSortedResults = (results, geography) => {
   if (geography === 'county') {
     return { type: 'SET_SORTED_COUNTY_RESULTS', results };
   }
   return { type: 'SET_SORTED_PRECINCT_RESULTS', results };
 };
-export { fetchStateData, updateOfficeData, resetResults, setSortedResults, fetchPrecinctData };
+export {
+  fetchStateData,
+  updateOfficeData,
+  resetResults,
+  setSortedResults,
+  fetchPrecinctData,
+  resetPrecinctResults,
+};
