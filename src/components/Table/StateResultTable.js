@@ -26,7 +26,7 @@ const StateResultTable = ({
   geography,
   toplines,
 }) => (
-  <div style={{ overflowX: 'auto', width: '100%', height: '100%' }}>
+  <div style={{ overflowX: 'auto', height: '100%' }}>
     {data.length > 0 && (
       <Table sortable celled unstackable structured size="small" compact>
         <Table.Header>
@@ -35,6 +35,7 @@ const StateResultTable = ({
               sorted={column === 'name' ? direction : null}
               onClick={() => handleSort('name')}
               rowSpan="2"
+              width={3}
             >
               {geography}
             </Table.HeaderCell>

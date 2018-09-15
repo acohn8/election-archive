@@ -91,10 +91,10 @@ class StateContainer extends React.Component {
           {this.props.loading === true && <ContentLoader />}
           {this.props.loading === false &&
             this.props.candidates.result !== undefined && (
-              <Grid columns={2} verticalAlign="middle" stackable className="fill-content">
+              <Grid verticalAlign="middle" stackable className="fill-content">
                 <Grid.Row columns={3}>
                   <Grid.Column>
-                    <Header size="huge">
+                    <Header as="h1">
                       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
                         {
                           this.props.states.states.find(
@@ -112,7 +112,6 @@ class StateContainer extends React.Component {
                         />
                       </Responsive>
                       <Header.Subheader>
-                        Results for{' '}
                         <span style={{ color: '#00B5AD' }}>
                           <OfficeDropdown
                             className="link item"
@@ -128,44 +127,18 @@ class StateContainer extends React.Component {
                     {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
                   </Grid.Column>
                 </Grid.Row>
-                <Grid.Row style={{ minHeight: 500 }} stretched>
+                <Grid.Row colums={1} verticalAlign="top">
                   <Grid.Column>
-                    <Segment style={{ minHeight: 430 }} basic>
-                      <Card.Group itemsPerRow={2} stackable>
-                        {this.props.candidates.result
-                          .filter(id => id !== 'other')
-                          .map(candidateId => (
-                            <ToplinesCard
-                              key={candidateId}
-                              candidate={this.props.candidates.entities.candidates[candidateId]}
-                              votes={this.props.stateResults[candidateId]}
-                              winner={this.props.candidates.result[0]}
-                              total={this.getStatewideTotal()}
-                            >
-                              <Card.Content>
-                                <Header as="h4">Finance</Header>
-                                {this.props.candidates.entities.candidates[candidateId] && (
-                                  <FinanceOverview
-                                    candidateId={candidateId}
-                                    campaignFinance={
-                                      this.props.candidates.entities.candidates[candidateId]
-                                        .finance_data
-                                    }
-                                  />
-                                )}
-                              </Card.Content>
-                            </ToplinesCard>
-                          ))}
-                      </Card.Group>
-                    </Segment>
-                  </Grid.Column>
-                  <Grid.Column>
+                    <Header size="medium">
+                      Results
+                      <Header.Subheader>Click a county for details</Header.Subheader>
+                    </Header>
                     <StateResultTableContainer />
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">
                   <Grid.Column>
-                    <Header size="large">
+                    <Header size="medium">
                       County Map
                       {this.props.stateInfo.attributes['precinct-map'] && (
                         <Header.Subheader>Zoom in for precincts</Header.Subheader>
