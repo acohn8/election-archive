@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchPrecinctData, resetPrecinctResults } from '../redux/actions/resultActions';
 
-import { Loader } from 'semantic-ui-react';
+import { Loader, Image, Segment, Grid, Container, Header } from 'semantic-ui-react';
 import CountyTableContainer from './CountyTableContainer';
 import { fetchCountyDetails, resetCountyDetails } from '../redux/actions/countyActions';
 
@@ -18,10 +18,14 @@ class CountyContainer extends React.Component {
   }
 
   render() {
+    const { details } = this.props.countyInfo;
     return (
       <div>
         {this.props.precinctResults.result !== undefined ? (
-          <CountyTableContainer countyId={this.props.countyId} />
+          <div>
+            {details !== undefined && <Container>{details}</Container>}
+            <CountyTableContainer countyId={this.props.countyId} />
+          </div>
         ) : (
           <Loader />
         )}
@@ -32,6 +36,7 @@ class CountyContainer extends React.Component {
 
 const mapStateToProps = state => ({
   precinctResults: state.results.precinctResults,
+  countyInfo: state.counties,
 });
 
 const mapDispatchToProps = dispatch => ({
