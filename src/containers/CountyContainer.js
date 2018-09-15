@@ -4,7 +4,7 @@ import { fetchPrecinctData, resetPrecinctResults } from '../redux/actions/result
 
 import { Loader } from 'semantic-ui-react';
 import CountyTableContainer from './CountyTableContainer';
-import fetchCountyDetails from '../redux/actions/countyActions';
+import { fetchCountyDetails, resetCountyDetails } from '../redux/actions/countyActions';
 
 class CountyContainer extends React.Component {
   componentDidMount() {
@@ -14,6 +14,7 @@ class CountyContainer extends React.Component {
 
   componentWillUnmount() {
     this.props.resetPrecinctResults();
+    this.props.resetCountyDetails();
   }
 
   render() {
@@ -37,6 +38,7 @@ const mapDispatchToProps = dispatch => ({
   fetchPrecinctData: countyId => dispatch(fetchPrecinctData(countyId)),
   fetchCountyDetails: countyId => dispatch(fetchCountyDetails(countyId)),
   resetPrecinctResults: () => dispatch(resetPrecinctResults()),
+  resetCountyDetails: () => dispatch(resetCountyDetails()),
 });
 
 export default connect(

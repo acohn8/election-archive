@@ -1,34 +1,27 @@
-// const initialStatesState = {
-//   countyInfo: []
-// };
+const initialCountyState = {
+  id: null,
+  name: null,
+  details: null,
+  images: [],
+};
 
-// const officesReducer = (previousState = initialStatesState, action) => {
-//   switch (action.type) {
-//     case 'SET_OFFICES':
-//       return {
-//         ...previousState,
-//         allOffices: action.allOffices,
-//       };
-//     case 'SET_ACTIVE_OFFICE':
-//       return {
-//         ...previousState,
-//         selectedOfficeId: action.officeId,
-//         selectedDistrictId: action.districtId,
-//       };
-//     case 'SET_ACTIVE_DISTRICT':
-//       return {
-//         ...previousState,
-//         selectedDistrictId: action.districtId,
-//       };
-//     case 'RESET_OFFICE':
-//       return {
-//         ...previousState,
-//         selectedOfficeId: '308',
-//         selectedDistrictId: null,
-//       };
-//     default:
-//       return previousState;
-//   }
-// };
+const countiesReducer = (previousState = initialCountyState, action) => {
+  switch (action.type) {
+    case 'SET_COUNTY_INFO':
+      return {
+        ...previousState,
+        id: action.id,
+        name: action.name,
+        details: action.details,
+        images: action.images,
+      };
+    case 'RESET_COUNTY_INFO':
+      return {
+        initialCountyState,
+      };
+    default:
+      return previousState;
+  }
+};
 
-// export default officesReducer;
+export default countiesReducer;

@@ -1,8 +1,19 @@
 import axios from 'axios';
 
 const fetchCountyDetails = countyId => async (dispatch, getState) => {
-  const response = await axios.get(`localhost:3000/api/v1/states/${getState().states.activeStateId}/counties/${countyId}`);
-  dispatch({ type: 'SET_STATES', states: response.data.data });
+  const response = await axios.get(`http://localhost:3000/api/v1/states/${getState().states.activeStateId}/counties/${countyId}`);
+  const {
+    id, details, name, images,
+  } = response.data;
+  dispatch({
+    type: 'SET_COUNTY_INFO',
+    id,
+    details,
+    name,
+    images,
+  });
 };
 
-export default fetchCountyDetails;
+const resetCountyDetails = () => dispatch => dispatch({ type: 'RESET_COUNTY_INFO' });
+
+export { fetchCountyDetails, resetCountyDetails };
