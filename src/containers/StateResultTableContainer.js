@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Segment, Pagination } from 'semantic-ui-react';
 import StateResultTable from '../components/Table/StateResultTable';
-import { setSortedCountyResults } from '../redux/actions/resultActions';
+import { setSortedResults } from '../redux/actions/resultActions';
 import formatTableData from '../util/FormatTableData';
 import convertToPercent from '../util/ConvertToPercent';
 import numericalSort from '../util/NumericalSort';
@@ -24,7 +24,7 @@ class StateResultTableContainer extends React.Component {
           value: value,
           direction: 'ascending',
         },
-        () => this.props.setSortedCountyResults(newData),
+        () => this.props.setSortedResults(newData, 'county'),
       );
       return;
     }
@@ -35,7 +35,7 @@ class StateResultTableContainer extends React.Component {
         value: value,
         direction: this.state.direction === 'ascending' ? 'descending' : 'ascending',
       },
-      () => this.props.setSortedCountyResults(previousSort.reverse()),
+      () => this.props.setSortedResults(previousSort.reverse(), 'county'),
     );
   };
 
@@ -58,7 +58,7 @@ class StateResultTableContainer extends React.Component {
 
   render() {
     const pageMinusOne = this.state.activePage - 1;
-    const data = formatTableData().slice(pageMinusOne * 10, pageMinusOne * 10 + 10);
+    const data = formatTableData('countyResults').slice(pageMinusOne * 10, pageMinusOne * 10 + 10);
 
     const { activePage } = this.state;
     return (
@@ -89,7 +89,7 @@ class StateResultTableContainer extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setSortedCountyResults: keys => dispatch(setSortedCountyResults(keys)),
+  setSortedResults: (keys, geography) => dispatch(setSortedResults(keys, geography)),
 });
 
 const mapStateToProps = state => ({

@@ -52,7 +52,7 @@ const StateResultTable = ({
         <Table.Body>
           {data.map(county => (
             <Table.Row key={county.id} textAlign="center">
-              <CountyModal countyName={county.name} />
+              <CountyModal countyName={county.name} countyId={county.id} />
               {candidateIds.map(candidateId =>
                   (county.winnerParty === county.results[candidateId].party
                     ? [

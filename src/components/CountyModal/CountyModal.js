@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button, Header, Icon, Image, Modal, Table } from 'semantic-ui-react';
+import CountyTableContainer from '../../containers/CountyTableContainer';
 
-const CountyModal = ({ countyName }) => (
+const CountyModal = ({ countyName, countyId }) => (
   <Modal
     trigger={
       <Table.Cell selectable>
@@ -10,19 +11,10 @@ const CountyModal = ({ countyName }) => (
     }
   >
     <Modal.Header>{countyName}</Modal.Header>
-    <Modal.Content image>
-      <Image wrapped size="medium" src="https://react.semantic-ui.com/images/wireframe/image.png" />
+    <Modal.Content>
       <Modal.Description>
-        <Header>Modal Header</Header>
-        <p>This is an example of expanded content that will cause the modal's dimmer to scroll</p>
-        <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-        <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-        <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-        <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-        <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-        <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-        <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-        <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
+        <Header>Results</Header>
+        <CountyTableContainer countyId={countyId} />
       </Modal.Description>
     </Modal.Content>
     <Modal.Actions>

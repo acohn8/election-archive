@@ -50,7 +50,7 @@ const resultsReducer = (previousState = initialResultsState, action) => {
     case 'SET_PRECINCTS':
       return {
         ...previousState,
-        precinctResults: { county_id: action.county, precincts: action.precincts },
+        precinctResults: action.precincts,
       };
     case 'FETCHING':
       return {
@@ -61,6 +61,11 @@ const resultsReducer = (previousState = initialResultsState, action) => {
       return {
         ...previousState,
         countyResults: { ...previousState.countyResults, result: action.results },
+      };
+    case 'SET_SORTED_PRECINCT_RESULTS':
+      return {
+        ...previousState,
+        precinctResults: { ...previousState.precinctResults, result: action.results },
       };
     case 'RESET_RESULTS':
       return {

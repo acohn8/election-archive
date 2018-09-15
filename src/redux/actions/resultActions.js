@@ -48,6 +48,16 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
   });
 };
 
+const fetchPrecinctData = countyId => async (dispatch, getState) => {
+  const url = 'https://election-data-2016.herokuapp.com/api/v1';
+  dispatch({ type: 'START_PRECINCT_FETCH' });
+  const fetchedPrecincts = await axios.get(`${url}/states/${getState().states.activeStateId}/offices/${
+    getState().offices.selectedOfficeId
+  }/results/precinct/${countyId}`);
+  const precincts = normalize(fetchedPrecincts.data.results, resultListSchema);
+  dispatch({ type: 'SET_PRECINCTS', precincts });
+};
+
 const updateOfficeData = (officeId, districtId = null) => async (dispatch, getState) => {
   dispatch({ type: 'FETCHING' });
   dispatch(setActiveOffice(officeId, districtId));
@@ -76,5 +86,10 @@ const updateOfficeData = (officeId, districtId = null) => async (dispatch, getSt
 
 const resetResults = () => ({ type: 'RESET_RESULTS' });
 
-const setSortedCountyResults = results => ({ type: 'SET_SORTED_COUNTY_RESULTS', results });
-export { fetchStateData, updateOfficeData, resetResults, setSortedCountyResults };
+const setSortedResults = (results, geography) => {
+  if (geography === 'county') {
+    return { type: 'SET_SORTED_COUNTY_RESULTS', results };
+  }
+  return { type: 'SET_SORTED_PRECINCT_RESULTS', results };
+};
+export { fetchStateData, updateOfficeData, resetResults, setSortedResults, fetchPrecinctData };
