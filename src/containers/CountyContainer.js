@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchPrecinctData, resetPrecinctResults } from '../redux/actions/resultActions';
 
-import { Loader, Image, Segment, Grid, Container, Header } from 'semantic-ui-react';
+import { Loader, Container } from 'semantic-ui-react';
 import CountyTableContainer from './CountyTableContainer';
 import { fetchCountyDetails, resetCountyDetails } from '../redux/actions/countyActions';
 
