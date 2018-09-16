@@ -68,6 +68,7 @@ class StateResultTableContainer extends React.Component {
       this.props.countyResults.entities.results[this.props.countyId].results,
     ).reduce((sum, n) => sum + n);
     const toplines = resultTotals(allData, countyTotal);
+    
     return (
       <Segment style={{ minHeight: 430, overflow: 'hidden' }} basic>
         <StateResultTable

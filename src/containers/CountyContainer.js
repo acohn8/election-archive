@@ -8,7 +8,8 @@ import { fetchCountyDetails, resetCountyDetails } from '../redux/actions/countyA
 
 class CountyContainer extends React.Component {
   componentDidMount() {
-    this.props.fetchPrecinctData(this.props.countyId);
+    console.log(this.props.districtId);
+    this.props.fetchPrecinctData(this.props.countyId, this.props.districtId);
     this.props.fetchCountyDetails(this.props.countyId);
   }
 
@@ -37,10 +38,11 @@ class CountyContainer extends React.Component {
 const mapStateToProps = state => ({
   precinctResults: state.results.precinctResults,
   countyInfo: state.counties,
+  districtId: state.offices.selectedDistrictId,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchPrecinctData: countyId => dispatch(fetchPrecinctData(countyId)),
+  fetchPrecinctData: (countyId, districtId) => dispatch(fetchPrecinctData(countyId, districtId)),
   fetchCountyDetails: countyId => dispatch(fetchCountyDetails(countyId)),
   resetPrecinctResults: () => dispatch(resetPrecinctResults()),
   resetCountyDetails: () => dispatch(resetCountyDetails()),

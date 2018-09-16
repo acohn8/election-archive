@@ -5,8 +5,6 @@ import ContentLoader from '../components/Loader/Loader';
 import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from '../components/StateList/MobileStateSelect';
 import ExportDropdown from '../components/Table/ExportDropdown';
-import FinanceOverview from '../components/Toplines/FinanceOverview';
-import ToplinesCard from '../components/Toplines/toplinesCard';
 import { setActive } from '../redux/actions/navActions';
 import { resetOffice, setActiveOffice, updateOffices } from '../redux/actions/officeActions';
 import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
@@ -32,6 +30,7 @@ class StateContainer extends React.Component {
       (this.props.match.params.activeStateName === prevProps.match.params.activeStateName &&
         this.props.match.params.activeDistrict !== prevProps.match.params.activeDistrict)
     ) {
+      console.log(districtName);
       districtName
         ? this.props.updateOffices(officeId, districtName.toLowerCase())
         : this.props.updateOffices(officeId);
