@@ -18,7 +18,6 @@ const getSubGeography = (stateId, officeId, geography, districtId = null) => {
 };
 
 const fetchStateData = (stateId, districtId = null) => async (dispatch, getState) => {
-  console.log(districtId);
   const url = 'http://localhost:3000/api/v1';
   dispatch({ type: 'START_FETCH' });
   const officeTotal = getOfficeTotal(stateId, getState().offices.selectedOfficeId, districtId);

@@ -8,7 +8,6 @@ import { fetchCountyDetails, resetCountyDetails } from '../redux/actions/countyA
 
 class CountyContainer extends React.Component {
   componentDidMount() {
-    console.log(this.props.districtId);
     this.props.fetchPrecinctData(this.props.countyId, this.props.districtId);
     this.props.fetchCountyDetails(this.props.countyId);
   }
