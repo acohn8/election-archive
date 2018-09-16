@@ -38,8 +38,10 @@ const getWinner = (results) => {
   const winner = Object.keys(results).sort((a, b) => results[b] - results[a])[0];
   if (winner === 'other') {
     return 'Other';
+  } else if (store.getState().results.candidates.entities.candidates[winner] !== undefined) {
+    return store.getState().results.candidates.entities.candidates[winner].party;
   }
-  return store.getState().results.candidates.entities.candidates[winner].party;
+  return 'Other';
 };
 
 export default formatTableData;
