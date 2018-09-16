@@ -36,6 +36,9 @@ const formatTableData = (type) => {
 
 const getWinner = (results) => {
   const winner = Object.keys(results).sort((a, b) => results[b] - results[a])[0];
+  if (winner === 'other') {
+    return 'Other';
+  }
   return store.getState().results.candidates.entities.candidates[winner].party;
 };
 
