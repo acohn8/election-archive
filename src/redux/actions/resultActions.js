@@ -61,7 +61,6 @@ const fetchPrecinctData = (countyId, districtId = null) => async (dispatch, getS
     districtId,
   );
   const url = `http://localhost:3000/api/v1/${subgeography}/${countyId}`;
-  console.log(url, districtId);
   dispatch({ type: 'START_PRECINCT_FETCH' });
   const fetchedPrecincts = await axios.get(url);
   const precincts = normalize(fetchedPrecincts.data.results, resultListSchema);
