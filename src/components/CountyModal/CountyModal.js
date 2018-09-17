@@ -4,7 +4,7 @@ import CountyContainer from '../../containers/CountyContainer';
 
 const CountyModal = ({ countyName, countyId }) => (
   <Modal
-    size="fullscreen"
+    size="large"
     dimmer="blurring"
     trigger={
       <Table.Cell selectable style={{ cursor: 'pointer' }}>

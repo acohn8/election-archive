@@ -42,6 +42,10 @@ class ResultsMap extends React.Component {
     if (this.map === undefined) {
       this.createMap();
     }
+    if (this.props.height !== prevProps.height) {
+      this.map.resize();
+      console.log(this.props.height);
+    }
   }
 
   componentWillUnmount() {
@@ -54,7 +58,6 @@ class ResultsMap extends React.Component {
   createMap = () => {
     this.map.on('load', () => {
       this.loadLayers();
-      this.map.addControl(new mapboxgl.FullscreenControl());
       this.map.addControl(new mapboxgl.NavigationControl());
     });
   };

@@ -42,6 +42,8 @@ const fetchStateData = (stateId, districtId = null) => async (dispatch, getState
   const stateInfo = response[3].data.data;
   const officeInfo = response[1].data.office;
 
+  console.log(response);
+
   dispatch({
     type: 'SET_STATE_DATA',
     stateOffices,

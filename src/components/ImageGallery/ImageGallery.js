@@ -8,8 +8,6 @@ const CountyImageGallery = ({ images }) => (
       items={images}
       showFullscreenButton={false}
       showPlayButton={false}
-      showThumbnails={false}
-      showBullets
       showNav={false}
     />
   </div>

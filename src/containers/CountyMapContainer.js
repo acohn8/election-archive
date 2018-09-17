@@ -63,18 +63,18 @@ class CountyMapContainer extends React.Component {
 
   render() {
     const { fips } = this.props.countyInfo;
+    const { height } = this.props;
+
     return (
-      <div>
-        {fips && (
-          <ResultsMap
-            hideHeaderOnPrecincts
-            height={300}
-            geographies={this.getMapGeographies()}
-            mapFilter={this.getMapFilter()}
-            countyMap
-          />
-        )}
-      </div>
+      fips && (
+        <ResultsMap
+          hideHeaderOnPrecincts
+          height={height}
+          geographies={this.getMapGeographies()}
+          mapFilter={this.getMapFilter()}
+          countyMap
+        />
+      )
     );
   }
 }

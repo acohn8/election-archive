@@ -1,6 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Divider, Grid, Header, Segment, Responsive } from 'semantic-ui-react';
+import {
+  Container,
+  Divider,
+  Grid,
+  Header,
+  Segment,
+  Responsive,
+  Label,
+  Icon,
+} from 'semantic-ui-react';
 import ContentLoader from '../components/Loader/Loader';
 import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from '../components/StateList/MobileStateSelect';
@@ -12,6 +21,8 @@ import MapContainer from './StateMapContainer';
 import StateResultTableContainer from './StateResultTableContainer';
 
 class StateContainer extends React.Component {
+  state = { expandedOverview: false };
+
   componentDidMount() {
     this.props.setActive('statesShow');
     this.fetchStateData();
@@ -22,24 +33,29 @@ class StateContainer extends React.Component {
     const officeId = this.getOfficeFromParams();
     const districtName = this.props.match.params.activeDistrict;
     if (this.props.match.params.activeStateName !== prevProps.match.params.activeStateName) {
-      this.props.resetOffice();
-      this.props.setActiveState(state.id, officeId);
+      this.setState({ expandedOverview: false }, () => {
+        this.props.resetOffice();
+        this.props.setActiveState(state.id, officeId);
+      });
     } else if (
       (this.props.match.params.activeStateName === prevProps.match.params.activeStateName &&
         this.props.match.params.activeOfficeName !== prevProps.match.params.activeOfficeName) ||
       (this.props.match.params.activeStateName === prevProps.match.params.activeStateName &&
         this.props.match.params.activeDistrict !== prevProps.match.params.activeDistrict)
     ) {
-      console.log(districtName);
       districtName
-        ? this.props.updateOffices(officeId, districtName.toLowerCase())
-        : this.props.updateOffices(officeId);
+        ? this.setState({ expandedOverview: false }, () =>
+            this.props.updateOffices(officeId, districtName.toLowerCase()),
+          )
+        : this.setState({ expandedOverview: false }, () => this.props.updateOffices(officeId));
     }
   }
 
   componentWillUnmount() {
-    this.props.resetOffice();
-    this.props.resetActiveState();
+    this.setState({ expandedOverview: false }, () => {
+      this.props.resetOffice();
+      this.props.resetActiveState();
+    });
   }
 
   fetchStateData = () => {
@@ -80,6 +96,40 @@ class StateContainer extends React.Component {
   getStatewideTotal = () => {
     const votes = Object.values(this.props.stateResults);
     return votes.reduce((sum, num) => sum + num);
+  };
+
+  handleClick = () => {
+    this.setState({ expandedOverview: !this.state.expandedOverview });
+  };
+
+  formatRaceSummary = () => {
+    const splitSummary = this.props.officeOverview.split(' ');
+    if (this.state.expandedOverview === true) {
+      return (
+        <div>
+          <p>{this.props.officeOverview}. </p>
+          <Label as="a" onClick={this.handleClick}>
+            <Icon name="arrow up" /> Less
+          </Label>
+        </div>
+      );
+    } else if (splitSummary.length <= 150) {
+      return this.props.officeOverview;
+    } else {
+      const sentences = splitSummary
+        .slice(0, 150)
+        .join(' ')
+        .split('.');
+      const shortenedSummary = sentences.slice(0, sentences.length - 2).join('.');
+      return (
+        <div>
+          <p>{shortenedSummary}. </p>
+          <Label onClick={this.handleClick}>
+            <Icon name="arrow down" /> More
+          </Label>
+        </div>
+      );
+    }
   };
 
   render() {
@@ -126,6 +176,7 @@ class StateContainer extends React.Component {
                     {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
                   </Grid.Column>
                 </Grid.Row>
+                {this.props.officeOverview && <Segment>{this.formatRaceSummary()}</Segment>}
                 <Grid.Row colums={1} verticalAlign="top">
                   <Grid.Column>
                     <Header size="medium">
@@ -167,6 +218,7 @@ const mapStateToProps = state => ({
   nav: state.nav,
   stateResults: state.results.stateResults,
   candidates: state.results.candidates,
+  officeOverview: state.results.officeInfo.overview,
 });
 
 const mapDispatchToProps = dispatch => ({
