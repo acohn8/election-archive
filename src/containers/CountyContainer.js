@@ -76,31 +76,32 @@ class CountyContainer extends React.Component {
                 >
                   {({ measureRef }) => (
                     <div ref={measureRef} height="100%">
-                      <Segment style={{ minHeight: 300 }}>
-                        <Header size="medium">Overview</Header>
-                        {images &&
-                          images.length > 0 && (
-                            <Image size="small" floated="left" src={images[0].url} />
-                          )}
-                        {details !== undefined && this.formatCountySummary()}
-                        {url && (
-                          <Label
-                            attached="top right"
-                            as="a"
-                            href={url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <Icon name="wikipedia w" />
-                          </Label>
+                      {details !== undefined &&
+                        details && (
+                          <Segment style={{ minHeight: 300 }}>
+                            <Header size="medium">Overview</Header>
+                            {images &&
+                              images.length > 0 && (
+                                <Image size="small" floated="left" src={images[0].url} />
+                              )}
+                            {this.formatCountySummary()}
+                            <Label
+                              attached="top right"
+                              as="a"
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Icon name="wikipedia w" />
+                            </Label>
+                          </Segment>
                         )}
-                      </Segment>
                     </div>
                   )}
                 </Measure>
               </Grid.Column>
               <Grid.Column>
-                <Segment style={{ height: this.state.height }}>
+                <Segment style={{ height: this.state.height, minHeight: 300 }}>
                   <CountyMapContainer height={this.state.height - 30} />
                 </Segment>
               </Grid.Column>

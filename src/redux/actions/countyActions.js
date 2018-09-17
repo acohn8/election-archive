@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const fetchCountyDetails = countyId => async (dispatch, getState) => {
-  const response = await axios.get(`http://localhost:3000/api/v1/states/${getState().states.activeStateId}/counties/${countyId}`);
+  const response = await axios.get(`https://election-data-2016.herokuapp.com/api/v1/states/${
+    getState().states.activeStateId
+  }/counties/${countyId}`);
   const {
     id, details, name, latitude, longitude, fips, images, url,
   } = response.data;

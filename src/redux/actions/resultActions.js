@@ -18,7 +18,7 @@ const getSubGeography = (stateId, officeId, geography, districtId = null) => {
 };
 
 const fetchStateData = (stateId, districtId = null) => async (dispatch, getState) => {
-  const url = 'http://localhost:3000/api/v1';
+  const url = 'https://election-data-2016.herokuapp.com/api/v1';
   dispatch({ type: 'START_FETCH' });
   const officeTotal = getOfficeTotal(stateId, getState().offices.selectedOfficeId, districtId);
   const subgeography = getSubGeography(
@@ -60,7 +60,7 @@ const fetchPrecinctData = (countyId, districtId = null) => async (dispatch, getS
     'precinct',
     districtId,
   );
-  const url = `http://localhost:3000/api/v1/${subgeography}/${countyId}`;
+  const url = `https://election-data-2016.herokuapp.com/api/v1/${subgeography}/${countyId}`;
   dispatch({ type: 'START_PRECINCT_FETCH' });
   const fetchedPrecincts = await axios.get(url);
   const precincts = normalize(fetchedPrecincts.data.results, resultListSchema);
@@ -70,7 +70,7 @@ const fetchPrecinctData = (countyId, districtId = null) => async (dispatch, getS
 const updateOfficeData = (officeId, districtId = null) => async (dispatch, getState) => {
   dispatch({ type: 'FETCHING' });
   dispatch(setActiveOffice(officeId, districtId));
-  const url = 'http://localhost:3000/api/v1';
+  const url = 'https://election-data-2016.herokuapp.com/api/v1';
   const officeTotal = getOfficeTotal(getState().states.activeStateId, officeId, districtId);
   const subgeography = getSubGeography(
     getState().states.activeStateId,
