@@ -5,7 +5,7 @@ const resultTotals = (data, total) => {
     const candidateResults = data
       .map(subGeo => subGeo.results[candidate])
       .filter(geo => geo.total !== undefined);
-    const voteTotal = candidateResults.map(result => result.total).reduce((sum, n) => sum + n);
+    const voteTotal = candidateResults.map(result => result.total).reduce((sum, n) => sum + n, 0);
     totals[candidate] = {};
     totals[candidate].votes = voteTotal;
     totals[candidate].percent = voteTotal / total;

@@ -2,7 +2,7 @@ import store from '../redux/store';
 
 const formatTableData = (type) => {
   const formattedResults = [];
-  const candidates = store.getState().results.candidates.entities.candidates;
+  const { candidates } = store.getState().results.candidates.entities;
   const resultEntities = store.getState().results[type].entities.results;
 
   const candidateIds = store.getState().results.candidates.result.slice();
@@ -17,7 +17,7 @@ const formatTableData = (type) => {
     const geoInfo = {};
     const geoResults = resultEntities[result.id].results;
     const winnerParty = getWinner(geoResults);
-    const geoTotal = Object.values(geoResults).reduce((sum, n) => sum + n);
+    const geoTotal = Object.values(geoResults).reduce((sum, n) => sum + n, 0);
     geoInfo.id = result.id;
     geoInfo.name = result.name;
     geoInfo.winnerParty = winnerParty;
