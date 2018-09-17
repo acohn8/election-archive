@@ -26,7 +26,7 @@ class CountyContainer extends React.Component {
     return (
       <div>
         {this.props.precinctResults.result !== undefined && fips ? (
-          <Grid>
+          <Grid stackable>
             <Grid.Row columns={2} stretched>
               <Grid.Column>
                 <Segment
