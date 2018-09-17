@@ -10,10 +10,10 @@ const colors = {
 };
 
 const totalColors = {
-  democratic: 'rgba(32,133,208)',
-  republican: 'rgba(219,40,40)',
-  libertarian: 'rgba(251,189,9)',
-  other: 'rgba(100,53,201)',
+  democratic: 'rgb(32,133,208)',
+  republican: 'rgb(219,40,40)',
+  libertarian: 'rgb(251,189,9)',
+  other: 'rgb(100,53,201)',
 };
 
 const StateResultTable = ({
