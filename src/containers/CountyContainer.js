@@ -6,6 +6,7 @@ import { Loader, Container, Grid, Segment } from 'semantic-ui-react';
 import CountyTableContainer from './CountyTableContainer';
 import { fetchCountyDetails, resetCountyDetails } from '../redux/actions/countyActions';
 import CountyMapContainer from './CountyMapContainer';
+import CountyImageGallery from '../components/ImageGallery/ImageGallery';
 
 class CountyContainer extends React.Component {
   componentDidMount() {
@@ -19,15 +20,38 @@ class CountyContainer extends React.Component {
   }
 
   render() {
-    const { details } = this.props.countyInfo;
+    const { details, fips, images } = this.props.countyInfo;
     return (
       <div>
-        {this.props.precinctResults.result !== undefined ? (
-          <div>
-            {details !== undefined && <Segment>{details}</Segment>}
-            <CountyMapContainer />
-            <CountyTableContainer countyId={this.props.countyId} />
-          </div>
+        {this.props.precinctResults.result !== undefined && fips ? (
+          <Grid>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Segment style={{ height: 330, 'text-overflow': 'auto' }}>
+                  {images &&
+                    images.length && (
+                      <CountyImageGallery
+                        images={images.map(image => ({
+                          original: image.url,
+                          thumbnail: image.url,
+                        }))}
+                      />
+                    )}
+                  <span>{details !== undefined && details}</span>
+                </Segment>
+              </Grid.Column>
+              <Grid.Column>
+                <Segment style={{ height: 330 }}>
+                  <CountyMapContainer />
+                </Segment>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row colums={1}>
+              <Grid.Column>
+                <CountyTableContainer countyId={this.props.countyId} />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         ) : (
           <Loader />
         )}

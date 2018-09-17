@@ -43,9 +43,10 @@ class CountyMapContainer extends React.Component {
   };
 
   getMapFilter = () => {
+    const { fips } = this.props.countyInfo;
     const stateFips = this.props.stateInfo.attributes.fips.toString().padStart(2, '0');
     if (this.props.selectedOfficeId !== '322') {
-      return { property: 'STATEFP', value: stateFips };
+      return { property: 'GEOID', value: fips.toString().padStart(5, '0') };
     } else {
       const congressionalDistricts = this.props.stateOffices.entities.offices[
         this.props.selectedOfficeId
@@ -61,23 +62,29 @@ class CountyMapContainer extends React.Component {
   };
 
   render() {
+    const { fips } = this.props.countyInfo;
     return (
-      <ResultsMap
-        hideHeaderOnPrecincts
-        height={300}
-        geographies={this.getMapGeographies()}
-        mapFilter={this.getMapFilter()}
-      />
+      <div>
+        {fips && (
+          <ResultsMap
+            hideHeaderOnPrecincts
+            height={300}
+            geographies={this.getMapGeographies()}
+            mapFilter={this.getMapFilter()}
+            countyMap
+          />
+        )}
+      </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  overlay: state.maps.overlay,
   stateInfo: state.results.stateInfo,
   stateOffices: state.results.stateOffices,
   selectedOfficeId: state.offices.selectedOfficeId,
   selectedDistrictId: state.offices.selectedDistrictId,
+  countyInfo: state.counties,
 });
 
 export default connect(mapStateToProps)(CountyMapContainer);

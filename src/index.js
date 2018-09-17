@@ -3,8 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import 'semantic-ui-css/semantic.min.css';
-import App from './App';
+
+import 'react-image-gallery/styles/css/image-gallery.css';
 import './index.css';
+import App from './App';
 import { history, store } from './redux/store';
 import registerServiceWorker from './registerServiceWorker';
 

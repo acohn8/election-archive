@@ -1,0 +1,13 @@
+.image-gallery {
+  max-height: 250px;
+  max-height: 150px;
+  max-width: 200px;
+  float: left;
+  margin: 0px 15px 15px 0px;
+}
+
+.image-gallery-image img {
+  max-height: 150px;
+  max-width: 200px;
+  object-fit: contain;
+}

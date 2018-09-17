@@ -5,6 +5,7 @@ const initialCountyState = {
   latitude: null,
   longitude: null,
   details: null,
+  images: [],
 };
 
 const countiesReducer = (previousState = initialCountyState, action) => {
@@ -18,6 +19,7 @@ const countiesReducer = (previousState = initialCountyState, action) => {
         latitude: action.latitude,
         longitude: action.longitude,
         details: action.details,
+        images: action.images,
       };
     case 'RESET_COUNTY_INFO':
       return {
