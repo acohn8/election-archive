@@ -85,7 +85,7 @@ class CountyContainer extends React.Component {
                         {details !== undefined && this.formatCountySummary()}
                         {url && (
                           <Label
-                            attached="bottom right"
+                            attached="top right"
                             as="a"
                             href={url}
                             target="_blank"
@@ -107,11 +107,13 @@ class CountyContainer extends React.Component {
             </Grid.Row>
             <Grid.Row colums={1}>
               <Grid.Column>
-                <Header size="medium">
-                  Results
-                  <Header.Subheader>{this.props.officeInfo.name}</Header.Subheader>
-                </Header>
-                <CountyTableContainer countyId={this.props.countyId} />
+                <Segment style={{ minHeight: 430, overflow: 'hidden' }}>
+                  <Header size="medium">
+                    Results
+                    <Header.Subheader>{this.props.officeInfo.name}</Header.Subheader>
+                  </Header>
+                  <CountyTableContainer countyId={this.props.countyId} />
+                </Segment>
               </Grid.Column>
             </Grid.Row>
           </Grid>

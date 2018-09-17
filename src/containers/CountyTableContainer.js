@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Segment, Pagination } from 'semantic-ui-react';
+import { Pagination } from 'semantic-ui-react';
 import StateResultTable from '../components/Table/StateResultTable';
 import { setSortedResults } from '../redux/actions/resultActions';
 import formatTableData from '../util/FormatTableData';
@@ -68,9 +68,9 @@ class StateResultTableContainer extends React.Component {
       this.props.countyResults.entities.results[this.props.countyId].results,
     ).reduce((sum, n) => sum + n);
     const toplines = resultTotals(allData, countyTotal);
-    
+
     return (
-      <Segment style={{ minHeight: 430, overflow: 'hidden' }} basic>
+      <div>
         <StateResultTable
           data={displayData}
           candidateIds={this.props.candidates.result}
@@ -93,7 +93,7 @@ class StateResultTableContainer extends React.Component {
           boundaryRange={1}
           style={{ padding: 0, margin: 0 }}
         />
-      </Segment>
+      </div>
     );
   }
 }

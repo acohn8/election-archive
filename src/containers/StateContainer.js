@@ -176,14 +176,22 @@ class StateContainer extends React.Component {
                     {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
                   </Grid.Column>
                 </Grid.Row>
-                {this.props.officeOverview && <Segment>{this.formatRaceSummary()}</Segment>}
+                {this.props.officeOverview && (
+                  <Grid.Row colums={1}>
+                    <Grid.Column>
+                      <Segment>{this.formatRaceSummary()}</Segment>
+                    </Grid.Column>
+                  </Grid.Row>
+                )}
                 <Grid.Row colums={1} verticalAlign="top">
                   <Grid.Column>
-                    <Header size="medium">
-                      Results
-                      <Header.Subheader>Click a county for details</Header.Subheader>
-                    </Header>
-                    <StateResultTableContainer />
+                    <Segment style={{ minHeight: 430, overflow: 'hidden', width: '100%' }}>
+                      <Header size="medium">
+                        Results
+                        <Header.Subheader>Click a county for details</Header.Subheader>
+                      </Header>
+                      <StateResultTableContainer />
+                    </Segment>
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">
@@ -195,9 +203,7 @@ class StateContainer extends React.Component {
                       )}
                     </Header>
                     <Segment>
-                      {/* <Container> */}
                       <MapContainer />
-                      {/* </Container> */}
                     </Segment>
                   </Grid.Column>
                 </Grid.Row>

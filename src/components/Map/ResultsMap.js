@@ -44,7 +44,6 @@ class ResultsMap extends React.Component {
     }
     if (this.props.height !== prevProps.height) {
       this.map.resize();
-      console.log(this.props.height);
     }
   }
 
