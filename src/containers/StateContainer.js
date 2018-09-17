@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Container, Divider, Grid, Header, Segment, Responsive } from 'semantic-ui-react';
+import { Container, Divider, Grid, Header, Segment, Responsive } from 'semantic-ui-react';
 import ContentLoader from '../components/Loader/Loader';
 import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from '../components/StateList/MobileStateSelect';

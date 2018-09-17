@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fetchPrecinctData, resetPrecinctResults } from '../redux/actions/resultActions';
 
-import { Loader, Container, Grid, Segment } from 'semantic-ui-react';
+import { Loader, Grid, Segment, Label, Icon } from 'semantic-ui-react';
 import CountyTableContainer from './CountyTableContainer';
 import { fetchCountyDetails, resetCountyDetails } from '../redux/actions/countyActions';
 import CountyMapContainer from './CountyMapContainer';
@@ -20,16 +20,22 @@ class CountyContainer extends React.Component {
   }
 
   render() {
-    const { details, fips, images } = this.props.countyInfo;
+    const {
+      details, fips, images, url,
+    } = this.props.countyInfo;
     return (
       <div>
         {this.props.precinctResults.result !== undefined && fips ? (
           <Grid>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={2} stretched>
               <Grid.Column>
-                <Segment style={{ height: 330, 'text-overflow': 'auto' }}>
+                <Segment
+                  style={{
+                    minHeight: 330,
+                  }}
+                >
                   {images &&
-                    images.length && (
+                    images.length > 0 && (
                       <CountyImageGallery
                         images={images.map(image => ({
                           original: image.url,
@@ -37,7 +43,24 @@ class CountyContainer extends React.Component {
                         }))}
                       />
                     )}
-                  <span>{details !== undefined && details}</span>
+                  {details !== undefined && (
+                    <span>
+                      <p>{details}</p>
+                    </span>
+                  )}
+
+                  {url && (
+                    <Label
+                      attached="bottom right"
+                      as="a"
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Icon name="wikipedia w" />
+                      More
+                    </Label>
+                  )}
                 </Segment>
               </Grid.Column>
               <Grid.Column>

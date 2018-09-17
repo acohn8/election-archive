@@ -3,7 +3,7 @@ import axios from 'axios';
 const fetchCountyDetails = countyId => async (dispatch, getState) => {
   const response = await axios.get(`http://localhost:3000/api/v1/states/${getState().states.activeStateId}/counties/${countyId}`);
   const {
-    id, details, name, latitude, longitude, fips, images,
+    id, details, name, latitude, longitude, fips, images, url,
   } = response.data;
   dispatch({
     type: 'SET_COUNTY_INFO',
@@ -14,6 +14,7 @@ const fetchCountyDetails = countyId => async (dispatch, getState) => {
     longitude,
     fips,
     images,
+    url,
   });
 };
 
