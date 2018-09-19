@@ -25,7 +25,7 @@ const FinanceOverview = ({ candidates }) => {
               <Table.HeaderCell width={2} />
               {filteredCandidates.map(id => (
                 <Table.HeaderCell textAlign="center" key={`${id}name`}>
-                  <PartyColorCircle color={colors[candidateEntities[id].party]} />{' '}
+                  <PartyColorCircle color={colors[candidateEntities[id].party]} />
                   {candidateEntities[id].name}
                 </Table.HeaderCell>
               ))}
@@ -47,7 +47,7 @@ const FinanceOverview = ({ candidates }) => {
               ))}
             </Table.Row>
             <Table.Row>
-              <Table.Cell textAlign="center">Total from Individuals</Table.Cell>
+              <Table.Cell textAlign="center">From Individuals</Table.Cell>
               {filteredCandidates.map(id => (
                 <Table.Cell
                   textAlign="center"
@@ -59,7 +59,7 @@ const FinanceOverview = ({ candidates }) => {
               ))}
             </Table.Row>
             <Table.Row>
-              <Table.Cell textAlign="center">Total from PACs</Table.Cell>
+              <Table.Cell textAlign="center">From PACs</Table.Cell>
               {filteredCandidates.map(id => (
                 <Table.Cell
                   textAlign="center"
