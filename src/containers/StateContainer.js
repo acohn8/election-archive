@@ -9,6 +9,7 @@ import {
   Responsive,
   Label,
   Icon,
+  Tab,
 } from 'semantic-ui-react';
 import ContentLoader from '../components/Loader/Loader';
 import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
@@ -19,6 +20,7 @@ import { resetOffice, setActiveOffice, updateOffices } from '../redux/actions/of
 import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
 import MapContainer from './StateMapContainer';
 import StateResultTableContainer from './StateResultTableContainer';
+import FinanceOverview from '../components/Toplines/FinanceOverview';
 
 class StateContainer extends React.Component {
   state = { expandedOverview: false };
@@ -99,7 +101,7 @@ class StateContainer extends React.Component {
   };
 
   handleClick = () => {
-    this.setState({ expandedOverview: !this.state.expandedOverview });
+    this.setState({ ...this.state, expandedOverview: !this.state.expandedOverview });
   };
 
   formatRaceSummary = () => {
@@ -133,6 +135,24 @@ class StateContainer extends React.Component {
   };
 
   render() {
+    const tabPanes = [
+      {
+        menuItem: 'Results',
+        render: () => (
+          <Tab.Pane>
+            <StateResultTableContainer />
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Campaign Finance',
+        render: () => (
+          <Tab.Pane>
+            <FinanceOverview candidates={this.props.candidates} />
+          </Tab.Pane>
+        ),
+      },
+    ];
     return (
       <div>
         <Divider hidden />
@@ -185,13 +205,9 @@ class StateContainer extends React.Component {
                 )}
                 <Grid.Row colums={1} verticalAlign="top">
                   <Grid.Column>
-                    <Segment style={{ minHeight: 430, overflow: 'hidden', width: '100%' }}>
-                      <Header size="medium">
-                        Results
-                        <Header.Subheader>Click a county for details</Header.Subheader>
-                      </Header>
-                      <StateResultTableContainer />
-                    </Segment>
+                    <div style={{ minHeight: 430, overflow: 'hidden', width: '100%' }}>
+                      <Tab menu={{ text: true }} panes={tabPanes} />
+                    </div>
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">

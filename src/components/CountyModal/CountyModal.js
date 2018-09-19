@@ -8,7 +8,7 @@ const CountyModal = ({ countyName, countyId }) => (
     dimmer="blurring"
     closeIcon
     trigger={
-      <Table.Cell selectable style={{ cursor: 'pointer' }}>
+      <Table.Cell selectable style={{ cursor: 'pointer', paddingLeft: '10px' }}>
         <div as="a">{countyName}</div>
       </Table.Cell>
     }

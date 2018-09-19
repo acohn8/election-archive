@@ -28,7 +28,7 @@ const StateResultTable = ({
 }) => (
   <div style={{ overflowX: 'auto', height: '100%' }}>
     {data.length > 0 && (
-      <Table sortable celled unstackable structured size="small" compact>
+      <Table sortable unstackable structured size="small">
         <Table.Header>
           <Table.Row textAlign="center">
             <Table.HeaderCell

@@ -7,6 +7,7 @@ import formatTableData from '../util/FormatTableData';
 import convertToPercent from '../util/ConvertToPercent';
 import numericalSort from '../util/NumericalSort';
 import resultTotals from '../util/ResultTotals';
+import StateTableHeader from '../components/StateTableHeader/StateTableHeader';
 
 class StateResultTableContainer extends React.Component {
   state = {
@@ -66,6 +67,7 @@ class StateResultTableContainer extends React.Component {
     const { activePage } = this.state;
     return (
       <div>
+        <StateTableHeader selectedTable="results" />
         <StateResultTable
           data={displayData}
           candidateIds={this.props.candidates.result}
