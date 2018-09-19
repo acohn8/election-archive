@@ -9,7 +9,9 @@ class CountyMapContainer extends React.Component {
   getMapGeographies = () => {
     if (
       this.props.stateInfo.attributes['precinct-map'] !== null &&
-      this.props.selectedOfficeId === '308'
+      this.props.selectedOfficeId === '308' &&
+      this.props.stateInfo.id !== '9'
+      //temporary disable for mi
     ) {
       const countyLayer = MapLayers.county;
       const precinctMinCountyMaxZoom = this.props.stateInfo.id === '3' ? 9 : 8;

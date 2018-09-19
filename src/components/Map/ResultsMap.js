@@ -327,7 +327,14 @@ class ResultsMap extends React.Component {
       layersToFilter = this.props.savedLayers.filter(layer => !layer.includes('precinct'));
     }
     layersToFilter.forEach(layer => {
-      if (this.map.getLayer(layer)) {
+      if (
+        this.map.getLayer(layer) &&
+        this.props.countyMap &&
+        this.props.states.activeStateId === '14'
+      ) {
+        //temporary fix for mn layer
+        this.map.setFilter(layer, ['==', property, parseInt(value, 10)]);
+      } else if (this.map.getLayer(layer)) {
         this.map.setFilter(layer, ['==', property, value]);
       }
     });
