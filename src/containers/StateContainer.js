@@ -20,7 +20,7 @@ import { resetOffice, setActiveOffice, updateOffices } from '../redux/actions/of
 import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
 import MapContainer from './StateMapContainer';
 import StateResultTableContainer from './StateResultTableContainer';
-import FinanceOverview from '../components/Toplines/FinanceOverview';
+import CampaignFinanceTable from '../components/CampaignFinanceTable/CampaignFinanceTable';
 
 class StateContainer extends React.Component {
   state = { expandedOverview: false };
@@ -139,7 +139,7 @@ class StateContainer extends React.Component {
       {
         menuItem: 'Results',
         render: () => (
-          <Tab.Pane>
+          <Tab.Pane attached={false}>
             <StateResultTableContainer />
           </Tab.Pane>
         ),
@@ -147,8 +147,8 @@ class StateContainer extends React.Component {
       {
         menuItem: 'Campaign Finance',
         render: () => (
-          <Tab.Pane>
-            <FinanceOverview candidates={this.props.candidates} />
+          <Tab.Pane attached={false}>
+            <CampaignFinanceTable candidates={this.props.candidates} />
           </Tab.Pane>
         ),
       },
@@ -206,7 +206,7 @@ class StateContainer extends React.Component {
                 <Grid.Row colums={1} verticalAlign="top">
                   <Grid.Column>
                     <div style={{ minHeight: 430, overflow: 'hidden', width: '100%' }}>
-                      <Tab menu={{ text: true }} panes={tabPanes} />
+                      <Tab menu={{ text: true, color: 'teal' }} panes={tabPanes} />
                     </div>
                   </Grid.Column>
                 </Grid.Row>

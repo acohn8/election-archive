@@ -3,7 +3,7 @@ import { Table } from 'semantic-ui-react';
 import getFinanceCellColor from '../../util/CompareFinance';
 import StateTableHeader from '../StateTableHeader/StateTableHeader';
 
-const CampaignFinanceTable = ({ candidates }) => {
+const FinanceOverview = ({ candidates }) => {
   const filteredCandidates = candidates.result.filter(id => id !== 'other' && candidates.entities.candidates[id].finance_data);
   const candidateEntities = candidates.entities.candidates;
   return (
@@ -129,4 +129,4 @@ const CampaignFinanceTable = ({ candidates }) => {
   );
 };
 
-export default CampaignFinanceTable;
+export default FinanceOverview;
