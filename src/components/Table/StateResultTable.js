@@ -1,5 +1,7 @@
 import React from 'react';
 import { Table, TableRow, TableHeaderCell } from 'semantic-ui-react';
+
+import PartyColorCircle from '../Ui/ColorCircle';
 import CountyModal from '../CountyModal/CountyModal';
 
 const colors = {
@@ -38,9 +40,10 @@ const StateResultTable = ({
               width={3}
             >
               {geography}
-            </Table.HeaderCell>
+              </Table.HeaderCell>
             {candidateIds.map(candidateId => (
               <Table.HeaderCell key={candidateId} colSpan="2">
+                <PartyColorCircle color={totalColors[data[0].results[candidateId].party]} />
                 {data[0].results[candidateId].name}
               </Table.HeaderCell>
             ))}

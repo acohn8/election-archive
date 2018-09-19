@@ -2,6 +2,14 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 import getFinanceCellColor from '../../util/CompareFinance';
 import StateTableHeader from '../StateTableHeader/StateTableHeader';
+import PartyColorCircle from '../Ui/ColorCircle';
+
+const colors = {
+  democratic: '#2085D0',
+  republican: '#DB2828',
+  libertarian: '#FBBD09',
+  other: '#6435C9',
+};
 
 const FinanceOverview = ({ candidates }) => {
   const filteredCandidates = candidates.result.filter(id => id !== 'other' && candidates.entities.candidates[id].finance_data);
@@ -17,6 +25,7 @@ const FinanceOverview = ({ candidates }) => {
               <Table.HeaderCell width={2} />
               {filteredCandidates.map(id => (
                 <Table.HeaderCell textAlign="center" key={`${id}name`}>
+                  <PartyColorCircle color={colors[candidateEntities[id].party]} />{' '}
                   {candidateEntities[id].name}
                 </Table.HeaderCell>
               ))}
