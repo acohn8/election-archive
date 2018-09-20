@@ -40,7 +40,7 @@ class CountyContainer extends React.Component {
     if (this.state.expandedOverview === true) {
       return (
         <div>
-          <p>{this.props.officeInfo.overview}</p>
+          <p>{this.props.countyInfo.details}</p>
           <Button.Group>
             <ButtonWithIcon color="teal" icon="arrow up" text={'Less'} onClick={this.handleClick} />
             <ButtonWithIcon color="grey" link={wikiUrl} icon="wikipedia w" text={'Wiki'} />
