@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Icon } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 
 const tableHeaders = {
   results: { header: 'County Election Results', subheader: 'Click a county for details' },

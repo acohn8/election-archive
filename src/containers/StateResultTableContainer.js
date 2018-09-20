@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Pagination, Icon } from 'semantic-ui-react';
+import { Pagination } from 'semantic-ui-react';
 import StateResultTable from '../components/Table/StateResultTable';
 import { setSortedResults } from '../redux/actions/resultActions';
 import formatTableData from '../util/FormatTableData';

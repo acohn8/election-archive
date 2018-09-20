@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Measure from 'react-measure';
 import { fetchPrecinctData, resetPrecinctResults } from '../redux/actions/resultActions';
 
-import { Loader, Grid, Segment, Label, Icon, Header, Image, Button } from 'semantic-ui-react';
+import { Loader, Grid, Segment, Header, Image, Button } from 'semantic-ui-react';
 import CountyTableContainer from './CountyTableContainer';
 import { fetchCountyDetails, resetCountyDetails } from '../redux/actions/countyActions';
 import CountyMapContainer from './CountyMapContainer';

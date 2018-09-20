@@ -32,7 +32,7 @@ const StateResultTable = ({
     {data.length > 0 && (
       <Table sortable unstackable structured size="small" celled>
         <Table.Header>
-          <Table.Row textAlign="center">
+          <Table.Row >
             <Table.HeaderCell
               sorted={column === 'name' ? direction : null}
               onClick={() => handleSort('name')}
@@ -48,7 +48,7 @@ const StateResultTable = ({
               </Table.HeaderCell>
             ))}
           </Table.Row>
-          <TableRow textAlign="center">
+          <TableRow >
             {candidateIds.map(candidateId => [
               <TableHeaderCell
                 key={`${candidateId}vc`}
@@ -69,7 +69,7 @@ const StateResultTable = ({
         </Table.Header>
         <Table.Body>
           {data.map(geo => (
-            <Table.Row key={geo.id} textAlign="center">
+            <Table.Row key={geo.id} >
               {geography === 'Precinct' ? (
                 <Table.Cell>{geo.name}</Table.Cell>
               ) : (
@@ -111,7 +111,7 @@ const StateResultTable = ({
           ))}
         </Table.Body>
         <Table.Footer>
-          <Table.Row textAlign="center">
+          <Table.Row >
             <Table.HeaderCell />
             {candidateIds.map(candidateId =>
                 (toplines[candidateId].winner

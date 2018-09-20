@@ -7,15 +7,12 @@ import {
   Header,
   Segment,
   Responsive,
-  Label,
-  Icon,
   Tab,
   Button,
 } from 'semantic-ui-react';
 import ContentLoader from '../components/Loader/Loader';
 import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
 import MobileStateSelector from '../components/StateList/MobileStateSelect';
-import ExportDropdown from '../components/Table/ExportDropdown';
 import { setActive } from '../redux/actions/navActions';
 import { resetOffice, setActiveOffice, updateOffices } from '../redux/actions/officeActions';
 import { resetActiveState, setActiveState } from '../redux/actions/stateActions';
@@ -245,23 +242,19 @@ class StateContainer extends React.Component {
                     </Grid.Column>
                   </Grid.Row>
                 )}
-                <Grid.Row colums={1} verticalAlign="top">
-                  <Grid.Column>
-                    <div style={{ minHeight: 430, overflow: 'hidden', width: '100%' }}>
-                      <Tab menu={{ text: true, color: 'teal' }} panes={this.formatTableTabs()} />
-                    </div>
-                  </Grid.Column>
-                </Grid.Row>
+                <div style={{ minHeight: 430, overflow: 'hidden', width: '100%' }}>
+                  <Tab menu={{ text: true, color: 'teal' }} panes={this.formatTableTabs()} />
+                </div>
                 <Grid.Row columns={1} style={{ minHeight: 700 }} verticalAlign="top">
                   <Grid.Column>
-                    <Header size="medium">
-                      County Map
-                      {this.props.stateInfo.attributes['precinct-map'] &&
-                        this.props.offices.selectedOfficeId === '308' && (
-                          <Header.Subheader>Zoom in for precincts</Header.Subheader>
-                        )}
-                    </Header>
                     <Segment>
+                      <Header size="medium">
+                        County Map
+                        {this.props.stateInfo.attributes['precinct-map'] &&
+                          this.props.offices.selectedOfficeId === '308' && (
+                            <Header.Subheader>Zoom in for precincts</Header.Subheader>
+                          )}
+                      </Header>
                       <MapContainer />
                     </Segment>
                   </Grid.Column>
