@@ -105,7 +105,12 @@ class StateContainer extends React.Component {
   };
 
   formatRaceSummary = () => {
-    const splitSummary = this.props.officeOverview.split(' ');
+    const splitSummary = this.props.officeOverview
+      .replace(
+        /\b(\w\.\w\.|\d+(?:\.\d+){1,2}\.?)|([.?!])\s+(?=[A-Za-z])/g,
+        (m, g1, g2) => (g1 ? g1 : g2 + '\r'),
+      )
+      .split('\r');
     if (this.state.expandedOverview === true) {
       return (
         <div>
@@ -115,17 +120,13 @@ class StateContainer extends React.Component {
           </Label>
         </div>
       );
-    } else if (splitSummary.length <= 150) {
+    } else if (splitSummary.length <= 2) {
       return this.props.officeOverview;
     } else {
-      const sentences = splitSummary
-        .slice(0, 150)
-        .join(' ')
-        .split('.');
-      const shortenedSummary = sentences.slice(0, sentences.length - 2).join('.');
+      const shortenedSummary = splitSummary.slice(0, 2).join(' ');
       return (
         <div>
-          <p>{shortenedSummary}. </p>
+          <p>{shortenedSummary}</p>
           <Label onClick={this.handleClick}>
             <Icon name="arrow down" /> More
           </Label>
@@ -145,7 +146,7 @@ class StateContainer extends React.Component {
         ),
       },
     ];
-    if (this.props.offices.selectedOfficeId !== '313') {
+    if (this.props.officeOverview.id !== 313) {
       tabPanes.push({
         menuItem: 'Campaign Finance',
         render: () => (

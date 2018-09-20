@@ -30,8 +30,11 @@ class CountyContainer extends React.Component {
 
   formatCountySummary = () => {
     const splitSummary = this.props.countyInfo.details
-      .split(' ')
-      .filter(word => !word.includes('()'));
+      .replace(
+        /\b(\w\.\w\.|\d+(?:\.\d+){1,2}\.?)|([.?!])\s+(?=[A-Za-z])/g,
+        (m, g1, g2) => (g1 ? g1 : g2 + '\r'),
+      )
+      .split('\r');
     if (this.state.expandedOverview === true) {
       return (
         <div>
@@ -41,17 +44,13 @@ class CountyContainer extends React.Component {
           </Label>
         </div>
       );
-    } else if (splitSummary.length <= 150) {
+    } else if (splitSummary.length <= 2) {
       return this.props.countyInfo.details;
     } else {
-      const sentences = splitSummary
-        .slice(0, 150)
-        .join(' ')
-        .split('.');
-      const shortenedSummary = sentences.slice(0, sentences.length - 2).join('.');
+      const shortenedSummary = splitSummary.slice(0, 2).join(' ');
       return (
         <div>
-          <p>{shortenedSummary}. </p>
+          <p>{shortenedSummary}</p>
           <Label onClick={this.handleClick}>
             <Icon name="arrow down" /> More
           </Label>
@@ -143,6 +142,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  null,
-  { withRef: true },
 )(CountyContainer);
