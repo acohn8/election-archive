@@ -34,7 +34,6 @@ const formatTableData = (type) => {
     });
     formattedResults.push(geoInfo);
   });
-  console.log(formattedResults);
   return formattedResults;
 };
 

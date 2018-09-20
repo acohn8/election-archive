@@ -256,9 +256,10 @@ class StateContainer extends React.Component {
                   <Grid.Column>
                     <Header size="medium">
                       County Map
-                      {this.props.stateInfo.attributes['precinct-map'] && (
-                        <Header.Subheader>Zoom in for precincts</Header.Subheader>
-                      )}
+                      {this.props.stateInfo.attributes['precinct-map'] &&
+                        this.props.offices.selectedOfficeId === '308' && (
+                          <Header.Subheader>Zoom in for precincts</Header.Subheader>
+                        )}
                     </Header>
                     <Segment>
                       <MapContainer />
