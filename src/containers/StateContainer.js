@@ -134,7 +134,7 @@ class StateContainer extends React.Component {
     }
   };
 
-  render() {
+  formatTableTabs = () => {
     const tabPanes = [
       {
         menuItem: 'Results',
@@ -144,15 +144,21 @@ class StateContainer extends React.Component {
           </Tab.Pane>
         ),
       },
-      {
+    ];
+    if (this.props.offices.selectedOfficeId !== '313') {
+      tabPanes.push({
         menuItem: 'Campaign Finance',
         render: () => (
           <Tab.Pane attached={false}>
             <CampaignFinanceTable candidates={this.props.candidates} />
           </Tab.Pane>
         ),
-      },
-    ];
+      });
+    }
+    return tabPanes;
+  };
+
+  render() {
     return (
       <div>
         <Divider hidden />
@@ -206,7 +212,7 @@ class StateContainer extends React.Component {
                 <Grid.Row colums={1} verticalAlign="top">
                   <Grid.Column>
                     <div style={{ minHeight: 430, overflow: 'hidden', width: '100%' }}>
-                      <Tab menu={{ text: true, color: 'teal' }} panes={tabPanes} />
+                      <Tab menu={{ text: true, color: 'teal' }} panes={this.formatTableTabs()} />
                     </div>
                   </Grid.Column>
                 </Grid.Row>
