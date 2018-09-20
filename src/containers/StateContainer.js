@@ -200,7 +200,7 @@ class StateContainer extends React.Component {
           {this.props.loading === false &&
             this.props.candidates.result !== undefined && (
               <Grid verticalAlign="middle" stackable className="fill-content">
-                <Grid.Row columns={3}>
+                <Grid.Row columns={1}>
                   <Grid.Column>
                     <Header as="h1">
                       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
@@ -219,20 +219,23 @@ class StateContainer extends React.Component {
                           }
                         />
                       </Responsive>
-                      <Header.Subheader>
-                        <span style={{ color: '#00B5AD' }}>
-                          <OfficeDropdown
-                            className="link item"
-                            offices={this.props.stateOffices}
-                            selectedOfficeId={this.props.offices.selectedOfficeId}
-                            stateName={this.props.stateInfo.attributes.name}
-                          />
-                        </span>
-                      </Header.Subheader>
                     </Header>
-                  </Grid.Column>
-                  <Grid.Column floated="right" textAlign="right">
-                    {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
+                    <Header
+                      as="h3"
+                      style={{
+                        marginTop: 3,
+                        fontWeight: 'normal',
+                      }}
+                    >
+                      <span style={{ color: '#00B5AD' }}>
+                        <OfficeDropdown
+                          className="link item"
+                          offices={this.props.stateOffices}
+                          selectedOfficeId={this.props.offices.selectedOfficeId}
+                          stateName={this.props.stateInfo.attributes.name}
+                        />
+                      </span>
+                    </Header>
                   </Grid.Column>
                 </Grid.Row>
                 {this.props.officeInfo.overview && (

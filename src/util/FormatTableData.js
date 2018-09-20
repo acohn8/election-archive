@@ -4,6 +4,7 @@ const formatTableData = (type) => {
   const formattedResults = [];
   const { candidates } = store.getState().results.candidates.entities;
   const resultEntities = store.getState().results[type].entities.results;
+  const stateName = store.getState().results.stateInfo.attributes.name;
 
   const candidateIds = store.getState().results.candidates.result.slice();
   const allGeographyResults = store
@@ -12,6 +13,7 @@ const formatTableData = (type) => {
     .map(geoId => ({
       id: geoId,
       name: resultEntities[geoId].name.replace(/County/g, ''),
+      title: `${resultEntities[geoId].name}, ${stateName}`,
     }));
   allGeographyResults.forEach((result) => {
     const geoInfo = {};
@@ -20,6 +22,7 @@ const formatTableData = (type) => {
     const geoTotal = Object.values(geoResults).reduce((sum, n) => sum + n, 0);
     geoInfo.id = result.id;
     geoInfo.name = result.name;
+    geoInfo.title = result.title;
     geoInfo.winnerParty = winnerParty;
     geoInfo.results = {};
     candidateIds.forEach((candidateId) => {
@@ -31,6 +34,7 @@ const formatTableData = (type) => {
     });
     formattedResults.push(geoInfo);
   });
+  console.log(formattedResults);
   return formattedResults;
 };
 

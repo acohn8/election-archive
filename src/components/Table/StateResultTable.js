@@ -40,7 +40,7 @@ const StateResultTable = ({
               width={3}
             >
               {geography}
-              </Table.HeaderCell>
+            </Table.HeaderCell>
             {candidateIds.map(candidateId => (
               <Table.HeaderCell key={candidateId} colSpan="2">
                 <PartyColorCircle color={totalColors[data[0].results[candidateId].party]} />
@@ -73,7 +73,7 @@ const StateResultTable = ({
               {geography === 'Precinct' ? (
                 <Table.Cell>{geo.name}</Table.Cell>
               ) : (
-                <CountyModal countyName={geo.name} countyId={geo.id} />
+                <CountyModal countyName={geo.name} countyId={geo.id} title={geo.title} />
               )}
               {candidateIds.map(candidateId =>
                   (geo.winnerParty === geo.results[candidateId].party

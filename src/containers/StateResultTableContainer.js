@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Pagination } from 'semantic-ui-react';
+import { Pagination, Icon } from 'semantic-ui-react';
 import StateResultTable from '../components/Table/StateResultTable';
 import { setSortedResults } from '../redux/actions/resultActions';
 import formatTableData from '../util/FormatTableData';
@@ -8,6 +8,7 @@ import convertToPercent from '../util/ConvertToPercent';
 import numericalSort from '../util/NumericalSort';
 import resultTotals from '../util/ResultTotals';
 import StateTableHeader from '../components/StateTableHeader/StateTableHeader';
+import ExportDropdown from '../components/Table/ExportDropdown';
 
 class StateResultTableContainer extends React.Component {
   state = {
@@ -67,7 +68,9 @@ class StateResultTableContainer extends React.Component {
     const { activePage } = this.state;
     return (
       <div>
-        <StateTableHeader selectedTable="results" />
+        <StateTableHeader selectedTable="results">
+          {this.props.selectedOfficeId !== 322 && <ExportDropdown />}
+        </StateTableHeader>
         <StateResultTable
           data={displayData}
           candidateIds={this.props.candidates.result}
@@ -103,6 +106,7 @@ const mapStateToProps = state => ({
   candidates: state.results.candidates,
   countyResults: state.results.countyResults,
   statewideResults: state.results.stateResults,
+  selectedOfficeId: state.results.officeInfo.id,
 });
 
 export default connect(

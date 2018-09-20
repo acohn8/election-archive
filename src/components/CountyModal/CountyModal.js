@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Table } from 'semantic-ui-react';
 import CountyContainer from '../../containers/CountyContainer';
 
-const CountyModal = ({ countyName, countyId }) => (
+const CountyModal = ({ countyName, countyId, title }) => (
   <Modal
     size="large"
     dimmer="blurring"
@@ -13,7 +13,7 @@ const CountyModal = ({ countyName, countyId }) => (
       </Table.Cell>
     }
   >
-    <Modal.Header>{countyName}</Modal.Header>
+    <Modal.Header>{title}</Modal.Header>
     <Modal.Content>
       <Modal.Description>
         <CountyContainer countyId={countyId} />

@@ -11,9 +11,8 @@ const ExportDropdown = (props) => {
     .join('_');
 
   return (
-    <Dropdown text="Export" icon="cloud download" floating labeled button className="icon" upward>
+    <Dropdown icon="download" className="icon">
       <Dropdown.Menu>
-        <Dropdown.Header icon="globe" content="Select a geography" />
         <Dropdown.Item
           as="a"
           href={`https://s3.amazonaws.com/stateprecinctresults/statewideexports/${stateName}/${formattedOfficeName}/counties/${stateName}_${formattedOfficeName}_county_results.csv`}
