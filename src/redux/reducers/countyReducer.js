@@ -25,7 +25,14 @@ const countiesReducer = (previousState = initialCountyState, action) => {
       };
     case 'RESET_COUNTY_INFO':
       return {
-        initialCountyState,
+        id: null,
+        name: null,
+        fips: null,
+        latitude: null,
+        longitude: null,
+        details: null,
+        url: null,
+        images: [],
       };
     default:
       return previousState;

@@ -52,6 +52,7 @@ const mapStateToProps = state => ({
   allOffices: state.offices.allOffices,
   allStates: state.states.states,
   offices: state.offices,
+  counties: state.counties,
 });
 
 export default withRouter(connect(
