@@ -10,6 +10,7 @@ import {
   Label,
   Icon,
   Tab,
+  Button,
 } from 'semantic-ui-react';
 import ContentLoader from '../components/Loader/Loader';
 import OfficeDropdown from '../components/OfficeDropdown/OfficeDropdown';
@@ -21,6 +22,8 @@ import { resetActiveState, setActiveState } from '../redux/actions/stateActions'
 import MapContainer from './StateMapContainer';
 import StateResultTableContainer from './StateResultTableContainer';
 import CampaignFinanceTable from '../components/CampaignFinanceTable/CampaignFinanceTable';
+import ButtonWithIcon from '../components/ButtonWithIcon/ButtonWithIcon';
+import { resetResults } from '../redux/actions/resultActions';
 
 class StateContainer extends React.Component {
   state = { expandedOverview: false };
@@ -54,10 +57,10 @@ class StateContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    this.setState({ expandedOverview: false }, () => {
-      this.props.resetOffice();
-      this.props.resetActiveState();
-    });
+    this.props.resetOffice();
+    this.props.resetResults();
+    this.props.resetActiveState();
+    this.setState({ expandedOverview: false });
   }
 
   fetchStateData = () => {
@@ -105,7 +108,7 @@ class StateContainer extends React.Component {
   };
 
   formatRaceSummary = () => {
-    const splitSummary = this.props.officeOverview
+    const splitSummary = this.props.officeInfo.overview
       .replace(
         /\b(\w\.\w\.|\d+(?:\.\d+){1,2}\.?)|([.?!])\s+(?=[A-Za-z])/g,
         (m, g1, g2) => (g1 ? g1 : g2 + '\r'),
@@ -114,22 +117,51 @@ class StateContainer extends React.Component {
     if (this.state.expandedOverview === true) {
       return (
         <div>
-          <p>{this.props.officeOverview}. </p>
-          <Label as="a" onClick={this.handleClick}>
-            <Icon name="arrow up" /> Less
-          </Label>
+          <p>{this.props.officeInfo.overview}</p>
+          <Button.Group>
+            <ButtonWithIcon color="teal" icon="arrow up" text={'Less'} onClick={this.handleClick} />
+            <ButtonWithIcon
+              color="grey"
+              link={this.props.officeInfo.overview_link}
+              icon="wikipedia w"
+              text={'Wiki'}
+            />
+          </Button.Group>
         </div>
       );
     } else if (splitSummary.length <= 2) {
-      return this.props.officeOverview;
+      return (
+        <div>
+          <p>{this.props.officeInfo.overview}</p>
+          <Button.Group>
+            <ButtonWithIcon
+              color="grey"
+              link={this.props.officeInfo.overview_link}
+              icon="wikipedia w"
+              text={'Wiki'}
+            />
+          </Button.Group>
+        </div>
+      );
     } else {
       const shortenedSummary = splitSummary.slice(0, 2).join(' ');
       return (
         <div>
           <p>{shortenedSummary}</p>
-          <Label onClick={this.handleClick}>
-            <Icon name="arrow down" /> More
-          </Label>
+          <Button.Group>
+            <ButtonWithIcon
+              color="teal"
+              icon="arrow down"
+              text={'More'}
+              onClick={this.handleClick}
+            />
+            <ButtonWithIcon
+              color="grey"
+              link={this.props.officeInfo.overview_link}
+              icon="wikipedia w"
+              text={'Wiki'}
+            />
+          </Button.Group>
         </div>
       );
     }
@@ -146,7 +178,7 @@ class StateContainer extends React.Component {
         ),
       },
     ];
-    if (this.props.officeOverview.id !== 313) {
+    if (this.props.officeInfo.id !== 313) {
       tabPanes.push({
         menuItem: 'Campaign Finance',
         render: () => (
@@ -203,7 +235,7 @@ class StateContainer extends React.Component {
                     {this.props.offices.selectedOfficeId !== '322' && <ExportDropdown />}
                   </Grid.Column>
                 </Grid.Row>
-                {this.props.officeOverview && (
+                {this.props.officeInfo.overview && (
                   <Grid.Row colums={1}>
                     <Grid.Column>
                       <Segment>{this.formatRaceSummary()}</Segment>
@@ -247,7 +279,7 @@ const mapStateToProps = state => ({
   nav: state.nav,
   stateResults: state.results.stateResults,
   candidates: state.results.candidates,
-  officeOverview: state.results.officeInfo.overview,
+  officeInfo: state.results.officeInfo,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -256,6 +288,7 @@ const mapDispatchToProps = dispatch => ({
   resetActiveState: () => dispatch(resetActiveState()),
   setActive: name => dispatch(setActive(name)),
   resetOffice: () => dispatch(resetOffice()),
+  resetResults: () => dispatch(resetResults()),
   setActiveOffice: (officeId, districtName) => dispatch(setActiveOffice(officeId, districtName)),
   updateOffices: (officeId, districtName) => dispatch(updateOffices(officeId, districtName)),
 });
