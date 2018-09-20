@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import Measure from 'react-measure';
 import { fetchPrecinctData, resetPrecinctResults } from '../redux/actions/resultActions';
 
-import { Loader, Grid, Segment, Label, Icon, Header, Image } from 'semantic-ui-react';
+import { Loader, Grid, Segment, Label, Icon, Header, Image, Button } from 'semantic-ui-react';
 import CountyTableContainer from './CountyTableContainer';
 import { fetchCountyDetails, resetCountyDetails } from '../redux/actions/countyActions';
 import CountyMapContainer from './CountyMapContainer';
+import ButtonWithIcon from '../components/ButtonWithIcon/ButtonWithIcon';
 
 class CountyContainer extends React.Component {
   state = { height: 300, expanded: false };
@@ -35,32 +36,47 @@ class CountyContainer extends React.Component {
         (m, g1, g2) => (g1 ? g1 : g2 + '\r'),
       )
       .split('\r');
+    const wikiUrl = this.props.countyInfo.url;
     if (this.state.expandedOverview === true) {
       return (
         <div>
-          <p>{splitSummary.join(' ')}. </p>
-          <Label as="a" onClick={this.handleClick}>
-            <Icon name="arrow up" /> Less
-          </Label>
+          <p>{this.props.officeInfo.overview}</p>
+          <Button.Group>
+            <ButtonWithIcon color="teal" icon="arrow up" text={'Less'} onClick={this.handleClick} />
+            <ButtonWithIcon color="grey" link={wikiUrl} icon="wikipedia w" text={'Wiki'} />
+          </Button.Group>
         </div>
       );
-    } else if (splitSummary.length <= 2) {
-      return this.props.countyInfo.details;
+    } else if (splitSummary.length <= 3) {
+      return (
+        <div>
+          <p>{this.props.countyInfo.details}</p>
+          <Button.Group>
+            <ButtonWithIcon color="grey" link={wikiUrl} icon="wikipedia w" text={'Wiki'} />
+          </Button.Group>
+        </div>
+      );
     } else {
-      const shortenedSummary = splitSummary.slice(0, 2).join(' ');
+      const shortenedSummary = splitSummary.slice(0, 3).join(' ');
       return (
         <div>
           <p>{shortenedSummary}</p>
-          <Label onClick={this.handleClick}>
-            <Icon name="arrow down" /> More
-          </Label>
+          <Button.Group>
+            <ButtonWithIcon
+              color="teal"
+              icon="arrow down"
+              text={'More'}
+              onClick={this.handleClick}
+            />
+            <ButtonWithIcon color="grey" link={wikiUrl} icon="wikipedia w" text={'Wiki'} />
+          </Button.Group>
         </div>
       );
     }
   };
 
   render() {
-    const { details, fips, images, url } = this.props.countyInfo;
+    const { details, fips, images } = this.props.countyInfo;
     return (
       <div>
         {this.props.precinctResults.result !== undefined && fips ? (
@@ -84,15 +100,6 @@ class CountyContainer extends React.Component {
                                 <Image size="small" floated="left" src={images[0].url} />
                               )}
                             {this.formatCountySummary()}
-                            <Label
-                              attached="top right"
-                              as="a"
-                              href={url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <Icon name="wikipedia w" />
-                            </Label>
                           </Segment>
                         )}
                     </div>
